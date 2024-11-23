@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from app.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from .models import MyMake, MyCosme
 
 
@@ -15,9 +16,13 @@ class Signupform(UserCreationForm):
             raise forms.ValidationError("このメールアドレスは既に登録されています")
         return email 
     
-class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField()
+#class LoginForm(forms.Form):
+    #email = forms.EmailField()
+    #password = forms.CharField()
+
+class LoginForm(AuthenticationForm): 
+    username = forms.CharField(max_length=254, required=True) 
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     def clean(self):
         email = self.cleaned_data.get("email")

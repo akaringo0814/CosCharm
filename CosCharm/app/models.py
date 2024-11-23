@@ -21,7 +21,7 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email"] #必須項目
 
 
     class Meta:
