@@ -1,12 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CosCharm</title>
+    <title>ホーム画面</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <h1>ホーム</h1>
-    <a href="{% url 'login' %}">アプリへ</a>
+    <!-- ナビゲーションバー -->
+    <header>
+        <nav>
+            <a href="{% url 'home' %}">ホーム</a>
+            <a href="{% url 'my_cosme' %}">マイコスメ</a>
+            <div class="dropdown">
+                <button>お気に入り ▼</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'favorites_cosme' %}">マイコスメお気に入り</a>
+                    <a href="{% url 'favorites_make' %}">マイメイクお気に入り</a>
+                </div>
+            </div>
+            <a href="{% url 'my_page' %}">マイページ</a>
+            <div class="dropdown">
+                <button>設定 ▼</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'email_change' %}">メールアドレス変更</a>
+                    <a href="{% url 'password_change' %}">パスワード変更</a>
+                    <a href="{% url 'logout' %}">ログアウト</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- タイムライン -->
+    <main>
+        <div class="container">
+            <!-- 左側: 未使用のマイコスメ -->
+            <section class="unused-cosmetics">
+                <h2>未使用のマイコスメ</h2>
+                <ul>
+                    {% for cosmetic in unused_cosmetics %}
+                        <li>{{ cosmetic.name }}</li>
+                    {% empty %}
+                        <p>未使用のコスメはありません。</p>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <!-- 右側: フォローユーザーの投稿 -->
+            <section class="follow-user-posts">
+                <h2>タイムライン</h2>
+                <ul>
+                    {% for post in follow_user_posts %}
+                        <li>
+                            <img src="{{ post.image.url }}" alt="{{ post.make_name }}">
+                            <p>{{ post.make_name }}</p>
+                        </li>
+                    {% empty %}
+                        <p>フォローしているユーザーの投稿がありません。</p>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+
+        <!-- マイメイク投稿ボタン -->
+        <div class="post-button">
+            <a href="{% url 'make_post' %}">マイメイク投稿</a>
+        </div>
+    </main>
 </body>
 </html>

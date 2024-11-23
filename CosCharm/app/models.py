@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -26,3 +27,14 @@ class User(AbstractUser):
     class Meta:
         db_table = "users"
  
+
+class MyMake(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='makes')
+    make_name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='make_images/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class MyCosme(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cosmetics')
+    name = models.CharField(max_length=100)
+    used_in_make = models.BooleanField(default=False)

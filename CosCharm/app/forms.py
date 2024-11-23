@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from app.models import User
 from django.contrib.auth import authenticate
+from .models import MyMake, MyCosme
 
 
 class Signupform(UserCreationForm):
@@ -26,3 +27,16 @@ class LoginForm(forms.Form):
         if self.user is None:
             raise forms.ValidationError("認証に失敗しました")
         return self.cleaned_data
+
+
+# MyMake用フォーム
+class MyMakeForm(forms.ModelForm):
+    class Meta:
+        model = MyMake
+        fields = ['make_name', 'image']  # 必要なフィールドを指定
+
+# MyCosme用フォーム
+class MyCosmeForm(forms.ModelForm):
+    class Meta:
+        model = MyCosme
+        fields = ['name', 'used_in_make']
