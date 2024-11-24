@@ -19,6 +19,9 @@ from django.urls import path
 from app.views import PortfolioView, SignupView, LoginView, HomeView
 from app import views
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 
 
@@ -29,4 +32,5 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login"),
     path('home/', HomeView.as_view(), name="home"),
     path('', include('app.urls')),  # appのURLをプロジェクトに統合
+
 ]

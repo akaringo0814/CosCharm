@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from app.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .models import MyMake, MyCosme
+from .models import MyMake, MyCosmetic
 
 
 class Signupform(UserCreationForm):
@@ -41,7 +41,7 @@ class MyMakeForm(forms.ModelForm):
         fields = ['make_name', 'image']  # 必要なフィールドを指定
 
 # MyCosme用フォーム
-class MyCosmeForm(forms.ModelForm):
+class MyCosmeticForm(forms.ModelForm):
     class Meta:
-        model = MyCosme
+        model = MyCosmetic
         fields = ['name', 'used_in_make']

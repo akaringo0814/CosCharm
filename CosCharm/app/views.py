@@ -1,90 +1,75 @@
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, redirect
 from django.views import View
-from app.forms import Signupform, LoginForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import MyMake, MyCosme  # 投稿やコスメデータを管理するモデル
-from .forms import LoginForm
+from django.contrib.auth.decorators import login_required
+from .forms import Signupform, LoginForm
+from .models import MyMake, MyCosmetic
 
-# Create your views here.
-
-class PortfolioView(View): 
-    def get(self,request):
+class PortfolioView(View):
+    def get(self, request):
         return render(request, "portfolio.html")
-    
-class SignupView(View): 
-    def get(self,request):
+
+class SignupView(View):
+    def get(self, request):
         form = Signupform()
-        return render(request, "signup.html", context={
-            "form":form
-        })
+        return render(request, "signup.html", {"form": form})
+
     def post(self, request):
         form = Signupform(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect("home")
-        return render(request, "signup.html", context={
-            "form": form 
-        })
-    
-class LoginView(View): 
-    def get(self, request): 
-        form = LoginForm() 
-        return render(request, "login.html", context={"form": form}) 
-    def post(self, request): 
-        form = LoginForm(request.POST) 
-        if form.is_valid(): 
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password') 
-            user = authenticate(request, username=username, password=password) 
-            if user is not None: 
-                login(request, user) 
-                return redirect("home") 
-            else:
-                 # 認証が失敗した場合のエラーメッセージを追加 
-                 form.add_error(None, "ユーザー名またはパスワードが正しくありません。") 
-            return render(request, "login.html", context={"form": form})
-            
+        return render(request, "signup.html", {"form": form})
 
-    #def post(self, request): 
-        
-    
-    #def get(self,request):
-        #return render(request, "login.html")  
-    #def post(self, request):
-        #form = LoginForm(request.POST)
-        #if form.is_valid():
-            #user = form.save()
-            #login(request, form.get_user())
-            #return redirect("home")
-        #return render(request, "login.html", context={
-           # "form": form 
-        #})
+class LoginView(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, "login.html", {"form": form})
 
-class HomeView(View,LoginRequiredMixin): 
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("home")
+            form.add_error(None, "ユーザー名またはパスワードが正しくありません。")
+        return render(request, "login.html", {"form": form})
+
+class HomeView(LoginRequiredMixin, View):
     login_url = "login"
-    def get(self,request):
-        return render(request, "home.html")      
 
+    def get(self, request):
+        follow_user_posts = MyMake.objects.filter(
+            user__in=request.user.following.all()
+        ).order_by("-created_at")
+        unused_cosmetics = MyCosmetic.objects.filter(
+            user=request.user, used_in_make=False
+        )
+        return render(request, "home.html", {
+            "follow_user_posts": follow_user_posts,
+            "unused_cosmetics": unused_cosmetics,
+        })
 
-def home(request):
-    # 右側：フォローユーザーの投稿を取得（日時順）
-    follow_user_posts = MyMake.objects.filter(user__in=request.user.following.all()).order_by('-created_at')
-    
-    # 左側：未使用の所持コスメを取得
-    unused_cosmetics = MyCosme.objects.filter(user=request.user, used_in_make=False)
-    
-    return render(request, 'home.html', {
-        'follow_user_posts': follow_user_posts,
-        'unused_cosmetics': unused_cosmetics
-    })
-def settings(request): 
-    # ここに処理を記述 
-    return render(request, 'settings.html')
+@login_required
+#def my_cosmetics(request):
+    #my_cosmetics = MyCosmetic.objects.filter(user=request.user)
+    #return render(request, "my_cosmetics.html", {"my_cosmetics": my_cosmetics})
 
 def my_cosme(request):
-    return render(request, 'my_cosme.html')
+    my_cosmetics = MyCosmetic.objects.filter(user=request.user)
+    return render(request, "my_cosmetics.html", {"my_cosmetics": my_cosmetics})
+    # ビューのロジック
+    return render(request, 'my_cosmetics.html')#上と一緒？不必要？
+
+def logout(request):
+    auth_logout(request)
+    return redirect("login")
+
 
 def my_cosme_detail(request):
     return render(request, 'my_cosme_detail.html') #マイコスメお気に入り
@@ -97,8 +82,7 @@ def my_cosme_favorites(request):
     # ここに処理を記述
     return render(request, 'my_cosme_favorites.html')
 
-
-def my_cosme_register(request):
+def my_cosmetic_register(request):
     return render(request, 'my_cosme_register.html') #マイコスメ登録画面
 
 def my_make_post(request):
@@ -135,7 +119,9 @@ def follower_list(request):
 def following_list(request):
     return render(request, 'following_list_list.html')
 
-def logout(request):
-    # ログアウト処理を追加
-    return render(request, 'logout.html')
+def settings(request):
+    # 設定ページの処理
+    return render(request, 'settings_template.html')
+
+
 
