@@ -12,7 +12,7 @@ urlpatterns = [
     path('my-cosme-register/', views.my_cosme_register, name='my_cosme_register'),
     path('my-make-post/', views.my_make_post, name='my_make_post'),
     path('my-make-detail/', views.my_make_detail, name='my_make_detail'),
-    path('favorites_make/', views.my_make_detail, name='my_make_detail'),
+    path('favorites-make/', views.my_make_detail, name='favorites_make'),
     path('my-page/', views.my_page, name='my_page'),
     path('profile-edit/', views.profile_edit, name='profile_edit'),
     path('user-page/', views.user_page, name='user_page'),
@@ -20,4 +20,6 @@ urlpatterns = [
     path('liked-posts/', views.liked_posts, name='liked_posts'),
     path('follower-list/', views.follower_list, name='follower_list'),
     path('following-list/', views.following_list, name='following_list'),
+    path('logout/', views.following_list, name='logout'),
+
 ]

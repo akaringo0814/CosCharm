@@ -135,7 +135,7 @@ def follower_list(request):
 def following_list(request):
     return render(request, 'following_list_list.html')
 
-def logout_view(request):
+def logout(request):
     # ログアウト処理を追加
     return render(request, 'logout.html')
 
