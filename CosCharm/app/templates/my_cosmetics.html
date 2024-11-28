@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>マイコスメ画面</title>
+</head>
+<body>
+    <h1>マイコスメ画面</h1>
+
+    <!-- 検索フォーム -->
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">検索</button>
+    </form>
+
+    <!-- コスメ一覧 -->
+    <div>
+        {% for cosmetic in cosmetics %}
+            <div>
+                <img src="{{ cosmetic.image.url }}" alt="{{ cosmetic.name }}" width="100">
+                <p>{{ cosmetic.brand }}</p>
+                <p>{{ cosmetic.name }}</p>
+            </div>
+        {% empty %}
+            <p>登録されたコスメはありません。</p>
+        {% endfor %}
+    </div>
+
+    <!-- マイコスメ登録ボタン -->
+    <a href="{% url 'cosmetic_register' %}">マイコスメ登録</a>
+</body>
+</html>

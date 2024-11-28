@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from app.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .models import MyMake, MyCosmetic
+from .models import MyMake, MyCosmetic, CosmeticMaster
 
 
 class Signupform(UserCreationForm):
@@ -44,4 +44,11 @@ class MyMakeForm(forms.ModelForm):
 class MyCosmeticForm(forms.ModelForm):
     class Meta:
         model = MyCosmetic
-        fields = ['name', 'used_in_make']
+        fields = ['cosmetic_name', 'category', 'facecare', 'pointmake', 'basemake', 'make_memo']
+
+    #サブカテゴリに
+    #def __init__(self, *args, **kwargs):
+        #super().__init__(*args, **kwargs)
+        #self.fields['facecare'].widget.attrs.update({'class': 'sub-category', 'data-category': '0'})
+        #self.fields['pointmake'].widget.attrs.update({'class': 'sub-category', 'data-category': '1'})
+        #self.fields['basemake'].widget.attrs.update({'class': 'sub-category', 'data-category': '2'})

@@ -33,16 +33,54 @@ class User(AbstractUser):
 class MyMake(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='makes')
     make_name = models.CharField(max_length=100)
+    make_memo =models.TextField
     image = models.ImageField(upload_to='make_images/')
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     
 class CosmeticMaster(models.Model):
     """コスメマスター"""
     name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100)
-    category = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     photo = models.ImageField(upload_to='cosmetics/', blank=True, null=True)
+    
+    #カテゴリ
+    FACECARE_CHOICES = [
+        (0, '化粧水'),
+        (1, '乳液'),
+        (2, '美容液')
+    ]
+    
+    POINTMAKE_CHOICES = [
+        (0, 'アイブロウ'),
+        (1, 'アイライナー'),
+        (2, 'アイシャドウ'),
+        (3, 'マスカラ'),
+        (4, 'チーク'),
+        (5, 'リップ')
+    ]
+
+    BASEMAKE_CHOICES = [
+        (0, '下地'),
+        (1, 'ファンデーション'),
+        (2, 'フェイスパウダー')
+    ]
+
+    CATEGORY_CHOICES = [
+        (0, 'フェイスケア'),
+        (1, 'ポイントメイク'),
+        (2, 'ベースメイク')
+    ]
+
+    category = models.IntegerField(choices=CATEGORY_CHOICES)
+    facecare = models.IntegerField(choices=FACECARE_CHOICES, null=True, blank=True)
+    pointmake = models.IntegerField(choices=POINTMAKE_CHOICES, null=True, blank=True)
+    basemake = models.IntegerField(choices=BASEMAKE_CHOICES, null=True, blank=True)
+    # 他のフィールドの定義
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.brand} - {self.name}"
@@ -50,11 +88,13 @@ class CosmeticMaster(models.Model):
 class MyCosmetic(models.Model):
     """マイコスメ"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cosmetics')
-    name = models.CharField(max_length=100)
+    cosmetic_name = models.ForeignKey(CosmeticMaster,on_delete=models.CASCADE)
     used_in_make = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='cosmetics/')
-    cosmetic = models.ForeignKey(CosmeticMaster, on_delete=models.CASCADE)  # 登録されたコスメ
+    #image = models.ImageField(upload_to='cosmetics/')
+    #cosmetic = models.ForeignKey(CosmeticMaster, on_delete=models.CASCADE)  # 登録されたコスメ
     is_favorite = models.BooleanField(default=False)  # お気に入りフラグ
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(
         max_length=10,
         choices=(
@@ -66,4 +106,4 @@ class MyCosmetic(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username} - {self.cosmetic.name}"
+        return f"{self.user.username} - {self.cosmetic.name}", f"{self.brand} - {self.name}"

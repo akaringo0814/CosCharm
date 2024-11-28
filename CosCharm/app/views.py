@@ -62,13 +62,13 @@ class HomeView(LoginRequiredMixin, View):
 
 def my_cosme(request):
     my_cosmetics = MyCosmetic.objects.filter(user=request.user)
-    return render(request, "my_cosmetics.html", {"my_cosmetics": my_cosmetics})
+    return render(request, "my_cosmetics.html")#, {"my_cosmetics": my_cosmetics})
     # ビューのロジック
-    return render(request, 'my_cosmetics.html')#上と一緒？不必要？
+    #return render(request, 'my_cosmetics.html')#上と一緒？不必要？
 
-def logout(request):
+#def logout(request):
     auth_logout(request)
-    return redirect("login")
+    return redirect(request,"login.html")
 
 
 def my_cosme_detail(request):
