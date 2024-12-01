@@ -11,6 +11,7 @@
         {% csrf_token %}
         <div>メールアドレス<input type="email" name="email"></div>
         <div>パスワード<input type="password" name="password"></div>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
         <button type="submit">ログイン</button>
     </form>
     {{ form.errors }}

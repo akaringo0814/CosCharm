@@ -36,7 +36,8 @@ class LoginView(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("home")
+                next_url = request.GET.get('next', 'home')  # デフォルトを'home'に設定
+                return redirect(next_url)
             form.add_error(None, "ユーザー名またはパスワードが正しくありません。")
         return render(request, "login.html", {"form": form})
 
@@ -54,6 +55,16 @@ class HomeView(LoginRequiredMixin, View):
             "follow_user_posts": follow_user_posts,
             "unused_cosmetics": unused_cosmetics,
         })
+#@login_required
+#def logout(request):
+    #logout(request)
+    #return redirect('login')
+
+def logout(request):
+    auth_logout(request)
+    return redirect('login/') 
+
+
 
 @login_required
 #def my_cosmetics(request):

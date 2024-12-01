@@ -21,6 +21,6 @@ urlpatterns = [
     path('liked-posts/', views.liked_posts, name='liked_posts'),
     path('follower-list/', views.follower_list, name='follower_list'),
     path('following-list/', views.following_list, name='following_list'),
-    path('logout/', views.following_list, name='logout'),
+    path('logout/', views.logout, name='logout'),
 
 ]

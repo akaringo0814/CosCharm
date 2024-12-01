@@ -20,9 +20,9 @@ class Signupform(UserCreationForm):
     #email = forms.EmailField()
     #password = forms.CharField()
 
-class LoginForm(AuthenticationForm): 
     username = forms.CharField(max_length=254, required=True) 
     password = forms.CharField(widget=forms.PasswordInput, required=True)
+
 
     def clean(self):
         email = self.cleaned_data.get("email")
@@ -34,8 +34,27 @@ class LoginForm(AuthenticationForm):
         return self.cleaned_data
 
 
+class LoginForm(AuthenticationForm):
+    email = forms.EmailField(max_length=254, required=True)  # メールアドレスを使用
+    password = forms.CharField(widget=forms.PasswordInput, required=True)  # パスワード
+    def clean(self):
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+
+        # メールアドレスを使ってユーザー認証
+        user = authenticate(request=self.request, username=email, password=password)
+        
+        if user is None:
+            raise forms.ValidationError("認証に失敗しました")
+        
+        self.user = user
+        return self.cleaned_data
+
+ 
+
 # MyMake用フォーム
 class MyMakeForm(forms.ModelForm):
+    
     class Meta:
         model = MyMake
         fields = ['make_name', 'image']  # 必要なフィールドを指定
