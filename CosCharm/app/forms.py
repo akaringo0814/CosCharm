@@ -42,9 +42,15 @@ class MyMakeForm(forms.ModelForm):
 
 # MyCosme用フォーム
 class MyCosmeticForm(forms.ModelForm):
+    cosmetic = forms.ModelChoiceField(
+        queryset=CosmeticMaster.objects.all(),
+        label="商品名",
+        widget=forms.Select
+    )
+
     class Meta:
         model = MyCosmetic
-        fields = ['cosmetic_name', 'category', 'facecare', 'pointmake', 'basemake', 'make_memo']
+        fields = ['cosmetic', 'used_in_make', 'is_favorite', 'status']
 
     #サブカテゴリに
     #def __init__(self, *args, **kwargs):
