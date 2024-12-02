@@ -26,23 +26,18 @@ class SignupView(View):
             return redirect("home")
         return render(request, "signup.html", {"form": form})
 
+
 class LoginView(View):
     def get(self, request):
         form = LoginForm()
         return render(request, "login.html", {"form": form})
 
     def post(self, request):
-        form = LoginForm(request.POST)
+        form = LoginForm(request.POST, request=request)
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-            user = authenticate(request, username=username, email=email, password=password)
-            if user is not None:
-                login(request, user)
-                next_url = request.GET.get('next', 'home')  # デフォルトを'home'に設定
-                return redirect(next_url)
-            form.add_error(None, "メールアドレスまたはパスワードが正しくありません。")
+            login(request, form.get_user())
+            next_url = request.POST.get("next") or "home"  # 'next'パラメータの確認
+            return redirect(next_url)
         return render(request, "login.html", {"form": form})
 
 class HomeView(LoginRequiredMixin, View):

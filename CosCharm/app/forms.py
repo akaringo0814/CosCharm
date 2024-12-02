@@ -30,22 +30,46 @@ class Signupform(UserCreationForm):
             raise forms.ValidationError("認証に失敗しました")
         return self.cleaned_data
 
-class LoginForm(AuthenticationForm):
-    email = forms.EmailField(max_length=254, required=True)  # メールアドレスを使用
-    password = forms.CharField(widget=forms.PasswordInput, required=True)  # パスワード
+#class LoginForm(AuthenticationForm):
+    #email = forms.EmailField(max_length=254, required=True)  # メールアドレスを使用
+    #password = forms.CharField(widget=forms.PasswordInput, required=True)  # パスワード
+    #def clean(self):
+        #email = self.cleaned_data.get("email")
+        #password = self.cleaned_data.get("password")
+
+        # メールアドレスを使ってユーザー認証
+        #user = authenticate(request=self.request, email=email, password=password)
+        
+        #if user is None:
+            #raise forms.ValidationError("認証に失敗しました")
+        
+        #self.user = user
+        #return self.cleaned_data
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(label="メールアドレス", max_length=254, required=True)
+    password = forms.CharField(
+        label="パスワード",
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
 
-        # メールアドレスを使ってユーザー認証
-        user = authenticate(request=self.request, email=email, password=password)
-        
+        user = authenticate(self.request, email=email, password=password)
         if user is None:
-            raise forms.ValidationError("認証に失敗しました")
-        
+            raise forms.ValidationError("メールアドレスまたはパスワードが正しくありません。")
         self.user = user
         return self.cleaned_data
 
+    def get_user(self):
+        return self.user
  
 
 # MyMake用フォーム
