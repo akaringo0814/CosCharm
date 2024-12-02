@@ -16,9 +16,6 @@ class Signupform(UserCreationForm):
             raise forms.ValidationError("このメールアドレスは既に登録されています")
         return email 
     
-#class LoginForm(forms.Form):
-    #email = forms.EmailField()
-    #password = forms.CharField()
 
     username = forms.CharField(max_length=254, required=True) 
     password = forms.CharField(widget=forms.PasswordInput, required=True)
@@ -33,7 +30,6 @@ class Signupform(UserCreationForm):
             raise forms.ValidationError("認証に失敗しました")
         return self.cleaned_data
 
-
 class LoginForm(AuthenticationForm):
     email = forms.EmailField(max_length=254, required=True)  # メールアドレスを使用
     password = forms.CharField(widget=forms.PasswordInput, required=True)  # パスワード
@@ -42,7 +38,7 @@ class LoginForm(AuthenticationForm):
         password = self.cleaned_data.get("password")
 
         # メールアドレスを使ってユーザー認証
-        user = authenticate(request=self.request, username=email, password=password)
+        user = authenticate(request=self.request, email=email, password=password)
         
         if user is None:
             raise forms.ValidationError("認証に失敗しました")
@@ -77,3 +73,26 @@ class MyCosmeticForm(forms.ModelForm):
         #self.fields['facecare'].widget.attrs.update({'class': 'sub-category', 'data-category': '0'})
         #self.fields['pointmake'].widget.attrs.update({'class': 'sub-category', 'data-category': '1'})
         #self.fields['basemake'].widget.attrs.update({'class': 'sub-category', 'data-category': '2'})
+
+
+class ChangeEmailForm(forms.Form):
+    current_email = forms.EmailField(
+        label='現在のメールアドレス',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': '現在のメールアドレス'}),
+    )
+    new_email = forms.EmailField(
+        label='新しいメールアドレス',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': '新しいメールアドレス'}),
+    )
+    confirm_email = forms.EmailField(
+        label='メールアドレス再入力',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'メールアドレス再入力'}),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_email = cleaned_data.get("new_email")
+        confirm_email = cleaned_data.get("confirm_email")
+        if new_email != confirm_email:
+            raise forms.ValidationError("新しいメールアドレスが一致しません。")
+        return cleaned_data

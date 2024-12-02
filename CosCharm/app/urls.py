@@ -4,8 +4,8 @@ from . import views
 
 urlpatterns = [
     path('settings/', views.settings, name='settings'),
-    path('email-change/', views.email_change, name='email_change'),
-    path('password-change/', views.password_change, name='password_change'),
+    path('email_change/', views.email_change, name='email_change'),
+    path('password_change/', views.password_change, name='password_change'),
     path('my-cosmetics/', views.my_cosme, name='my_cosmetics'),
     path('faovrites-cosme/', views.favorites_cosme, name='favorites_cosme'),
     path('my_cosme-favorites', views.favorites_cosme, name='my_cosme_favorites'),

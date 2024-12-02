@@ -5,6 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import Signupform, LoginForm
 from .models import MyMake, MyCosmetic
+from .forms import ChangeEmailForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 class PortfolioView(View):
     def get(self, request):
@@ -32,13 +35,14 @@ class LoginView(View):
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, email=email, password=password)
             if user is not None:
                 login(request, user)
                 next_url = request.GET.get('next', 'home')  # デフォルトを'home'に設定
                 return redirect(next_url)
-            form.add_error(None, "ユーザー名またはパスワードが正しくありません。")
+            form.add_error(None, "メールアドレスまたはパスワードが正しくありません。")
         return render(request, "login.html", {"form": form})
 
 class HomeView(LoginRequiredMixin, View):
@@ -62,11 +66,11 @@ class HomeView(LoginRequiredMixin, View):
 
 def logout(request):
     auth_logout(request)
-    return redirect('login/') 
+    return redirect('/login/') 
 
 
 
-@login_required
+#@login_required
 #def my_cosmetics(request):
     #my_cosmetics = MyCosmetic.objects.filter(user=request.user)
     #return render(request, "my_cosmetics.html", {"my_cosmetics": my_cosmetics})
@@ -116,10 +120,37 @@ def profile_edit(request):
 
 
 def email_change(request):
-    return render(request, 'email_change.html')
+    if request.method == 'POST':
+        form = ChangeEmailForm(request.POST)
+        if form.is_valid():
+            # フォームのデータを取得
+            current_email = form.cleaned_data['current_email']
+            new_email = form.cleaned_data['new_email']
 
+            # メールアドレス変更処理をここに記述
+            print(f"Current Email: {current_email}, New Email: {new_email}")
+
+            # 成功後にホーム画面へリダイレクト
+            return redirect('home')  # 'home' はホーム画面のURL名
+    else:
+        form = ChangeEmailForm()
+
+    return render(request, 'email_change.html', {'form': form})
+
+
+
+@login_required
 def password_change(request):
-    return render(request, 'password_change.html')
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)  # パスワード変更後もログイン状態を保持
+            return redirect('home')  # ホーム画面にリダイレクト
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'password_change.html', {'form': form})
+
 
 def liked_posts(request):
     return render(request, 'liked_posts.html')
