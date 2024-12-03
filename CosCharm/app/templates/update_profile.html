@@ -1,0 +1,6 @@
+<!-- update_profile.html -->
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- フォームフィールドを表示 -->
+    <button type="submit">プロフィールを更新</button>
+</form>

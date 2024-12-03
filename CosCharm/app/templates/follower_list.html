@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+フォロワー一覧画面
+{% endblock %}
+
+{% block content %}
+<h1>フォロワー一覧</h1>
+<ul>
+    {% for follow in followers %}
+        <li>{{ follow.follower.username }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'my_page' %}">マイページに戻る</a>
+{% endblock %}

@@ -8,6 +8,9 @@ from .models import MyMake, MyCosmetic
 from .forms import ChangeEmailForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render, get_object_or_404
+from .models import  Follow, User
+from .forms import ProfileForm
 
 class PortfolioView(View):
     def get(self, request):
@@ -54,6 +57,17 @@ class HomeView(LoginRequiredMixin, View):
             "follow_user_posts": follow_user_posts,
             "unused_cosmetics": unused_cosmetics,
         })
+    def get(self, request):
+        # フォローしているユーザーのIDリストを取得
+        followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
+        
+        # フォローされているユーザーを取得
+        users_followed = User.objects.filter(id__in=followed_users)
+        
+        context = {
+            'users_followed': users_followed
+        }
+        return render(request, 'home.html', context)
 #@login_required
 #def logout(request):
     #logout(request)
@@ -104,14 +118,34 @@ def my_make_detail(request):
 def favorites_make(request):
     return render(request, 'favorites_make.html') #マイメイクお気に入り
 
+#マイページ
 def my_page(request):
-    return render(request, 'my_page.html')
+    profile = get_object_or_404(User, username=request.user.username)
+    followers = Follow.objects.filter(following=request.user)
+    following = Follow.objects.filter(follower=request.user)
+    return render(request, 'my_page.html', {
+        'profile': profile,
+        'followers': followers.count(),
+        'following': following.count()
+    })
+
 
 def user_page(request):
     return render(request, 'user_page.html')
 
+
+#プロフィール編集画面
 def profile_edit(request):
-    return render(request, 'profile_edit.html')
+    profile = get_object_or_404(User, user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('my_page')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile_edit.html', {'form': form})
+
 
 
 def email_change(request):
@@ -155,10 +189,25 @@ def follower_list(request):
 
 def following_list(request):
     return render(request, 'following_list_list.html')
+from django.shortcuts import render
+from .models import Follow
+
+# フォロー一覧
+def following_list(request):
+    followings = Follow.objects.filter(follower=request.user)
+    return render(request, 'following_list.html', {'followings': followings})
+
+# フォロワー一覧
+def follower_list(request):
+    followers = Follow.objects.filter(following=request.user)
+    return render(request, 'follower_list.html', {'followers': followers})
 
 def settings(request):
     # 設定ページの処理
     return render(request, 'settings_template.html')
 
+def update_profile(request):
+    # プロフィール更新のロジック
+    return render(request, 'update_profile.html')
 
 

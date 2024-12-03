@@ -14,13 +14,15 @@ urlpatterns = [
     path('my-make-post/', views.my_make_post, name='my_make_post'),
     path('my-make-detail/', views.my_make_detail, name='my_make_detail'),
     path('favorites-make/', views.my_make_detail, name='favorites_make'),
-    path('my-page/', views.my_page, name='my_page'),
-    path('profile-edit/', views.profile_edit, name='profile_edit'),
+    path('my_page/', views.my_page, name='my_page'),
+    path('profile_edit/', views.profile_edit, name='profile_edit'),
     path('user-page/', views.user_page, name='user_page'),
-    path('my-page/', views.user_page, name='my_page'),
+    #path('my-page/', views.user_page, name='my_page'),
     path('liked-posts/', views.liked_posts, name='liked_posts'),
-    path('follower-list/', views.follower_list, name='follower_list'),
-    path('following-list/', views.following_list, name='following_list'),
+    path('follower_list/', views.follower_list, name='follower_list'),
+    path('following_list/', views.following_list, name='following_list'),
     path('logout/', views.logout, name='logout'),
+    path('update_profile/', views.update_profile, name='update_profile'),
+
 
 ]

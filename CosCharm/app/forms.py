@@ -4,6 +4,7 @@ from app.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .models import MyMake, MyCosmetic, CosmeticMaster
+#from .models import Profile
 
 
 class Signupform(UserCreationForm):
@@ -120,3 +121,16 @@ class ChangeEmailForm(forms.Form):
         if new_email != confirm_email:
             raise forms.ValidationError("新しいメールアドレスが一致しません。")
         return cleaned_data
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['age', 'gender', 'skin_type', 'personal_color', 'profile_image']
+
+    def clean_profile_image(self):
+        profile_image = self.cleaned_data.get('profile_image')
+        if profile_image:
+            # 画像サイズなどのバリデーションを追加できます
+            if profile_image.size > 5 * 1024 * 1024:  # 5MB以上の画像を拒否
+                raise forms.ValidationError("画像のサイズは5MB以下にしてください。")
+        return profile_image
