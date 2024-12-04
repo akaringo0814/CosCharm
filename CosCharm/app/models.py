@@ -31,16 +31,19 @@ class User(AbstractUser):
     skin_type = models.CharField(
         max_length=10,
         choices=[('乾燥肌', '乾燥肌'), ('脂性肌', '脂性肌'), ('普通肌', '普通肌'), ('混合肌', '混合肌'), ('不明', '不明')],
-        blank=True
+        blank=True,
+        null=True,
+        verbose_name="肌質"
     )
     personal_color = models.CharField(
         max_length=10,
         choices=[('イエベ春', 'イエベ春'), ('ブルベ夏', 'ブルベ夏'), ('イエベ秋', 'イエベ秋'), ('ブルベ冬', 'ブルベ冬'), ('不明', '不明')],
-        blank=True
+        blank=True,
+        null=True,
+        verbose_name="パーソナルカラー"
     )
     #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
     profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')  # defaultを設定
-
 
     # マネージャー
     objects = UserManager()

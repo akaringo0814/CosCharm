@@ -132,4 +132,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/login/'  
 
+AUTH_USER_MODEL = 'app.User'  # 'app' は該当するアプリ名
+
 

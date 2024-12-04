@@ -125,7 +125,7 @@ class ChangeEmailForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['age', 'gender', 'skin_type', 'personal_color', 'profile_image']
+        fields = ['username','age', 'gender', 'skin_type', 'personal_color', 'profile_image']
 
     def clean_profile_image(self):
         profile_image = self.cleaned_data.get('profile_image')

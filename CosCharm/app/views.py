@@ -136,7 +136,7 @@ def user_page(request):
 
 #プロフィール編集画面
 def profile_edit(request):
-    profile = get_object_or_404(User, user=request.user)
+    profile = get_object_or_404(User, username=request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
