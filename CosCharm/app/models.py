@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 class User(AbstractUser):
     # 削除したフィールド
     first_name = None
@@ -60,7 +59,8 @@ class User(AbstractUser):
 class MyMake(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='makes')
     make_name = models.CharField(max_length=100)
-    make_memo = models.TextField()  # 修正: ()を追加
+    #make_memo = models.TextField()  # 修正: ()を追加
+    make_memo = models.CharField(max_length=255, default="")
     image = models.ImageField(upload_to='make_images/')
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
@@ -132,3 +132,7 @@ class Follow(models.Model):
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+
+
+
+
