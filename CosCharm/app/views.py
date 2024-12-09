@@ -4,13 +4,13 @@ from django.contrib.auth import authenticate, login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import Signupform, LoginForm
-from .models import MyMake, MyCosmetic
+from .models import MyMake, MyCosmetic, CosmeticMaster
 from .forms import ChangeEmailForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, get_object_or_404
 from .models import  Follow, User
-from .forms import ProfileForm
+from .forms import ProfileForm,CosmeticForm
 
 class PortfolioView(View):
     def get(self, request):
@@ -95,6 +95,26 @@ def my_cosme(request):
     return redirect(request,"login.html")
 
 
+def my_cosmetics(request):
+    cosmetics = CosmeticMaster.objects.all()
+    return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
+
+def my_cosmetic_register(request):
+    if request.method == 'POST':
+        cosmetic_id = request.POST.get('cosmetic_id')
+        is_favorite = request.POST.get('is_favorite') == 'on'
+        usage_status = request.POST.get('usage_status')
+
+        cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
+        cosmetic.is_favorite = is_favorite
+        cosmetic.usage_status = usage_status
+        cosmetic.save()
+
+        return redirect('my_cosmetics')
+    
+    cosmetics = CosmeticMaster.objects.all()
+    return render(request, 'my_cosmetic_register.html', {'cosmetics': cosmetics})
+
 def my_cosme_detail(request):
     return render(request, 'my_cosme_detail.html') #マイコスメお気に入り
 
@@ -108,6 +128,19 @@ def my_cosme_favorites(request):
 
 def my_cosmetic_register(request):
     return render(request, 'my_cosme_register.html') #マイコスメ登録画面
+
+def my_cosmetic_register(request):
+    if request.method == 'POST':
+        form = CosmeticForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('my_cosme')  # 登録後に一覧ページに移動
+    else:
+        form = CosmeticForm()
+    return render(request, 'my_cosmetic_register.html', {'form': form})
+
+
+
 
 def my_make_post(request):
     return render(request, 'my_make_post.html') #マイメイク投稿画面

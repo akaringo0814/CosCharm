@@ -79,7 +79,7 @@ class CosmeticMaster(models.Model):
         (2, 'ベースメイク')
     ]
     category = models.IntegerField(choices=CATEGORY_CHOICES, verbose_name="カテゴリ")
-
+    sub_category = models.CharField(max_length=50, blank=True, null=True)  # サブカテゴリ
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日", null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日", null=True)
 
@@ -93,13 +93,22 @@ class MyCosmetic(models.Model):
     cosmetic = models.ForeignKey(CosmeticMaster, on_delete=models.CASCADE, verbose_name="コスメ")
     used_in_make = models.BooleanField(default=False, verbose_name="メイクに使用")
     is_favorite = models.BooleanField(default=False, verbose_name="お気に入り")
-    status = models.CharField(
-        max_length=10,
-        choices=[('未使用', '未使用'), ('使用中', '使用中'), ('使用済み', '使用済み')],
-        default='未使用',
-        verbose_name="使用ステータス"
+    #status = models.CharField(
+        #max_length=10,
+        #choices=[('未使用', '未使用'), ('使用中', '使用中'), ('使用済み', '使用済み')],
+        #default='未使用',
+        #verbose_name="使用ステータス"
+    #)
+    USAGE_STATUS_CHOICES = [
+        ('not_used', '未使用'),
+        ('in_use', '使用中'),
+        ('used', '使用済み'),
+    ]
+    usage_status = models.CharField(
+        max_length=20,
+        choices=USAGE_STATUS_CHOICES,
+        default='not_used',
     )
-
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日", null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日", null=True)
 

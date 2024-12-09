@@ -90,7 +90,20 @@ class MyCosmeticForm(forms.ModelForm):
 
     class Meta:
         model = MyCosmetic
-        fields = ['cosmetic', 'used_in_make', 'is_favorite', 'status']
+        fields = ['cosmetic', 'used_in_make', 'is_favorite', 'usage_status']
+
+
+class CosmeticForm(forms.ModelForm):
+    class Meta:
+        model = CosmeticMaster
+        fields = ['cosmetic_name', 'category', 'sub_category', 'photo']
+        widgets = {
+            'category': forms.Select(),
+            'sub_category': forms.TextInput(attrs={'placeholder': 'アイブロウ'}),
+            'usage_status': forms.RadioSelect(),  # ラジオボタンで選択
+            'favorite': forms.CheckboxInput(),    # チェックボックス
+        }
+
 
     #サブカテゴリに
     #def __init__(self, *args, **kwargs):

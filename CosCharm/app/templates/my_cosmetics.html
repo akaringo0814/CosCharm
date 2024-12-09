@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>マイコスメ画面</title>
-</head>
-<body>
-    <h1>マイコスメ画面</h1>
+{% extends 'base.html' %}
 
-    <!-- 検索フォーム -->
-    <form method="get">
-        {{ form.as_p }}
-        <button type="submit">検索</button>
-    </form>
+{% block title %}
+マイコスメ画面
+{% endblock %}
 
-    <!-- コスメ一覧 -->
-    <div>
+{% block content %}
+<h1>マイコスメ一覧</h1>
+    <ul>
         {% for cosmetic in cosmetics %}
-            <div>
-                <img src="{{ cosmetic.image.url }}" alt="{{ cosmetic.name }}" width="100">
-                <p>{{ cosmetic.brand }}</p>
-                <p>{{ cosmetic.name }}</p>
-            </div>
-        {% empty %}
-            <p>登録されたコスメはありません。</p>
+        <li>
+            <img src="{{ cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic_name }}" style="width:100px;">
+            {{ cosmetic.cosmetic_name }} ({{ cosmetic.get_usage_status_display }})
+            {% if cosmetic.is_favorite %}
+            <strong>お気に入り</strong>
+            {% endif %}
+        </li>
         {% endfor %}
-    </div>
-
-    <!-- マイコスメ登録ボタン -->
-    <a href="{% url 'cosmetic_register' %}">マイコスメ登録</a>
+    </ul>
+    <a href="{% url 'my_cosmetic_register' %}">マイコスメ登録</a>
 </body>
 </html>
+{% endblock %}

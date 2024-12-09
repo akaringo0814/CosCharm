@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+マイコスメ登録画面
+{% endblock %}
+
+{% block content %}
+<h1>マイコスメ登録</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="cosmetic_id">コスメを選択:</label>
+        <select name="cosmetic_id" id="cosmetic_id">
+            {% for cosmetic in cosmetics %}
+            <option value="{{ cosmetic.id }}">{{ cosmetic.cosmetic_name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="is_favorite">お気に入り:</label>
+        <input type="checkbox" name="is_favorite" id="is_favorite"><br>
+
+        <label>使用状況:</label>
+        <input type="radio" name="usage_status" value="not_used" checked> 未使用
+        <input type="radio" name="usage_status" value="in_use"> 使用中
+        <input type="radio" name="usage_status" value="used"> 使用済み<br>
+
+        <button type="submit">登録</button>
+    </form>
+    <p>
+        <a href="{% url 'my_cosmetics' %}">マイコスメ画面へ戻る</a>
+    </p>
+</body>
+</html>
+{% endblock %}
