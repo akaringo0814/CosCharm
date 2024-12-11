@@ -11,6 +11,11 @@ from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, get_object_or_404
 from .models import  Follow, User
 from .forms import ProfileForm,CosmeticForm
+from django.http import JsonResponse
+import json
+from django.conf import settings
+import os
+from django.conf import settings
 
 class PortfolioView(View):
     def get(self, request):
@@ -129,7 +134,7 @@ def my_cosme_favorites(request):
 def my_cosmetic_register(request):
     return render(request, 'my_cosme_register.html') #マイコスメ登録画面
 
-def my_cosmetic_register(request):
+#def my_cosmetic_register(request):
     if request.method == 'POST':
         form = CosmeticForm(request.POST, request.FILES)
         if form.is_valid():
@@ -140,10 +145,150 @@ def my_cosmetic_register(request):
     return render(request, 'my_cosmetic_register.html', {'form': form})
 
 
+# 初期データ
+COSMETIC_CATEGORIES = {
+    "フェイスケア": ["化粧水", "乳液", "美容液"],
+    "ポイントメイク": ["アイブロウ", "アイシャドウ", "リップ"],
+    "ベースメイク": ["下地", "ファンデーション", "フェイスパウダー"],
+}
+
+# コスメの登録画面表示
+def my_cosmetic_register(request):
+    context = {
+        "categories": COSMETIC_CATEGORIES,
+        "cosmetics": CosmeticMaster.objects.all(),
+    }
+    if request.method == 'POST':
+        # POSTデータからコスメ情報を取得
+        cosmetic_id = request.POST.get('cosmetic_id')
+        is_favorite = 'is_favorite' in request.POST
+        usage_status = request.POST.get('usage_status')
+
+        if cosmetic_id:
+            cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
+
+            # コスメ登録処理
+            MyCosmetic.objects.create(
+                user=request.user,
+                cosmetic=cosmetic,
+                is_favorite=is_favorite,
+                usage_status=usage_status
+            )
+            
+            return redirect('my_cosmetics')
+        else:
+            # cosmetic_id が None の場合のエラーメッセージを追加
+            context['error'] = "コスメを選択してください。"
+
+    return render(request, 'my_cosmetic_register.html', context)
+
+# コスメの検索
+def search_cosmetics(request):
+    keyword = request.GET.get('keyword', '').lower()
+    results = []
+
+    # 簡易的な検索ロジック（カテゴリ内検索）
+    for category, items in COSMETIC_CATEGORIES.items():
+        filtered_items = [item for item in items if keyword in item.lower()]
+        if filtered_items:
+            results.append({"category": category, "items": filtered_items})
+
+    return JsonResponse({"results": results})
+
+# 初期コスメデータの取得
+def get_initial_cosmetics(request):
+    # cosmetic.jsonファイルのパス
+    file_path = os.path.join(settings.BASE_DIR, 'static/data/cosmetic.json')
+    with open(file_path, 'r', encoding='utf-8') as f:
+        cosmetics = json.load(f)
+
+    # 必要なデータだけ抽出（fieldsのみ）
+    filtered_cosmetics = [
+        {
+            "name": item["fields"]["name"],
+            "brand": item["fields"]["brand"],
+            "category": item["fields"]["category"],
+            "price": item["fields"]["price"]
+        }
+        for item in cosmetics
+    ]
+
+    return JsonResponse({"cosmetics": filtered_cosmetics})
+
 
 
 def my_make_post(request):
     return render(request, 'my_make_post.html') #マイメイク投稿画面
+
+
+# 初期データ
+COSMETIC_CATEGORIES = {
+    "フェイスケア": ["化粧水", "乳液", "美容液"],
+    "ポイントメイク": ["アイブロウ", "アイシャドウ", "リップ"],
+    "ベースメイク": ["下地", "ファンデーション", "フェイスパウダー"],
+}
+
+# コスメの登録画面表示
+def my_cosmetic_register(request):
+    context = {
+        "categories": COSMETIC_CATEGORIES,
+        "cosmetics": CosmeticMaster.objects.all(),
+    }
+    if request.method == 'POST':
+        # POSTデータからコスメ情報を取得
+        cosmetic_id = request.POST.get('cosmetic_id')
+        is_favorite = 'is_favorite' in request.POST
+        usage_status = request.POST.get('usage_status')
+
+        if cosmetic_id:
+            cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
+
+            # コスメ登録処理
+            MyCosmetic.objects.create(
+                user=request.user,
+                cosmetic=cosmetic,
+                is_favorite=is_favorite,
+                usage_status=usage_status
+            )
+            
+            return redirect('my_cosmetics')
+        else:
+            # cosmetic_id が None の場合のエラーメッセージを追加
+            context['error'] = "コスメを選択してください。"
+
+    return render(request, 'my_cosmetic_register.html', context)
+
+# カテゴリに基づくコスメの検索
+def search_cosmetics(request):
+    category = request.GET.get('category', '').lower()
+    results = []
+
+    if category:
+        cosmetics = CosmeticMaster.objects.filter(category__iexact=category)
+        results = [{'id': cosmetic.id, 'name': cosmetic.name} for cosmetic in cosmetics]
+
+    return JsonResponse({"results": results})
+
+# 初期コスメデータの取得
+def get_initial_cosmetics(request):
+    # cosmetic.jsonファイルのパス
+    file_path = os.path.join(settings.BASE_DIR, 'static/data/cosmetic.json')
+    with open(file_path, 'r', encoding='utf-8') as f:
+        cosmetics = json.load(f)
+
+    # 必要なデータだけ抽出（fieldsのみ）
+    filtered_cosmetics = [
+        {
+            "name": item["fields"]["name"],
+            "brand": item["fields"]["brand"],
+            "category": item["fields"]["category"],
+            "price": item["fields"]["price"]
+        }
+        for item in cosmetics
+    ]
+
+    return JsonResponse({"cosmetics": filtered_cosmetics})
+
 
 def my_make_detail(request):
     return render(request, 'my_make_detail.html') #マイメイク詳細画面

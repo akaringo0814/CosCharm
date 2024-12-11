@@ -25,6 +25,8 @@ urlpatterns = [
     path('following_list/', views.following_list, name='following_list'),
     path('logout/', views.logout, name='logout'),
     path('update_profile/', views.update_profile, name='update_profile'),
+    path('search/', views.search_cosmetics, name='search_cosmetics'),
+    path('get_initial_cosmetics/', views.get_initial_cosmetics, name='get_initial_cosmetics'),
 
 
 ]

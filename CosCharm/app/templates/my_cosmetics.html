@@ -1,23 +1,24 @@
 {% extends 'base.html' %}
 
 {% block title %}
-マイコスメ画面
+マイコスメ一覧
 {% endblock %}
 
 {% block content %}
 <h1>マイコスメ一覧</h1>
-    <ul>
-        {% for cosmetic in cosmetics %}
-        <li>
-            <img src="{{ cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic_name }}" style="width:100px;">
-            {{ cosmetic.cosmetic_name }} ({{ cosmetic.get_usage_status_display }})
-            {% if cosmetic.is_favorite %}
-            <strong>お気に入り</strong>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'my_cosmetic_register' %}">マイコスメ登録</a>
-</body>
-</html>
+<div class="container">
+  <ul class="list-group mb-4">
+    {% for cosmetic in cosmetics %}
+    <li class="list-group-item">
+      {{ cosmetic.cosmetic.name }} - {{ cosmetic.usage_status }} - お気に入り: {{ cosmetic.is_favorite }}
+    </li>
+    {% endfor %}
+  </ul>
+
+  <!-- コスメ登録画面へ遷移するボタン -->
+  <div class="d-flex justify-content-end">
+    <a href="{% url 'my_cosmetic_register' %}" class="btn btn-primary">コスメ登録画面へ</a>
+  </div>
+</div>
 {% endblock %}
+
