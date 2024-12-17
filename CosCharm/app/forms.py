@@ -1,77 +1,33 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+#from django.contrib.auth.models import User
 from app.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .models import MyMake, MyCosmetic, CosmeticMaster
 #from .models import Profile
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
 
 
-class Signupform(UserCreationForm):
+class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email = email).exists():
-            raise forms.ValidationError("このメールアドレスは既に登録されています")
-        return email 
-    
 
-    username = forms.CharField(max_length=254, required=True) 
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
 
+
+class LoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)  # 非表示にする
 
     def clean(self):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
-        print (email,password)
         self.user = authenticate(email=email, password=password)
         if self.user is None:
             raise forms.ValidationError("認証に失敗しました")
         return self.cleaned_data
-
-#class LoginForm(AuthenticationForm):
-    #email = forms.EmailField(max_length=254, required=True)  # メールアドレスを使用
-    #password = forms.CharField(widget=forms.PasswordInput, required=True)  # パスワード
-    #def clean(self):
-        #email = self.cleaned_data.get("email")
-        #password = self.cleaned_data.get("password")
-
-        # メールアドレスを使ってユーザー認証
-        #user = authenticate(request=self.request, email=email, password=password)
-        
-        #if user is None:
-            #raise forms.ValidationError("認証に失敗しました")
-        
-        #self.user = user
-        #return self.cleaned_data
-
-class LoginForm(forms.Form):
-    email = forms.EmailField(label="メールアドレス", max_length=254, required=True)
-    password = forms.CharField(
-        label="パスワード",
-        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
-        required=True,
-    )
-
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop("request", None)
-        super().__init__(*args, **kwargs)
-
-    def clean(self):
-        email = self.cleaned_data.get("email")
-        password = self.cleaned_data.get("password")
-
-        user = authenticate(self.request, email=email, password=password)
-        if user is None:
-            raise forms.ValidationError("メールアドレスまたはパスワードが正しくありません。")
-        self.user = user
-        return self.cleaned_data
-
-    def get_user(self):
-        return self.user
- 
 
 # MyMake用フォーム
 class MyMakeForm(forms.ModelForm):
@@ -105,12 +61,6 @@ class CosmeticForm(forms.ModelForm):
         }
 
 
-    #サブカテゴリに
-    #def __init__(self, *args, **kwargs):
-        #super().__init__(*args, **kwargs)
-        #self.fields['facecare'].widget.attrs.update({'class': 'sub-category', 'data-category': '0'})
-        #self.fields['pointmake'].widget.attrs.update({'class': 'sub-category', 'data-category': '1'})
-        #self.fields['basemake'].widget.attrs.update({'class': 'sub-category', 'data-category': '2'})
 
 
 class ChangeEmailForm(forms.Form):

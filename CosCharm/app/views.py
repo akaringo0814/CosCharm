@@ -1,86 +1,114 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth import authenticate, login, logout as auth_logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
-from .forms import Signupform, LoginForm
-from .models import MyMake, MyCosmetic, CosmeticMaster
-from .forms import ChangeEmailForm
-from django.contrib.auth.forms import PasswordChangeForm
+from .forms import SignupForm, LoginForm
+from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User
+from .forms import ChangeEmailForm, ProfileForm, CosmeticForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth import update_session_auth_hash
-from django.shortcuts import render, get_object_or_404
-from .models import  Follow, User
-from .forms import ProfileForm,CosmeticForm
 from django.http import JsonResponse
-import json
 from django.conf import settings
+from django.views.generic import CreateView, TemplateView
+from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 import os
-from django.conf import settings
+from django import forms
+from django.utils.translation import gettext_lazy as _
+from django.shortcuts import get_object_or_404
+
+
+
+
+
 
 class PortfolioView(View):
     def get(self, request):
         return render(request, "portfolio.html")
 
-class SignupView(View):
-    def get(self, request):
-        form = Signupform()
-        return render(request, "signup.html", {"form": form})
-
+class SignupView(View): 
+    def get(self,request):
+        return render(request, "signup.html")
+        form = SignupForm()
+        return render(request, "signup.html", context={
+            "form":form
+        })
     def post(self, request):
-        form = Signupform(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect("home")
-        return render(request, "signup.html", {"form": form})
+        return render(request, "signup.html", context={
+            "form": form 
+        })
 
 
-class LoginView(View):
+class LoginView(View): 
     def get(self, request):
         form = LoginForm()
         return render(request, "login.html", {"form": form})
 
     def post(self, request):
-        form = LoginForm(request.POST, request=request)
+        form = LoginForm(request.POST)
         if form.is_valid():
-            login(request, form.get_user())
-            next_url = request.POST.get("next") or "home"  # 'next'パラメータの確認
-            return redirect(next_url)
+            login(request, form.user)
+            return redirect("home")
         return render(request, "login.html", {"form": form})
 
-class HomeView(LoginRequiredMixin, View):
-    login_url = "login"
 
-    def get(self, request):
+#class HomeView(LoginRequiredMixin, TemplateView):
+    #template_name = "home.html"
+    #login_url = "login"
+
+    #def get(self, request):
         follow_user_posts = MyMake.objects.filter(
             user__in=request.user.following.all()
         ).order_by("-created_at")
         unused_cosmetics = MyCosmetic.objects.filter(
             user=request.user, used_in_make=False
         )
-        return render(request, "home.html", {
-            "follow_user_posts": follow_user_posts,
-            "unused_cosmetics": unused_cosmetics,
-        })
-    def get(self, request):
-        # フォローしているユーザーのIDリストを取得
         followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
-        
-        # フォローされているユーザーを取得
         users_followed = User.objects.filter(id__in=followed_users)
         
         context = {
+            'follow_user_posts': follow_user_posts,
+            'unused_cosmetics': unused_cosmetics,
             'users_followed': users_followed
         }
         return render(request, 'home.html', context)
-#@login_required
-#def logout(request):
-    #logout(request)
-    #return redirect('login')
+class HomeView(LoginRequiredMixin, TemplateView):
+    template_name = "home.html"
+    login_url = "login"
+
+    def get(self, request):
+        # フォローしているユーザーを取得
+        followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
+        
+        # フォローしているユーザーの投稿を取得
+        follow_user_posts = MyMake.objects.filter(
+            user__in=followed_users
+        ).order_by("-created_at")
+        
+        # 未使用のコスメを取得
+        unused_cosmetics = MyCosmetic.objects.filter(
+            user=request.user, used_in_make=False
+        )
+        
+        # フォローしているユーザーオブジェクトを取得
+        users_followed = User.objects.filter(id__in=followed_users)
+        
+        context = {
+            'follow_user_posts': follow_user_posts,
+            'unused_cosmetics': unused_cosmetics,
+            'users_followed': users_followed
+        }
+        return render(request, 'home.html', context)
 
 def logout(request):
     auth_logout(request)
-    return redirect('/login/') 
+    return redirect('/login/')
 
 
 

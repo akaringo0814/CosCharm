@@ -15,25 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from app.views import PortfolioView, SignupView, LoginView, HomeView
-from app import views
 from django.urls import path, include
+from app.views import PortfolioView, SignupView, LoginView, HomeView
 from django.conf import settings
 from django.conf.urls.static import static
-
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', PortfolioView.as_view(), name="portfolio"),
     path('signup/', SignupView.as_view(), name="signup"),
     path('login/', LoginView.as_view(), name="login"),
-    #path('logout',LogoutView.as_view(), name="logout"),
     path('home/', HomeView.as_view(), name="home"),
     path('', include('app.urls')),  # appのURLをプロジェクトに統合
-    
-
 ]
 
 if settings.DEBUG:

@@ -9,9 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,10 +80,19 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 AUTH_USER_MODEL = "app.User"
+
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # デフォルトの認証バックエンド
+    'path.to.your.EmailBackend',  # カスタム認証バックエンド
+]
 AUTHENTICATION_BACKENDS = [
     "app.backends.UserAuthBackend"
 ]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -130,15 +138,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = '/login/'  
+#LOGIN_REDIRECT_URL = '/home/'
+#LOGOUT_REDIRECT_URL = '/login/'  
 
+
+AUTH_USER_MODEL = 'app.CustomUser'  # カスタムユーザーを使用している場合
 AUTH_USER_MODEL = 'app.User'  # 'app' は該当するアプリ名
+
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+LOGIN_REDIRECT_URL = 'home'  # ログイン成功後のリダイレクト先（homeはURL名）
+LOGOUT_REDIRECT_URL = 'login'  # ログアウト後のリダイレクト先
+
+
 
 
 
