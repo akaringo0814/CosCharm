@@ -42,7 +42,7 @@ class User(AbstractUser):
         verbose_name="パーソナルカラー"
     )
     #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
-    profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')  # defaultを設定
+    profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, )  # defaultを設定
 
     # マネージャー
     objects = UserManager()
@@ -132,7 +132,7 @@ class MyCosmetic(models.Model):
         blank=True
     #)
     #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
-    profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')  # defaultを設定
+    #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')  # defaultを設定
 
 
 # フォローモデル

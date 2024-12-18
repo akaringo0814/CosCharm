@@ -16,8 +16,8 @@
         <div class="profile-image">
             {% if user.profile_image %}
                 <img src="{{ user.profile_image.url }}" alt="プロフィール画像">
-            {% else %}
-                <img src="{% static 'images/default_profile.png' %}" alt="デフォルト画像">
+            <!-- {% else %}  -->
+                 <!-- <img src="{% static 'images/' %}" alt="デフォルト画像"> --> 
             {% endif %}
             <label for="profile_image">画像をアップロード</label>
             <input type="file" id="profile_image" name="profile_image">

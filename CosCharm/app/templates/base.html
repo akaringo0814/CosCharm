@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ホーム画面{% endblock %}</title>
     {% load static %}
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/select2.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/select2.min.js"></script>
+    <link href="{% static 'css/select2.css' %}" rel="stylesheet">
 </head>
 <body>
     <!-- ナビゲーションバー -->
@@ -19,34 +16,47 @@
         <nav>
             <a href="{% url 'home' %}">ホーム</a>
             <a href="{% url 'my_cosmetics' %}">マイコスメ</a>
-            <!--<div class="dropdown">
-                <button>お気に入り ▼</button>
-                <div class="dropdown-content">
-                    <a href="{% url 'favorites_cosme' %}">マイコスメお気に入り</a>
-                    <a href="{% url 'favorites_make' %}">マイメイクお気に入り</a>
-                </div>
-            </div>-->
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  お気に入り ▼
-                </a>
-              
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{% url 'favorites_cosme' %}">マイコスメお気に入り</a></li>
-                  <li><a class="dropdown-item" href="{% url 'favorites_make' %}">マイメイクお気に入り</a></li>
-                </ul>
-              </div>              
-              
+            
+            <div class="mt-2">
+                <select id="favorites-select" class="form-select" onchange="navigateToCategory()">
+                    <option value="">お気に入り</option>
+                    <option value="{% url 'favorites_cosme' %}">マイコスメお気に入り</option>
+                    <option value="{% url 'favorites_make' %}">マイメイクお気に入り</option>
+                </select>
+            </div>
+            
+            <script>
+                function navigateToCategory() {
+                    const selectedValue = document.getElementById("favorites-select").value;
+                    if (selectedValue) {
+                        // 選択されたURLに遷移
+                        window.location.href = selectedValue;
+                    }
+                }
+            </script>
+            
 
             <a href="{% url 'my_page' %}">マイページ</a>
-            <div class="dropdown">
-                <button>設定 ▼</button>
-                <div class="dropdown-content">
-                    <a href="{% url 'email_change' %}">メールアドレス変更</a>
-                    <a href="{% url 'password_change' %}">パスワード変更</a>
-                    <a href="{% url 'logout' %}">ログアウト</a>
-                </div>
+            
+            <div class="mt-2">
+                <select id="settings-select" class="form-select" onchange="navigateToSetting()">
+                    <option value="">設定</option>
+                    <option value="{% url 'email_change' %}">メールアドレス変更</option>
+                    <option value="{% url 'password_change' %}">パスワード変更</option>
+                    <option value="{% url 'logout' %}">ログアウト</option>
+                </select>
             </div>
+            
+            <script>
+                function navigateToSetting() {
+                    const selectedValue = document.getElementById("settings-select").value;
+                    if (selectedValue) {
+                        // 選択されたURLに遷移
+                        window.location.href = selectedValue;
+                    }
+                }
+            </script>
+            
         </nav>
     </header>
 
@@ -56,11 +66,10 @@
         <!-- 子テンプレートの内容がここに挿入されます -->
         {% endblock %}
     </main>
-    <!-- jQueryをインポート --> 
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-     <!-- BootstrapのJavaScript --> 
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script> 
-      <!-- その他の必要なJavaScript --> 
-       <script src="{% static 'js/scripts.js' %}"></script>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
 </body>
 </html>

@@ -156,6 +156,12 @@ LOGIN_REDIRECT_URL = 'home'  # ログイン成功後のリダイレクト先（h
 LOGOUT_REDIRECT_URL = 'login'  # ログアウト後のリダイレクト先
 
 
+# JSONファイルのディレクトリ
+FIXTURES_DIR = BASE_DIR / 'app' / 'fixtures'
+
+from pathlib import Path
+
+FIXTURES_DIR = BASE_DIR / 'app' / 'fixtures'  # パスを正しく結合
 
 
 

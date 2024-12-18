@@ -17,9 +17,7 @@ import os
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
-
-
-
+import json
 
 
 
@@ -210,39 +208,28 @@ def my_cosmetic_register(request):
 
     return render(request, 'my_cosmetic_register.html', context)
 
-# コスメの検索
+
 def search_cosmetics(request):
+    # JSONファイルのパス
+    json_file_path = settings.FIXTURES_DIR / 'cosmetic.json'
+    
+    # JSONファイルを読み込む
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    # フロントエンドからのリクエストデータを取得
     keyword = request.GET.get('keyword', '').lower()
-    results = []
+    category = request.GET.get('category', '')
 
-    # 簡易的な検索ロジック（カテゴリ内検索）
-    for category, items in COSMETIC_CATEGORIES.items():
-        filtered_items = [item for item in items if keyword in item.lower()]
-        if filtered_items:
-            results.append({"category": category, "items": filtered_items})
-
-    return JsonResponse({"results": results})
-
-# 初期コスメデータの取得
-def get_initial_cosmetics(request):
-    # cosmetic.jsonファイルのパス
-    file_path = os.path.join(settings.BASE_DIR, 'static/data/cosmetic.json')
-    with open(file_path, 'r', encoding='utf-8') as f:
-        cosmetics = json.load(f)
-
-    # 必要なデータだけ抽出（fieldsのみ）
+    # 検索フィルタリング
     filtered_cosmetics = [
-        {
-            "name": item["fields"]["name"],
-            "brand": item["fields"]["brand"],
-            "category": item["fields"]["category"],
-            "price": item["fields"]["price"]
-        }
-        for item in cosmetics
+        item['fields'] for item in data if
+        (keyword in item['fields']['name'].lower() if keyword else True) and
+        (item['fields']['category'] == category if category else True)
     ]
 
-    return JsonResponse({"cosmetics": filtered_cosmetics})
-
+    # 結果を返す
+    return JsonResponse({'results': filtered_cosmetics})
 
 
 def my_make_post(request):
@@ -285,6 +272,31 @@ def my_cosmetic_register(request):
             context['error'] = "コスメを選択してください。"
 
     return render(request, 'my_cosmetic_register.html', context)
+from django.http import JsonResponse
+import json
+from django.conf import settings
+
+def search_cosmetics(request):
+    # JSONファイルのパス
+    json_file_path = settings.FIXTURES_DIR / 'cosmetic.json'
+    
+    # JSONファイルを読み込む
+    with open(json_file_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    # フロントエンドからのリクエストデータを取得
+    keyword = request.GET.get('keyword', '').lower()
+    category = request.GET.get('category', '')
+
+    # 検索フィルタリング
+    filtered_cosmetics = [
+        item['fields'] for item in data if
+        (keyword in item['fields']['name'].lower() if keyword else True) and
+        (item['fields']['category'] == category if category else True)
+    ]
+
+    # 結果を返す
+    return JsonResponse({'results': filtered_cosmetics})
 
 # カテゴリに基づくコスメの検索
 def search_cosmetics(request):
