@@ -22,40 +22,33 @@ function performSearch() {
     // 追加の処理をここに記述 (例: フォームデータの送信など)
   }
   
-  function performSearch() {
-    var keyword = document.getElementById('keyword-input').value.toLowerCase();
-    var category = document.getElementById('category-select').value;
-    var resultsContainer
-  }
-  $(function(){
-    $('.search-section').select2();
-});
 
+// 検索処理
 function performSearch() {
   const keyword = document.getElementById('keyword-input').value;
   const category = document.getElementById('category-select').value;
 
-  fetch(`/search/?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}`)
+  fetch(`/search/?keyword=${keyword}&category=${category}`)
       .then(response => response.json())
       .then(data => {
           const resultsContainer = document.getElementById('search-results');
-          resultsContainer.innerHTML = '';
+          resultsContainer.innerHTML = ''; // 初期化
 
-          if (data.results.length > 0) {
-              data.results.forEach(item => {
-                  const div = document.createElement('div');
-                  div.classList.add('result-item');
-                  div.innerHTML = `
-                      <h5>${item.name}</h5>
-                      <p>ブランド: ${item.brand}</p>
-                      <p>カテゴリ: ${item.category}</p>
-                      <p>価格: ¥${item.price.toLocaleString()}</p>
-                  `;
-                  resultsContainer.appendChild(div);
-              });
-          } else {
-              resultsContainer.textContent = '該当するコスメが見つかりません。';
-          }
-      })
-      .catch(error => console.error('Error:', error));
+          data.results.forEach(item => {
+              const div = document.createElement('div');
+              div.className = 'search-result-item';
+              div.textContent = `${item.cosmetic_name} (${item.category} - ${item.subcategory})`;
+              div.dataset.id = item.id; // コスメIDをデータ属性に追加
+              resultsContainer.appendChild(div);
+          });
+      });
 }
+
+// 検索結果をクリックしたときにフォームに反映
+document.getElementById('search-results').addEventListener('click', (e) => {
+  if (e.target.classList.contains('search-result-item')) {
+      const cosmeticId = e.target.dataset.id; // データ属性からIDを取得
+      document.getElementById('cosmetic_id').value = cosmeticId; // フォームにセット
+  }
+});
+

@@ -57,26 +57,6 @@ class LoginView(View):
         return render(request, "login.html", {"form": form})
 
 
-#class HomeView(LoginRequiredMixin, TemplateView):
-    #template_name = "home.html"
-    #login_url = "login"
-
-    #def get(self, request):
-        follow_user_posts = MyMake.objects.filter(
-            user__in=request.user.following.all()
-        ).order_by("-created_at")
-        unused_cosmetics = MyCosmetic.objects.filter(
-            user=request.user, used_in_make=False
-        )
-        followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
-        users_followed = User.objects.filter(id__in=followed_users)
-        
-        context = {
-            'follow_user_posts': follow_user_posts,
-            'unused_cosmetics': unused_cosmetics,
-            'users_followed': users_followed
-        }
-        return render(request, 'home.html', context)
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
     login_url = "login"
@@ -111,27 +91,11 @@ def logout(request):
 
 
 
-#@login_required
-#def my_cosmetics(request):
-    #my_cosmetics = MyCosmetic.objects.filter(user=request.user)
-    #return render(request, "my_cosmetics.html", {"my_cosmetics": my_cosmetics})
-
-def my_cosme(request):
-    my_cosmetics = MyCosmetic.objects.filter(user=request.user)
-    return render(request, "my_cosmetics.html")#, {"my_cosmetics": my_cosmetics})
-    # ビューのロジック
-    #return render(request, 'my_cosmetics.html')#上と一緒？不必要？
-
-#def logout(request):
-    auth_logout(request)
-    return redirect(request,"login.html")
-
-
 def my_cosmetics(request):
     cosmetics = CosmeticMaster.objects.all()
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
 
-def my_cosmetic_register(request):
+#def my_cosmetic_register(request):
     if request.method == 'POST':
         cosmetic_id = request.POST.get('cosmetic_id')
         is_favorite = request.POST.get('is_favorite') == 'on'
@@ -151,14 +115,6 @@ def my_cosme_detail(request):
     return render(request, 'my_cosme_detail.html') #マイコスメお気に入り
 
 
-
-
-#def favorites_cosme(request):
-    favorite_cosmetics = CosmeticMaster.objects.filter(is_favorite=True)
-    paginator = Paginator(favorite_cosmetics, 10)  # 1ページに表示する件数を指定
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'favorites_cosme.html',{'favorite_cosmetics': favorite_cosmetics},{'cosmetics': page_obj})
 def favorites_cosme(request):
     # お気に入りのコスメをフィルタリング
     favorite_cosmetics_list = MyCosmetic.objects.filter(is_favorite=True)
@@ -169,22 +125,9 @@ def favorites_cosme(request):
     favorite_cosmetics = paginator.get_page(page_number)
     
     return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
-#def favorites_cosme(request):
-    # お気に入りコスメをフィルタリング
-    favorite_cosmetics_list = CosmeticMaster.objects.filter(is_favorite=True)
-    
-    # ページネーションの設定
-    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
-    page_number = request.GET.get('page')
-    favorite_cosmetics = paginator.get_page(page_number)
-    
-    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
-#def favorites_cosme(request):
-    favorite_cosmetics = CosmeticMaster.objects.filter(is_favorite=True)
-    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
 
-def my_cosmetic_register(request):
+#def my_cosmetic_register(request):
     return render(request, 'my_cosme_register.html') #マイコスメ登録画面
 
 #def my_cosmetic_register(request):
@@ -198,66 +141,32 @@ def my_cosmetic_register(request):
     return render(request, 'my_cosmetic_register.html', {'form': form})
 
 
-# 初期データ
-COSMETIC_CATEGORIES = {
-    "フェイスケア": ["化粧水", "乳液", "美容液"],
-    "ポイントメイク": ["アイブロウ", "アイシャドウ", "リップ"],
-    "ベースメイク": ["下地", "ファンデーション", "フェイスパウダー"],
-}
 
-# コスメの登録画面表示
-def my_cosmetic_register(request):
-    context = {
-        "categories": COSMETIC_CATEGORIES,
-        "cosmetics": CosmeticMaster.objects.all(),
-    }
-    if request.method == 'POST':
-        # POSTデータからコスメ情報を取得
-        cosmetic_id = request.POST.get('cosmetic_id')
-        is_favorite = 'is_favorite' in request.POST
-        usage_status = request.POST.get('usage_status')
-
-        if cosmetic_id:
-            cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
-
-            # コスメ登録処理
-            MyCosmetic.objects.create(
-                user=request.user,
-                cosmetic=cosmetic,
-                is_favorite=is_favorite,
-                usage_status=usage_status
-            )
-            
-            return redirect('my_cosmetics')
-        else:
-            # cosmetic_id が None の場合のエラーメッセージを追加
-            context['error'] = "コスメを選択してください。"
-
-    return render(request, 'my_cosmetic_register.html', context)
-
-
-def search_cosmetics(request):
-    # JSONファイルのパス
-    json_file_path = settings.FIXTURES_DIR / 'cosmetic.json'
-    
-    # JSONファイルを読み込む
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-
-    # フロントエンドからのリクエストデータを取得
-    keyword = request.GET.get('keyword', '').lower()
+#def search_cosmetics(request):
+    keyword = request.GET.get('keyword', '')
     category = request.GET.get('category', '')
 
-    # 検索フィルタリング
-    filtered_cosmetics = [
-        item['fields'] for item in data if
-        (keyword in item['fields']['name'].lower() if keyword else True) and
-        (item['fields']['category'] == category if category else True)
-    ]
+    # 検索ロジック
+    cosmetics = CosmeticMaster.objects.all()
+    if keyword:
+        cosmetics = cosmetics.filter(cosmetic_name__icontains=keyword)
+    if category:
+        cosmetics = cosmetics.filter(subcategory=category)
 
-    # 結果を返す
-    return JsonResponse({'results': filtered_cosmetics})
+    # JSON 形式で返す
+    results = list(cosmetics.values('id', 'cosmetic_name', 'category', 'subcategory'))
+    return JsonResponse({'results': results})
 
+# コスメの検索
+def search_cosmetics(request):
+    keyword = request.GET.get('keyword', '').lower()
+    results = []
+    # 簡易的な検索ロジック（カテゴリ内検索）
+    for category, items in COSMETIC_CATEGORIES.items():
+        filtered_items = [item for item in items if keyword in item.lower()]
+        if filtered_items:
+            results.append({"category": category, "items": filtered_items})
+    return JsonResponse({"results": results})
 
 def my_make_post(request):
     return render(request, 'my_make_post.html') #マイメイク投稿画面
@@ -270,7 +179,7 @@ COSMETIC_CATEGORIES = {
     "ベースメイク": ["下地", "ファンデーション", "フェイスパウダー"],
 }
 
-# コスメの登録画面表示
+#コスメの登録画面表示
 def my_cosmetic_register(request):
     context = {
         "categories": COSMETIC_CATEGORIES,
@@ -281,10 +190,8 @@ def my_cosmetic_register(request):
         cosmetic_id = request.POST.get('cosmetic_id')
         is_favorite = 'is_favorite' in request.POST
         usage_status = request.POST.get('usage_status')
-
         if cosmetic_id:
             cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
-
             # コスメ登録処理
             MyCosmetic.objects.create(
                 user=request.user,
@@ -297,33 +204,8 @@ def my_cosmetic_register(request):
         else:
             # cosmetic_id が None の場合のエラーメッセージを追加
             context['error'] = "コスメを選択してください。"
-
     return render(request, 'my_cosmetic_register.html', context)
-from django.http import JsonResponse
-import json
-from django.conf import settings
 
-def search_cosmetics(request):
-    # JSONファイルのパス
-    json_file_path = settings.FIXTURES_DIR / 'cosmetic.json'
-    
-    # JSONファイルを読み込む
-    with open(json_file_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-
-    # フロントエンドからのリクエストデータを取得
-    keyword = request.GET.get('keyword', '').lower()
-    category = request.GET.get('category', '')
-
-    # 検索フィルタリング
-    filtered_cosmetics = [
-        item['fields'] for item in data if
-        (keyword in item['fields']['name'].lower() if keyword else True) and
-        (item['fields']['category'] == category if category else True)
-    ]
-
-    # 結果を返す
-    return JsonResponse({'results': filtered_cosmetics})
 
 # カテゴリに基づくコスメの検索
 def search_cosmetics(request):

@@ -78,8 +78,28 @@ class CosmeticMaster(models.Model):
         (1, 'ポイントメイク'),
         (2, 'ベースメイク')
     ]
+    SUB_CATEGORY_CHOICES = [
+    # フェイスケア
+    (0, '化粧水'),
+    (1, '乳液'),
+    (2, '美容液'),
+    
+    # ポイントメイク
+    (3, 'アイブロウ'),
+    (4, 'アイライナー'),
+    (5, 'アイシャドウ'),
+    (6, 'マスカラ'),
+    (7, 'チーク'),
+    (8, 'リップ'),
+    
+    # ベースメイク
+    (9, '下地'),
+    (10, 'ファンデーション'),
+    (11, 'フェイスパウダー')
+]
+
     category = models.IntegerField(choices=CATEGORY_CHOICES, verbose_name="カテゴリ")
-    sub_category = models.CharField(max_length=50, blank=True, null=True)  # サブカテゴリ
+    sub_category = models.IntegerField(choices=SUB_CATEGORY_CHOICES, verbose_name="サブカテゴリ",default=0)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日", null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日", null=True)
 

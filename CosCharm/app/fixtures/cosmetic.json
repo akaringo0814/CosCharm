@@ -1,181 +1,199 @@
 [
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 1,
         "fields": {
-            "name": "薬用スキンコンディショナー エッセンシャル",
+            "cosmetic_name": "薬用スキンコンディショナー エッセンシャル",
             "brand": "アルビオン",
-            "category": "化粧水",
+            "category": 0,  
+            "sub_category": 0,
             "price": 3300
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 2,
         "fields": {
-            "name": "ハトムギ化粧水",
+            "cosmetic_name": "ハトムギ化粧水",
             "brand": "ナチュリエ",
-            "category": "化粧水",
+            "category": 0,
+            "sub_category": 0,
             "price": 715
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 3,
         "fields": {
-            "name": "資生堂 オイデルミン エッセンスローション",
+            "cosmetic_name": "資生堂 オイデルミン エッセンスローション",
             "brand": "資生堂",
-            "category": "乳液",
+            "category": 0,
+            "sub_category": 1,
             "price": 6600
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 4,
         "fields": {
-            "name": "乳液・敏感肌用・しっとりタイプ",
+            "cosmetic_name": "乳液・敏感肌用・しっとりタイプ",
             "brand": "無印良品",
-            "category": "乳液",
+            "category": 0,
+            "sub_category": 1,
             "price": 490
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 5,
         "fields": {
-            "name": "RMK バリアトリートメントエッセンス",
+            "cosmetic_name": "RMK バリアトリートメントエッセンス",
             "brand": "RMK",
-            "category": "美容液",
+            "category": 0,
+            "sub_category": 2,
             "price": 7150
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 6,
         "fields": {
-            "name": "RMK Wトリートメントオイル",
+            "cosmetic_name": "RMK Wトリートメントオイル",
             "brand": "RMK",
-            "category": "美容オイル",
+            "category": 0,
+            "sub_category": 2,
             "price": 4840
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 7,
         "fields": {
-            "name": "THE アイパレ 01 本命のブラウン",
+            "cosmetic_name": "THE アイパレ 01 本命のブラウン",
             "brand": "ビーアイドル",
-            "category": "アイシャドウ",
+            "category": 1,
+            "sub_category": 5,
             "price": 1980
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 8,
         "fields": {
-            "name": "シピシピ グリッターイルミネーションライナー 101 フローズンホワイト",
+            "cosmetic_name": "シピシピ グリッターイルミネーションライナー 101 フローズンホワイト",
             "brand": "CipiCipi",
-            "category": "アイライナー",
+            "category": 1,
+            "sub_category": 4,
             "price": 1540
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 9,
         "fields": {
-            "name": "ロムアンド ハンオールブロウカラーマスカラ 03 ジントーンインディ",
+            "cosmetic_name": "ロムアンド ハンオールブロウカラーマスカラ 03 ジントーンインディ",
             "brand": "ロムアンド",
-            "category": "アイブロウ",
+            "category": 1,
+            "sub_category": 3,
             "price": 880
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 10,
         "fields": {
-            "name": "エチュセ アイエディション 19",
+            "cosmetic_name": "エチュセ アイエディション 19",
             "brand": "エチュセ",
-            "category": "アイシャドウ",
+            "category": 1,
+            "sub_category": 5,
             "price": 1540
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 11,
         "fields": {
-            "name": "フジコ プランプモニュイリップ 01 王道",
+            "cosmetic_name": "フジコ プランプモニュイリップ 01 王道",
             "brand": "Fujiko",
-            "category": "リップ",
+            "category": 1,
+            "sub_category": 8,
             "price": 1400
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 12,
         "fields": {
-            "name": "BBIA ラストベルベットリップティント 01",
+            "cosmetic_name": "BBIA ラストベルベットリップティント 01",
             "brand": "BBIA",
-            "category": "リップ",
+            "category": 1,
+            "sub_category": 8,
             "price": 1100
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 13,
         "fields": {
-            "name": "ヴォワールコレクチュールn",
+            "cosmetic_name": "ヴォワールコレクチュールn",
             "brand": "クレ・ド・ポー ボーテ",
-            "category": "下地",
+            "category": 2,
+            "sub_category": 9,
             "price": 7700
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 14,
         "fields": {
-            "name": "ドラマティックフルイド プライマー ラベンダーカラー",
+            "cosmetic_name": "ドラマティックフルイド プライマー ラベンダーカラー",
             "brand": "マキアージュ",
-            "category": "下地",
+            "category": 2,
+            "sub_category": 9,
             "price": 2970
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 15,
         "fields": {
-            "name": "ナチュラルラディアント ロングウェア クッションファンデーション",
+            "cosmetic_name": "ナチュラルラディアント ロングウェア クッションファンデーション",
             "brand": "NARS",
-            "category": "ファンデーション",
+            "category": 2,
+            "sub_category": 10,
             "price": 7920
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 16,
         "fields": {
-            "name": "ディオール フォーエヴァー スキン コレクト ファンデーション 00",
+            "cosmetic_name": "ディオール フォーエヴァー スキン コレクト ファンデーション 00",
             "brand": "Dior",
-            "category": "ファンデーション",
+            "category": 2,
+            "sub_category": 10,
             "price": 7480
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 17,
         "fields": {
-            "name": "Vim Beauty フェイスパウダー",
+            "cosmetic_name": "Vim Beauty フェイスパウダー",
             "brand": "Vim Beauty",
-            "category": "フェイスパウダー",
+            "category": 2,
+            "sub_category": 11,
             "price": 2300
         }
     },
     {
-        "model": "app.cosmetic",
+        "model": "app.cosmeticmaster",
         "pk": 18,
         "fields": {
-            "name": "ウォンジョンヨ ウォーターブルー ウォーターパウダー 01 クリアホワイト",
+            "cosmetic_name": "ウォンジョンヨ ウォーターブルー ウォーターパウダー 01 クリアホワイト",
             "brand": "Wonjonyo",
-            "category": "フェイスパウダー",
+            "category": 2,
+            "sub_category": 11,
             "price": 1980
         }
     }
