@@ -17,6 +17,7 @@ import os
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 import json
 
 
@@ -149,13 +150,39 @@ def my_cosmetic_register(request):
 def my_cosme_detail(request):
     return render(request, 'my_cosme_detail.html') #マイコスメお気に入り
 
-def favorites_cosme(request): 
-    # ここに処理を記述 
-    return render(request, 'favorites_cosme.html') #favorite_cosme my_cosme_favotiteどちらか
 
-def my_cosme_favorites(request):
-    # ここに処理を記述
-    return render(request, 'my_cosme_favorites.html')
+
+
+#def favorites_cosme(request):
+    favorite_cosmetics = CosmeticMaster.objects.filter(is_favorite=True)
+    paginator = Paginator(favorite_cosmetics, 10)  # 1ページに表示する件数を指定
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'favorites_cosme.html',{'favorite_cosmetics': favorite_cosmetics},{'cosmetics': page_obj})
+def favorites_cosme(request):
+    # お気に入りのコスメをフィルタリング
+    favorite_cosmetics_list = MyCosmetic.objects.filter(is_favorite=True)
+
+    # ページネーションの設定
+    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+    
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
+#def favorites_cosme(request):
+    # お気に入りコスメをフィルタリング
+    favorite_cosmetics_list = CosmeticMaster.objects.filter(is_favorite=True)
+    
+    # ページネーションの設定
+    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+    
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
+#def favorites_cosme(request):
+    favorite_cosmetics = CosmeticMaster.objects.filter(is_favorite=True)
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
+
 
 def my_cosmetic_register(request):
     return render(request, 'my_cosme_register.html') #マイコスメ登録画面

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>お気に入りコスメ</h1>
+<div>
+    {% for cosmetic in favorite_cosmetics %}
+    <div>
+        <img src="{{ cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic_name }}">
+        <p>{{ cosmetic.brand }}</p>
+        <p><a href="{% url 'cosmetic_detail' cosmetic.id %}">{{ cosmetic.cosmetic_name }}</a></p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ページネーションの例 -->
+<div class="pagination">
+    <span class="step-links">
+        {% if favorite_cosmetics.has_previous %}
+            <a href="?page=1">最初</a>
+            <a href="?page={{ favorite_cosmetics.previous_page_number }}">前へ</a>
+        {% endif %}
+
+        <span class="current">
+            ページ {{ favorite_cosmetics.number }} / {{ favorite_cosmetics.paginator.num_pages }}
+        </span>
+
+        {% if favorite_cosmetics.has_next %}
+            <a href="?page={{ favorite_cosmetics.next_page_number }}">次へ</a>
+            <a href="?page={{ favorite_cosmetics.paginator.num_pages }}">最後</a>
+        {% endif %}
+    </span>
+</div>
+<p>
+    <a href="{% url 'home' %}">ホームに戻る</a>
+</p>
+{% endblock %}
