@@ -16,7 +16,7 @@ from django.contrib.auth import logout as auth_logout
 import os
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect , Http404
 from django.core.paginator import Paginator
 import json
 
@@ -111,9 +111,72 @@ def my_cosmetics(request):
     cosmetics = CosmeticMaster.objects.all()
     return render(request, 'my_cosmetic_register.html', {'cosmetics': cosmetics})
 
-def my_cosme_detail(request):
-    return render(request, 'my_cosme_detail.html') #マイコスメお気に入り
+#def my_cosmetic_detail(request):
+    return render(request, 'my_cosmetic_detail.html') #マイコスメお気に入り
 
+
+def load_cosmetic_data():
+    # 正しいパスを指定して cosmetic.json を読み込み
+    json_path = os.path.join(settings.BASE_DIR, 'app', 'fixtures', 'cosmetic.json')
+    if not os.path.exists(json_path):
+        raise FileNotFoundError(f"cosmetic.json file not found at {json_path}")
+
+    with open(json_path, 'r', encoding='utf-8') as f:
+        cosmetics = json.load(f)
+    return cosmetics
+
+# グローバル変数としてコスメデータをロード
+COSMETIC_DATA = load_cosmetic_data()
+
+# その他のビュー関数やクラス
+
+
+
+
+
+
+
+
+
+
+#def my_cosmetic_detail(request, pk):
+    # 正しいパスを指定して cosmetic.json を読み込み
+    #json_path = os.path.join(settings.BASE_DIR, 'app', 'fixtures', 'cosmetic.json')
+    #if not os.path.exists(json_path):
+        #raise Http404("cosmetic.json file not found")
+
+    #with open(json_path, 'r', encoding='utf-8') as f:
+        #cosmetics = json.load(f)
+
+    # pk に基づいてコスメティックを検索
+    #cosmetic = next((item for item in cosmetics if item["id"] == pk), None)
+    
+    #if not cosmetic:
+        #raise Http404("Cosmetic not found")
+
+   # return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
+
+
+def delete_my_cosmetic(request, pk):
+    cosmetic = get_object_or_404(MyCosmetic, pk=pk)
+    cosmetic.delete()
+    return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
+
+
+def my_cosmetic_detail(request, pk):
+    print(f"Fetching MyCosmetic with pk={pk}")
+    cosmetic = get_object_or_404(MyCosmetic, pk=pk)
+    print(f"Found MyCosmetic: {cosmetic}")
+    return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
+
+#def my_cosmetic_detail(request, pk):
+    cosmetic = get_object_or_404(MyCosmetic, pk=pk)
+    return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
+
+def delete_my_cosmetic(request, pk):
+    cosmetic = get_object_or_404(MyCosmetic, pk=pk)
+    cosmetic.delete()
+    return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
 
 def favorites_cosme(request):
     # お気に入りのコスメをフィルタリング

@@ -52,3 +52,25 @@ document.getElementById('search-results').addEventListener('click', (e) => {
   }
 });
 
+function performSearch() {
+  const keyword = document.getElementById("keyword-input").value;
+  const category = document.getElementById("category-select").value;
+
+  // Fetch API を使用して検索結果を取得
+  fetch(`/search/?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}`)
+    .then(response => response.json())
+    .then(data => {
+      const resultsContainer = document.getElementById("search-results");
+      resultsContainer.innerHTML = ""; // 前回の結果をクリア
+      if (data.results.length > 0) {
+        data.results.forEach(result => {
+          const div = document.createElement("div");
+          div.textContent = `${result.brand} - ${result.name}`;
+          resultsContainer.appendChild(div);
+        });
+      } else {
+        resultsContainer.textContent = "検索結果がありません。";
+      }
+    })
+    .catch(error => console.error("検索エラー:", error));
+}

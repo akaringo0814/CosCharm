@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 マイコスメ登録・編集画面
@@ -7,72 +8,85 @@
 {% block content %}
 <h1>マイコスメ登録・編集画面</h1>
 
+{% if messages %}
+  <div class="alert alert-success">
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+  </div>
+{% endif %}
+
 {% if error %}
 <div class="alert alert-danger">{{ error }}</div>
 {% endif %}
 
-<div class="row">
-  <!-- 検索セクション -->
-  <div class="col-md-6">
-    <div class="search-section">
-      <h2>検索</h2>
-      <input type="text" id="keyword-input" placeholder="キーワードで検索" class="form-control" oninput="performSearch()">
-      <select id="category-select" class="form-select mt-2" onchange="performSearch()">
-        <option value="">カテゴリで検索</option>
-        {% for category, subcategories in categories.items %}
-        <optgroup label="{{ category }}">
-          {% for subcategory in subcategories %}
-          <option value="{{ subcategory }}">{{ subcategory }}</option>
-          {% endfor %}
-        </optgroup>
-        {% endfor %}
-      </select>
-      <button class="btn btn-secondary mt-2" onclick="performSearch()">検索</button>
-    </div>
-    <div id="search-results" class="mt-3"></div>
-  </div>
-
-  <!-- 右側の登録コスメ表示エリア -->
-  <div class="col-md-6">
-    <div class="cosmetics-display">
-      <h2>登録コスメ</h2>
-      <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="cosmetic_id" class="form-label">コスメを選択:</label>
-          <select name="cosmetic_id" id="cosmetic_id" class="form-select">
-            {% for cosmetic in cosmetics %}
-            <option value="{{ cosmetic.id }}">{{ cosmetic.cosmetic_name }}</option>
+<div class="container">
+  <!-- 左側: 検索セクション -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="search-section">
+        <h2>検索</h2>
+        <input type="text" id="keyword-input" placeholder="キーワードで検索" class="form-control" oninput="performSearch()">
+        <select id="category-select" class="form-select mt-2" onchange="performSearch()">
+          <option value="">カテゴリで検索</option>
+          {% for category, subcategories in categories.items %}
+          <optgroup label="{{ category }}">
+            {% for subcategory in subcategories %}
+            <option value="{{ subcategory }}">{{ subcategory }}</option>
             {% endfor %}
-          </select>
-        </div>
+          </optgroup>
+          {% endfor %}
+        </select>
+        <button class="btn btn-secondary mt-2" onclick="performSearch()">検索</button>
+      </div>
+      <div id="search-results" class="mt-3">
+        <!-- 検索結果がここに表示されます -->
+      </div>
+    </div>
 
-        <div class="mb-3 d-flex align-items-center">
-          <input type="checkbox" class="form-check-input me-2" name="is_favorite" id="is_favorite">
-          <label for="is_favorite" class="form-check-label mb-0">お気に入り登録</label>
-        </div>
+    <!-- 右側: 登録コスメ表示エリア -->
+    <div class="col-md-6">
+      <div class="cosmetics-display">
+        <h2>登録コスメ</h2>
+        <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="cosmetic_id" class="form-label">コスメを選択:</label>
+            <select name="cosmetic_id" id="cosmetic_id" class="form-select">
+              {% for cosmetic in cosmetics %}
+              <option value="{{ cosmetic.id }}">{{ cosmetic.cosmetic_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">使用状況:</label>
-          <div class="d-flex">
-            <div class="form-check me-3">
-              <input type="radio" class="form-check-input" name="usage_status" value="not_used" id="not_used" checked>
-              <label for="not_used" class="form-check-label">未使用</label>
-            </div>
-            <div class="form-check me-3">
-              <input type="radio" class="form-check-input" name="usage_status" value="in_use" id="in_use">
-              <label for="in_use" class="form-check-label">使用中</label>
-            </div>
-            <div class="form-check">
-              <input type="radio" class="form-check-input" name="usage_status" value="used" id="used">
-              <label for="used" class="form-check-label">使用済み</label>
+          <div class="mb-3 d-flex align-items-center">
+            <input type="checkbox" class="form-check-input me-2" name="is_favorite" id="is_favorite">
+            <label for="is_favorite" class="form-check-label mb-0">お気に入り登録</label>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">使用状況:</label>
+            <div class="d-flex">
+              <div class="form-check me-3">
+                <input type="radio" class="form-check-input" name="usage_status" value="not_used" id="not_used" checked>
+                <label for="not_used" class="form-check-label">未使用</label>
+              </div>
+              <div class="form-check me-3">
+                <input type="radio" class="form-check-input" name="usage_status" value="in_use" id="in_use">
+                <label for="in_use" class="form-check-label">使用中</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" class="form-check-input" name="usage_status" value="used" id="used">
+                <label for="used" class="form-check-label">使用済み</label>
+              </div>
             </div>
           </div>
-        </div>
 
-        <button type="submit" class="btn btn-primary">登録</button>
-      </form>
+          <button type="submit" class="btn btn-primary">登録</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
+<script src="{% static 'js/scripts.js' %}"></script>
 {% endblock %}
