@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from app.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .models import MyMake, MyCosmetic, CosmeticMaster
+from .models import MyMake, MyCosmetic, CosmeticMaster,MyMakeCosmetic
 #from .models import Profile
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
@@ -97,3 +97,10 @@ class ProfileForm(forms.ModelForm):
             if profile_image.size > 5 * 1024 * 1024:  # 5MB以上の画像を拒否
                 raise forms.ValidationError("画像のサイズは5MB以下にしてください。")
         return profile_image
+    
+
+class MyMakeForm(forms.ModelForm):
+    class Meta:
+        model = MyMake
+        fields = ['make_name', 'make_memo', 'image']
+

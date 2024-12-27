@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+メイク詳細
+{% endblock %}
+
+{% block content %}
+<h1>{{ my_make.make_name }}</h1>
+<p>メイクメモ: {{ my_make.make_memo }}</p>
+<p>作成日: {{ my_make.created_at }}</p>
+
+<div>
+  <h2>メインコスメ:</h2>
+  <p>{{ my_make.cosmetics.filter(is_main=True).first }}</p>
+</div>
+
+<div>
+  <h2>他使用コスメ:</h2>
+  <ul>
+    {% for cosmetic in my_make.cosmetics.filter(is_main=False) %}
+      <li>{{ cosmetic }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div>
+  <h2>写真:</h2>
+  <img src="{{ my_make.image.url }}" alt="メイク画像">
+</div>
+{% endblock %}

@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import SignupForm, LoginForm
-from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User
+from .forms import SignupForm, LoginForm ,MyMakeForm
+from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake
 from .forms import ChangeEmailForm, ProfileForm, CosmeticForm
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth import update_session_auth_hash
@@ -19,6 +19,8 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render, get_object_or_404, redirect , Http404
 from django.core.paginator import Paginator
 import json
+
+
 
 
 
@@ -219,9 +221,26 @@ def favorites_cosme(request):
     # JSON 形式で返す
     results = list(cosmetics.values('id', 'cosmetic_name', 'category', 'subcategory'))
     return JsonResponse({'results': results})
+def search_cosmetics(request):
+    keyword = request.GET.get('keyword', '').lower()
+    brand = request.GET.get('brand', '').lower()
+    category = request.GET.get('category', '').lower()
+
+    results = []
+    for cat, items in COSMETIC_CATEGORIES.items():
+        if category and category not in cat.lower():
+            continue  # カテゴリフィルタリング
+
+        filtered_items = [
+            item for item in items 
+            if keyword in item.lower() and (not brand or brand in item.lower())
+        ]
+        if filtered_items:
+            results.append({"category": cat, "items": filtered_items})
+    return JsonResponse({"results": results})
 
 # コスメの検索
-def search_cosmetics(request):
+#def search_cosmetics(request):
     keyword = request.GET.get('keyword', '').lower()
     results = []
     # 簡易的な検索ロジック（カテゴリ内検索）
@@ -231,7 +250,7 @@ def search_cosmetics(request):
             results.append({"category": category, "items": filtered_items})
     return JsonResponse({"results": results})
 
-def my_make_post(request):
+#def my_make_post(request):
     return render(request, 'my_make_post.html') #マイメイク投稿画面
 
 
@@ -302,8 +321,28 @@ def get_initial_cosmetics(request):
     return JsonResponse({"cosmetics": filtered_cosmetics})
 
 
-def my_make_detail(request):
-    return render(request, 'my_make_detail.html') #マイメイク詳細画面
+def my_make_post(request):
+    if request.method == "POST":
+        form = MyMakeForm(request.POST, request.FILES)
+        if form.is_valid():
+            my_make = form.save(commit=False)
+            my_make.user = request.user
+            my_make.save()
+            
+            # 他使用コスメを保存
+            other_cosmetics = request.POST.getlist('other_cosmetics')  # 他使用コスメのIDリスト
+            for cosmetic_id in other_cosmetics:
+                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic_id=cosmetic_id, is_main=False)
+            
+            return redirect('my_make_detail', pk=my_make.pk)
+    else:
+        form = MyMakeForm()
+    return render(request, 'my_make_post.html', {'form': form})
+
+def my_make_detail(request, pk):
+    my_make = MyMake.objects.get(pk=pk)
+    return render(request, 'my_make_detail.html', {'my_make': my_make})
+
 
 def favorites_make(request):
     return render(request, 'favorites_make.html') #マイメイクお気に入り

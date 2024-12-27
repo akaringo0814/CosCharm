@@ -65,6 +65,10 @@ class MyMake(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+class MyMakeCosmetic(models.Model):
+    my_make = models.ForeignKey(MyMake, on_delete=models.CASCADE, related_name="cosmetics")
+    cosmetic = models.ForeignKey('CosmeticMaster', on_delete=models.CASCADE)
+    is_main = models.BooleanField(default=False)  # メインコスメかどうか
 
 class CosmeticMaster(models.Model):
     """コスメマスター"""

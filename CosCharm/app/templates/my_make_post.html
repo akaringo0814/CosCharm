@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+メイク投稿
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <label>メイク名:</label>
+        {{ form.make_name }}
+    </div>
+  
+    <div>
+        <label>メイクメモ:</label>
+        {{ form.make_memo }}
+    </div>
+
+    <div>
+        <label>写真:</label>
+        {{ form.image }}
+    </div>
+
+    <div>
+        <label>メインコスメ:</label>
+        <button type="button" id="select-main-cosmetic">＋コスメを選択</button>
+        <input type="hidden" name="main_cosmetic" id="main-cosmetic-id">
+    </div>
+
+    <div>
+        <label>他使用コスメ:</label>
+        <div id="other-cosmetics-container"></div>
+        <button type="button" id="add-other-cosmetic">＋コスメを選択</button>
+    </div>
+
+    <div>
+        <button type="submit">投稿</button>
+    </div>
+</form>
+{% endblock %}
