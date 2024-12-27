@@ -7,7 +7,7 @@
     <div>
         <img src="{{ cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic_name }}">
         <p>{{ cosmetic.brand }}</p>
-        <p><a href="{% url 'cosmetic_detail' cosmetic.id %}">{{ cosmetic.cosmetic_name }}</a></p>
+        <p><a href="{% url 'my_cosmetic_detail' cosmetic.pk %}">{{ cosmetic.cosmetic_name }}</a></p>
     </div>
     {% endfor %}
 </div>

@@ -10,18 +10,19 @@
     <p style="position: absolute; right: 10px;">使用状況: {{ cosmetic.usages_status }}</p>
 </div>
 <section>
-    <img src="{{ cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic_name }}">
+    <img src="{% if cosmetic.photo %}{{ cosmetic.photo.url }}{% else %}/path/to/default/image.jpg{% endif %}" alt="{{ cosmetic.cosmetic_name }}">
     <p>ブランド: {{ cosmetic.brand }}</p>
     <p>カテゴリー: {{ cosmetic.category }}</p>
     <p>金額: ¥{{ cosmetic.price }}</p>
 </section>
 <footer>
-    <button onclick="location.href='{% url 'my_cosmetic_register' %}';">編集</button>
+    <button onclick="location.href='{% url 'my_cosmetic_register' %}'">編集</button>
     <form action="{% url 'delete_my_cosmetic' cosmetic.pk %}" method="post" style="display:inline;">
         {% csrf_token %}
         <button type="submit">削除</button>
     </form>
-    <button onclick="location.href='{% url 'my_cosmetics' %}';">投稿</button>
+    <button onclick="location.href='{% url 'my_cosmetics' %}'">投稿</button>
 </footer>
 {% endblock %}
+
 

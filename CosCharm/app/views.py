@@ -158,14 +158,14 @@ COSMETIC_DATA = load_cosmetic_data()
 
 
 def delete_my_cosmetic(request, pk):
-    cosmetic = get_object_or_404(MyCosmetic, pk=pk)
+    cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
     cosmetic.delete()
     return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
 
 
 def my_cosmetic_detail(request, pk):
     print(f"Fetching MyCosmetic with pk={pk}")
-    cosmetic = get_object_or_404(MyCosmetic, pk=pk)
+    cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
     print(f"Found MyCosmetic: {cosmetic}")
     return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
