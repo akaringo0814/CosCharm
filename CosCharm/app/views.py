@@ -321,7 +321,7 @@ def get_initial_cosmetics(request):
     return JsonResponse({"cosmetics": filtered_cosmetics})
 
 
-def my_make_post(request):
+#def my_make_post(request):
     if request.method == "POST":
         form = MyMakeForm(request.POST, request.FILES)
         if form.is_valid():
@@ -339,11 +339,89 @@ def my_make_post(request):
         form = MyMakeForm()
     return render(request, 'my_make_post.html', {'form': form})
 
-def my_make_detail(request, pk):
+#def my_make_detail(request, pk):
     my_make = MyMake.objects.get(pk=pk)
     return render(request, 'my_make_detail.html', {'my_make': my_make})
 
 
+def my_make_detail(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    main_cosmetic = my_make.cosmetics.filter(is_main=True).first()
+    other_cosmetics = my_make.cosmetics.filter(is_main=False)
+    return render(request, 'my_make_detail.html', {
+        'my_make': my_make,
+        'main_cosmetic': main_cosmetic,
+        'other_cosmetics': other_cosmetics
+    })
+
+#def delete_my_make(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    if request.method == "POST":
+        my_make.delete()
+        return redirect('some_view_name')  # 削除後のリダイレクト先を設定
+    return render(request, 'delete_confirmation.html', {'my_make': my_make})
+
+#def delete_my_make(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    if request.method == "POST":
+        my_make.delete()
+        return redirect('home')  # 削除後のリダイレクト先を正しいビュー名に変更
+    return render(request, 'delete_confirmation.html', {'my_make': my_make})
+
+def delete_my_make(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    if request.method == "POST":
+        my_make.delete()
+        return redirect('home')  # 削除後のリダイレクト先を設定
+    return render(request, 'delete_confirmation.html', {'my_make': my_make})
+
+#def my_make_post_new(request):
+    if request.method == 'POST':
+        form = MyMakeForm(request.POST, request.FILES)
+        if form.is_valid():
+            my_make = form.save()
+            return redirect('my_make_detail', pk=my_make.pk)
+    else:
+        form = MyMakeForm()
+    return render(request, 'my_make_post.html', {'form': form})
+
+#def my_make_post(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    if request.method == 'POST':
+        form = MyMakeForm(request.POST, request.FILES, instance=my_make)
+        if form.is_valid():
+            form.save()
+            return redirect('my_make_detail', pk=my_make.pk)
+    else:
+        form = MyMakeForm(instance=my_make)
+    return render(request, 'my_make_post.html', {'form': form})
+
+def my_make_post_new(request):
+    if request.method == 'POST':
+        form = MyMakeForm(request.POST, request.FILES)
+        if form.is_valid():
+            my_make = form.save(commit=False)
+            my_make.user = request.user  # 現在のログインユーザーを設定
+            my_make.save()
+            return redirect('my_make_detail', pk=my_make.pk)
+    else:
+        form = MyMakeForm()
+    return render(request, 'my_make_post.html', {'form': form})
+
+def my_make_post(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    if request.method == 'POST':
+        form = MyMakeForm(request.POST, request.FILES, instance=my_make)
+        if form.is_valid():
+            form.save()
+            return redirect('my_make_detail', pk=my_make.pk)
+    else:
+        form = MyMakeForm(instance=my_make)
+    return render(request, 'my_make_post.html', {'form': form, 'my_make': my_make})
+
+def modal_select_cosmetics(request):
+    # 必要に応じてデータをテンプレートに渡す
+    return render(request, 'modal_select_cosmetics.html')
 def favorites_make(request):
     return render(request, 'favorites_make.html') #マイメイクお気に入り
 

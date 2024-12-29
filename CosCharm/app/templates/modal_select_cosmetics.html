@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+コスメ検索
+{% endblock %}
+
+{% block content %}
+<script src="{% static 'js/cosmetic_search.js' %}"></script>
+<div id="cosmetic-search-modal" style="display:none;">
+  <h3>コスメを検索</h3>
+  <input type="text" id="cosmetic-search-input" placeholder="コスメを検索..." />
+  <button id="search-cosmetics-button">検索</button>
+  
+  <select id="brand-filter">
+    <option value="">すべてのブランド</option>
+    <!-- ブランド一覧を動的に埋め込み -->
+  </select>
+  <select id="category-filter">
+    <option value="">すべてのカテゴリ</option>
+    <!-- カテゴリ一覧を動的に埋め込み -->
+  </select>
+
+  <div id="search-results"></div>
+  <button id="confirm-selection">確定</button>
+</div>
+{% endblock %}
+
+  

@@ -18,8 +18,12 @@ urlpatterns = [
     #path('my_cosmetic_detail/', views.my_cosmetic_detail, name='my_cosmetic_detail'),
     #path('my_cosmetic/detail/<int:pk>/', views.my_cosmetic_detail, name='my_cosmetic_detail'),
     path('my_cosmetic_register/', views.my_cosmetic_register, name='my_cosmetic_register'),
-    path('my_make_post/', views.my_make_post, name='my_make_post'),
+    #path('my_make_post/', views.my_make_post, name='my_make_post'),
     path('my_make_detail/<int:pk>/', views.my_make_detail, name='my_make_detail'),
+    #path('my_make_detail/<int:pk>/', views.my_make_detail, name='my_make_detail'),
+    path('my_make_post_new', views.my_make_post_new, name='my_make_post_new'), #新規作成用
+    path('my_make_post/<int:pk>/', views.my_make_post, name='my_make_post'),  # 編集用
+    path('delete_my_make/<int:pk>/', views.delete_my_make, name='delete_my_make'),
     #path('my-make-detail/', views.my_make_detail, name='my_make_detail'),
     path('favorites-make/', views.my_make_detail, name='favorites_make'),
     path('my_page/', views.my_page, name='my_page'),
@@ -35,5 +39,7 @@ urlpatterns = [
     path('get_initial_cosmetics/', views.get_initial_cosmetics, name='get_initial_cosmetics'),
     #path('signup/', views.signup_view, name='signup'),
     path('signup/', SignupView.as_view(), name='signup'),
+    path('modal/select-cosmetics/', views.modal_select_cosmetics, name='modal_select_cosmetics'),
+    path('search_cosmetics/', views.search_cosmetics, name='search_cosmetics'),  # 既存の検索用URL
 
 ]

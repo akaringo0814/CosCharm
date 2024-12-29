@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}
-メイク投稿
-{% endblock %}
+{% block title %}マイメイク投稿{% endblock %}
 
 {% block content %}
 <form method="post" enctype="multipart/form-data">
@@ -11,11 +9,7 @@
         <label>メイク名:</label>
         {{ form.make_name }}
     </div>
-  
-    <div>
-        <label>メイクメモ:</label>
-        {{ form.make_memo }}
-    </div>
+
 
     <div>
         <label>写真:</label>
@@ -35,7 +29,13 @@
     </div>
 
     <div>
+        <label>メイクメモ:</label>
+        {{ form.make_memo }}
+    </div>
+
+    <div>
         <button type="submit">投稿</button>
     </div>
 </form>
+
 {% endblock %}
