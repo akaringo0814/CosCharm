@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ユーザーページ
+{% endblock %}
+
+{% block content %}
+<div class="user-profile">
+    <div class="profile-info">
+        <img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像">
+        <h2>{{ user_profile.username }}</h2>
+        <p>年齢: {{ user_profile.age }}</p>
+        <p>性別: {{ user_profile.gender }}</p>
+        <p>肌質: {{ user_profile.skin_type }}</p>
+        <p>パーソナルカラー: {{ user_profile.personal_color }}</p>
+    </div>
+    <div class="follow-buttons">
+        <a href="{% url 'follower_list' user_profile.id %}">フォロー: {{ user_profile.followers.count }}</a>
+        <a href="{% url 'following_list' user_profile.id %}">フォロワー: {{ user_profile.following.count }}</a>
+        {% if is_following %}
+            <form method="POST" action="{% url 'unfollow' user_profile.id %}">
+                {% csrf_token %}
+                <button type="submit">フォロー解除</button>
+            </form>
+        {% else %}
+            <form method="POST" action="{% url 'follow' user_profile.id %}">
+                {% csrf_token %}
+                <button type="submit">フォローする</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+<div class="my-make-list">
+    <h3>投稿したマイメイク</h3>
+    <div class="make-grid">
+        {% for make in my_make_list %}
+        <div class="make-item">
+            <a href="{% url 'my_make_detail' make.id %}">
+                <img src="{{ make.image.url }}" alt="{{ make.make_name }}">
+                <p>{{ make.make_name }}</p>
+            </a>
+            <footer>
+                <button onclick="location.href='{% url 'my_make_post' make.id %}'">編集</button>
+                <form action="{% url 'delete_my_make' make.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit

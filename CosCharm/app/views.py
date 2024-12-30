@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SignupForm, LoginForm ,MyMakeForm
-from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake
+from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake ,MyMakeCosmetic
 from .forms import ChangeEmailForm, ProfileForm, CosmeticForm
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth import update_session_auth_hash
@@ -19,7 +19,7 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render, get_object_or_404, redirect , Http404
 from django.core.paginator import Paginator
 import json
-
+from django.views.decorators.http import require_POST
 
 
 
@@ -344,7 +344,7 @@ def get_initial_cosmetics(request):
     return render(request, 'my_make_detail.html', {'my_make': my_make})
 
 
-def my_make_detail(request, pk):
+#def my_make_detail(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
     main_cosmetic = my_make.cosmetics.filter(is_main=True).first()
     other_cosmetics = my_make.cosmetics.filter(is_main=False)
@@ -353,6 +353,48 @@ def my_make_detail(request, pk):
         'main_cosmetic': main_cosmetic,
         'other_cosmetics': other_cosmetics
     })
+
+def my_make_detail(request, pk):
+    # メイク情報を取得
+    my_make = get_object_or_404(MyMake, pk=pk)
+
+    # メインコスメと他使用コスメを取得
+    main_cosmetic = my_make.cosmetics.filter(is_main=True).first()
+    other_cosmetics = my_make.cosmetics.filter(is_main=False)
+
+    # 初期データからすべてのコスメを取得
+    all_cosmetics = CosmeticMaster.objects.all()
+
+    return render(request, 'my_make_detail.html', {
+        'my_make': my_make,
+        'main_cosmetic': main_cosmetic,
+        'other_cosmetics': other_cosmetics,
+        'all_cosmetics': all_cosmetics,  # 初期データからのコスメ
+    })
+
+
+def update_main_cosmetic(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    cosmetic_id = request.POST.get("main_cosmetic")
+    if cosmetic_id:
+        # 既存のメインコスメをリセット
+        my_make.cosmetics.filter(is_main=True).delete()
+        # 新しいメインコスメを登録
+        cosmetic = get_object_or_404(CosmeticMaster, pk=cosmetic_id)
+        MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=cosmetic, is_main=True)
+    return redirect('my_make_detail', pk=pk)
+
+def update_other_cosmetics(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    cosmetic_ids = request.POST.getlist("other_cosmetics")
+    if cosmetic_ids:
+        # 他使用コスメをリセット
+        my_make.cosmetics.filter(is_main=False).delete()
+        # 新しい他使用コスメを登録
+        cosmetics = CosmeticMaster.objects.filter(pk__in=cosmetic_ids)
+        for cosmetic in cosmetics:
+            MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=cosmetic, is_main=False)
+    return redirect('my_make_detail', pk=pk)
 
 #def delete_my_make(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
@@ -491,13 +533,11 @@ def password_change(request):
 def liked_posts(request):
     return render(request, 'liked_posts.html')
 
-def follower_list(request):
+#def follower_list(request):
     return render(request, 'follower_list.html')
 
-def following_list(request):
+#def following_list(request):
     return render(request, 'following_list_list.html')
-from django.shortcuts import render
-from .models import Follow
 
 # フォロー一覧
 def following_list(request):
@@ -518,3 +558,47 @@ def update_profile(request):
     return render(request, 'update_profile.html')
 
 
+# 他ユーザーのユーザーページ
+def user_page(request, user_id):
+    user_profile = get_object_or_404(User, id=user_id)
+    my_make_list = MyMake.objects.filter(user=user_profile).order_by('-created_at')
+    is_following = Follow.objects.filter(follower=request.user, following=user_profile).exists()
+
+    context = {
+        'user_profile': user_profile,
+        'my_make_list': my_make_list,
+        'is_following': is_following,
+    }
+    return render(request, 'user_page.html', context)
+
+# フォロワー一覧
+def follower_list(request, user_id):
+    user_profile = get_object_or_404(User, id=user_id)
+    followers = Follow.objects.filter(following=user_profile).select_related('follower')
+    context = {
+        'user_profile': user_profile,
+        'followers': [f.follower for f in followers],
+    }
+    return render(request, 'follower_list.html', context)
+
+# フォロー中のユーザー一覧
+def following_list(request, user_id):
+    user_profile = get_object_or_404(User, id=user_id)
+    following = Follow.objects.filter(follower=user_profile).select_related('following')
+    context = {
+        'user_profile': user_profile,
+        'following': [f.following for f in following],
+    }
+    return render(request, 'following_list.html', context)
+
+# フォロー処理
+def follow(request, user_id):
+    following = get_object_or_404(User, id=user_id)
+    Follow.objects.get_or_create(follower=request.user, following=following)
+    return redirect('user_page', user_id=user_id)
+
+#フォロー解除処理
+def unfollow(request, user_id):
+    following = get_object_or_404(User, id=user_id)
+    Follow.objects.filter(follower=request.user, following=following).delete()
+    return redirect('user_page', user_id=user_id)

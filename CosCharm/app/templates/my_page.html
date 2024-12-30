@@ -5,12 +5,6 @@
 {% endblock %}
 
 {% block content %}
-<h1>マイページ</h1>
-{% if user.profile_image %}
-    <img src="{{ user.profile_image.url }}" alt="プロフィール画像">
-{% else %}
-    <p>プロフィール画像がありません。</p>
-{% endif %}
 <p>ユーザー名: {{ request.user.username }}</p>
 <p>年齢: {{ profile.age }}</p>
 <p>性別: {{ profile.gender }}</p>
@@ -21,6 +15,7 @@
 
 <p>フォロー: {{ following }}</p>
 <p>フォロワー: {{ followers }}</p>
-<a href="{% url 'following_list' %}">フォロー一覧を見る</a>
-<a href="{% url 'follower_list' %}">フォロワー一覧を見る</a>
+<a href="{% url 'following_list' request.user.id %}">フォロー一覧を見る</a>
+<a href="{% url 'follower_list' request.user.id %}">フォロワー一覧を見る</a>
 {% endblock %}
+

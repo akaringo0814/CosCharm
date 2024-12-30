@@ -166,6 +166,8 @@ class Follow(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('follower', 'following')  # 重複フォローを防ぐ
 
 
 

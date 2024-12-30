@@ -31,8 +31,13 @@ urlpatterns = [
     path('user-page/', views.user_page, name='user_page'),
     #path('my-page/', views.user_page, name='my_page'),
     path('liked-posts/', views.liked_posts, name='liked_posts'),
-    path('follower_list/', views.follower_list, name='follower_list'),
-    path('following_list/', views.following_list, name='following_list'),
+    #path('follower_list/', views.follower_list, name='follower_list'),
+    #path('following_list/', views.following_list, name='following_list'),
+    path('user/<int:user_id>/', views.user_page, name='user_page'),
+    path('user/<int:user_id>/follower_list/', views.follower_list, name='follower_list'),
+    path('user/<int:user_id>/following_list/', views.following_list, name='following_list'),
+    path('user/<int:user_id>/follow/', views.follow, name='follow'),
+    path('user/<int:user_id>/unfollow/', views.unfollow, name='unfollow'),
     path('logout/', views.logout, name='logout'),
     path('update_profile/', views.update_profile, name='update_profile'),
     path('search/', views.search_cosmetics, name='search_cosmetics'),
@@ -41,5 +46,6 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('modal/select-cosmetics/', views.modal_select_cosmetics, name='modal_select_cosmetics'),
     path('search_cosmetics/', views.search_cosmetics, name='search_cosmetics'),  # 既存の検索用URL
-
+    path('my_make/<int:pk>/update_main_cosmetic/', views.update_main_cosmetic, name='update_main_cosmetic'),
+    path('my_make/<int:pk>/update_other_cosmetics/', views.update_other_cosmetics, name='update_other_cosmetics'),
 ]

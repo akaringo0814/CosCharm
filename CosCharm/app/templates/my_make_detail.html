@@ -7,31 +7,69 @@
 {% block content %}
 <h1>{{ my_make.make_name }}</h1>
 
+<!-- メインコスメ -->
 <div>
   <h2>メインコスメ:</h2>
-  <p>{{ main_cosmetic }}</p>
+  {% if main_cosmetic %}
+    <p>{{ main_cosmetic.cosmetic.cosmetic_name }}</p>
+  {% else %}
+    <p>未選択</p>
+  {% endif %}
+
+  <!-- メインコスメを選択するフォーム -->
+  <form action="{% url 'update_main_cosmetic' my_make.pk %}" method="post">
+    {% csrf_token %}
+    <select name="main_cosmetic">
+      {% for cosmetic in all_cosmetics %}
+        <option value="{{ cosmetic.pk }}" 
+          {% if main_cosmetic and cosmetic.pk == main_cosmetic.cosmetic.pk %}selected{% endif %}>
+          {{ cosmetic.cosmetic_name }}
+        </option>
+      {% endfor %}
+    </select>
+    <button type="submit">更新</button>
+  </form>
 </div>
 
+<!-- 他使用コスメ -->
 <div>
   <h2>他使用コスメ:</h2>
   <ul>
     {% for cosmetic in other_cosmetics %}
-      <li>{{ cosmetic }}</li>
+      <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>
     {% endfor %}
   </ul>
+
+  <!-- 他使用コスメを選択するフォーム -->
+  <form action="{% url 'update_other_cosmetics' my_make.pk %}" method="post">
+    {% csrf_token %}
+    <select name="other_cosmetics" multiple>
+      {% for cosmetic in all_cosmetics %}
+        <option value="{{ cosmetic.pk }}" 
+          {% if cosmetic.pk in other_cosmetics.values_list('cosmetic__pk', flat=True) %}selected{% endif %}>
+          {{ cosmetic.cosmetic_name }}
+        </option>
+      {% endfor %}
+    </select>
+    <button type="submit">更新</button>
+  </form>
 </div>
+
 <p>メイクメモ: {{ my_make.make_memo }}</p>
 <p>作成日: {{ my_make.created_at }}</p>
+
+<!-- 写真 -->
 <div>
   <h2>写真:</h2>
   <img src="{{ my_make.image.url }}" alt="メイク画像">
 </div>
 
+<!-- 編集/削除 -->
 <footer>
-    <button onclick="location.href='{% url 'my_make_post' my_make.pk %}'">編集</button>
-    <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit">削除</button>
-    </form>
+  <button onclick="location.href='{% url 'my_make_post' my_make.pk %}'">編集</button>
+  <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit">削除</button>
+  </form>
 </footer>
 {% endblock %}

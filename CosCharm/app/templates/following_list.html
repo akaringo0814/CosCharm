@@ -1,15 +1,18 @@
+
 {% extends 'base.html' %}
 
 {% block title %}
-フォロー一覧画面
+{{ user_profile.username }}がフォロー中のユーザー一覧
 {% endblock %}
 
 {% block content %}
-<h1>フォロー一覧</h1>
+<h2>{{ user_profile.username }}がフォロー中のユーザー一覧</h2>
 <ul>
-    {% for follow in followings %}
-        <li>{{ follow.following.username }}</li>
+    {% for user in following %}
+    <li>
+        <a href="{% url 'user_page' user.id %}">{{ user.username }}</a>
+    </li>
     {% endfor %}
 </ul>
-<a href="{% url 'my_page' %}">マイページに戻る</a>
+<a href="{% url 'my_page' %}">戻る</a>
 {% endblock %}
