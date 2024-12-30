@@ -94,8 +94,9 @@ class ProfileForm(forms.ModelForm):
         profile_image = self.cleaned_data.get('profile_image')
         if profile_image:
             # 画像サイズなどのバリデーションを追加できます
-            if profile_image.size > 5 * 1024 * 1024:  # 5MB以上の画像を拒否
-                raise forms.ValidationError("画像のサイズは5MB以下にしてください。")
+            #if profile_image.size > 5 * 1024 * 1024:  # 5MB以上の画像を拒否
+                #raise forms.ValidationError("画像のサイズは5MB以下にしてください。")
+                pass
         return profile_image
     
 

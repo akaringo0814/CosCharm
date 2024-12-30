@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-ユーザーページ
+{{ user_profile.username }}のページ
 {% endblock %}
 
 {% block content %}
@@ -44,4 +44,11 @@
                 <button onclick="location.href='{% url 'my_make_post' make.id %}'">編集</button>
                 <form action="{% url 'delete_my_make' make.id %}" method="post" style="display:inline;">
                     {% csrf_token %}
-                    <button type="submit
+                    <button type="submit">削除</button>
+                </form>
+            </footer>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+<img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像">
 <p>ユーザー名: {{ request.user.username }}</p>
 <p>年齢: {{ profile.age }}</p>
 <p>性別: {{ profile.gender }}</p>

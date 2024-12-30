@@ -354,7 +354,7 @@ def get_initial_cosmetics(request):
         'other_cosmetics': other_cosmetics
     })
 
-def my_make_detail(request, pk):
+#def my_make_detail(request, pk):
     # メイク情報を取得
     my_make = get_object_or_404(MyMake, pk=pk)
 
@@ -372,6 +372,36 @@ def my_make_detail(request, pk):
         'all_cosmetics': all_cosmetics,  # 初期データからのコスメ
     })
 
+def my_make_detail(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    main_cosmetic = my_make.cosmetics.filter(is_main=True).first()
+    other_cosmetics = my_make.cosmetics.filter(is_main=False)
+    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)  # ここでデータを取得
+    all_cosmetics = CosmeticMaster.objects.all()
+    return render(request, 'my_make_detail.html', {
+        'my_make': my_make,
+        'main_cosmetic': main_cosmetic,
+        'other_cosmetics': other_cosmetics,
+        'other_cosmetic_ids': other_cosmetic_ids,
+        'all_cosmetics': all_cosmetics,
+    })
+
+#@login_required
+#def my_make_detail(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    if my_make.user != request.user:
+        return redirect('home')  # 権限がないユーザーはホームにリダイレクト
+    main_cosmetic = my_make.cosmetics.filter(is_main=True).first()
+    other_cosmetics = my_make.cosmetics.filter(is_main=False)
+    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)
+    all_cosmetics = CosmeticMaster.objects.all()
+    return render(request, 'my_make_detail.html', {
+        'my_make': my_make,
+        'main_cosmetic': main_cosmetic,
+        'other_cosmetics': other_cosmetics,
+        'other_cosmetic_ids': other_cosmetic_ids,
+        'all_cosmetics': all_cosmetics,
+    })
 
 def update_main_cosmetic(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)

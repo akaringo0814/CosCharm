@@ -23,7 +23,9 @@
             {% for post in follow_user_posts %}
                 <li>
                     <img src="{{ post.image.url }}" alt="{{ post.make_name }}">
-                    <p>{{ post.make_name }}</p>
+                    <a href="{% url 'my_make_detail' post.id %}">
+                        <p>{{ post.make_name }}</p>
+                    </a>
                 </li>
             {% empty %}
                 <p>フォローしているユーザーの投稿がありません。</p>
@@ -37,3 +39,4 @@
     <a href="{% url 'my_make_post_new' %}">マイメイク投稿</a>
 </div>
 {% endblock %}
+
