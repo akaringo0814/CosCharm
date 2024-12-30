@@ -10,7 +10,6 @@
         {{ form.make_name }}
     </div>
 
-
     <div>
         <label>写真:</label>
         {{ form.image }}
@@ -18,14 +17,26 @@
 
     <div>
         <label>メインコスメ:</label>
-        <button type="button" id="select-main-cosmetic">＋コスメを選択</button>
-        <input type="hidden" name="main_cosmetic" id="main-cosmetic-id">
+        <select name="main_cosmetic">
+            {% for cosmetic in all_cosmetics %}
+            <option value="{{ cosmetic.pk }}" 
+                {% if cosmetic.pk == main_cosmetic_id %}selected{% endif %}>
+                {{ cosmetic.cosmetic_name }}
+            </option>
+            {% endfor %}
+        </select>
     </div>
 
     <div>
         <label>他使用コスメ:</label>
-        <div id="other-cosmetics-container"></div>
-        <button type="button" id="add-other-cosmetic">＋コスメを選択</button>
+        <select name="other_cosmetics" multiple>
+            {% for cosmetic in all_cosmetics %}
+            <option value="{{ cosmetic.pk }}" 
+                {% if cosmetic.pk in other_cosmetic_ids %}selected{% endif %}>
+                {{ cosmetic.cosmetic_name }}
+            </option>
+            {% endfor %}
+        </select>
     </div>
 
     <div>
@@ -37,5 +48,4 @@
         <button type="submit">投稿</button>
     </div>
 </form>
-
 {% endblock %}

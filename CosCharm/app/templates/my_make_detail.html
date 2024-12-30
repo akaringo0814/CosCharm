@@ -20,20 +20,6 @@
     {% endfor %}
   </ul>
 
-  <!-- 他使用コスメを選択するフォーム -->
-  <form action="{% url 'update_other_cosmetics' my_make.pk %}" method="post">
-    {% csrf_token %}
-    <select name="other_cosmetics" multiple>
-      {% for cosmetic in all_cosmetics %}
-        <option value="{{ cosmetic.pk }}" 
-          {% if cosmetic.pk in other_cosmetic_ids %}selected{% endif %}>
-          {{ cosmetic.cosmetic_name }}
-        </option>
-      {% endfor %}
-    </select>
-    <button type="submit">更新</button>
-  </form>
-</div>
 
 <p>メイクメモ: {{ my_make.make_memo }}</p>
 <p>作成日: {{ my_make.created_at }}</p>
@@ -43,10 +29,12 @@
 </div>
 
 <footer>
-    <button onclick="location.href='{% url 'my_make_post' my_make.pk %}'">編集</button>
-    <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit">削除</button>
-    </form>
+    {% if my_make.user == request.user %}
+        <button onclick="location.href='{% url 'my_make_post' my_make.pk %}'">編集</button>
+        <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">削除</button>
+        </form>
+    {% endif %}
 </footer>
 {% endblock %}

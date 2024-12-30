@@ -41,11 +41,13 @@
                 <p>{{ make.make_name }}</p>
             </a>
             <footer>
-                <button onclick="location.href='{% url 'my_make_post' make.id %}'">編集</button>
-                <form action="{% url 'delete_my_make' make.id %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">削除</button>
-                </form>
+                {% if make.user == request.user %}
+                    <button onclick="location.href='{% url 'my_make_post' make.id %}'">編集</button>
+                    <form action="{% url 'delete_my_make' make.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">削除</button>
+                    </form>
+                {% endif %}
             </footer>
         </div>
         {% endfor %}

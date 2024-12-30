@@ -100,8 +100,23 @@ class ProfileForm(forms.ModelForm):
         return profile_image
     
 
-class MyMakeForm(forms.ModelForm):
-    class Meta:
+#class MyMakeForm(forms.ModelForm):
+    #class Meta:
         model = MyMake
         fields = ['make_name', 'make_memo', 'image']
 
+
+class MyMakeForm(forms.ModelForm):
+    main_cosmetic = forms.ModelChoiceField(queryset=CosmeticMaster.objects.all(), required=False)
+    other_cosmetics = forms.ModelMultipleChoiceField(queryset=CosmeticMaster.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+
+    class Meta:
+        model = MyMake
+        fields = ['make_name', 'image', 'make_memo', 'main_cosmetic', 'other_cosmetics']  # フィールドを追加
+
+    def save(self, commit=True):
+        my_make = super().save(commit=False)
+        if commit:
+            my_make.save()
+            self.save_m2m()
+        return my_make
