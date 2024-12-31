@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}お気に入りのマイメイク{% endblock %}
+
+{% block content %}
+<h1>マイメイクお気に入り</h1>
+
+<div class="favorite-list">
+    <ul>
+        {% for favorite in favorites %}
+        <li>
+            <a href="{% url 'my_make_detail' favorite.my_make.pk %}">
+                <img src="{{ favorite.my_make.image.url }}" alt="{{ favorite.my_make.make_name }}">
+                <p>{{ favorite.my_make.make_name }}</p>
+            </a>
+        </li>
+        {% empty %}
+        <p>お気に入りのマイメイクはまだありません。</p>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if favorites.has_previous %}
+            <a href="?page=1">最初</a>
+            <a href="?page={{ favorites.previous_page_number }}">前へ</a>
+        {% endif %}
+
+        <span class="current">
+            ページ {{ favorites.number }} / {{ favorites.paginator.num_pages }}
+        </span>
+
+        {% if favorites.has_next %}
+            <a href="?page={{ favorites.next_page_number }}">次へ</a>
+            <a href="?page={{ favorites.paginator.num_pages }}">最後</a>
+        {% endif %}
+    </span>
+</div>
+
+<p>
+    <a href="{% url 'home' %}">ホームに戻る</a>
+</p>
+{% endblock %}

@@ -106,13 +106,29 @@ class ProfileForm(forms.ModelForm):
         fields = ['make_name', 'make_memo', 'image']
 
 
+#class MyMakeForm(forms.ModelForm):
+    #main_cosmetic = forms.ModelChoiceField(queryset=CosmeticMaster.objects.all(), required=False)
+    #other_cosmetics = forms.ModelMultipleChoiceField(queryset=CosmeticMaster.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+
+    #class Meta:
+        model = MyMake
+        fields = ['make_name', 'image', 'make_memo', 'main_cosmetic', 'other_cosmetics']  # フィールドを追加
+
+    #def save(self, commit=True):
+        my_make = super().save(commit=False)
+        if commit:
+            my_make.save()
+            self.save_m2m()
+        return my_make
+
+
 class MyMakeForm(forms.ModelForm):
     main_cosmetic = forms.ModelChoiceField(queryset=CosmeticMaster.objects.all(), required=False)
-    other_cosmetics = forms.ModelMultipleChoiceField(queryset=CosmeticMaster.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+    other_cosmetics = forms.ModelMultipleChoiceField(queryset=CosmeticMaster.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)  # 他使用コスメを複数選択できるようにする
 
     class Meta:
         model = MyMake
-        fields = ['make_name', 'image', 'make_memo', 'main_cosmetic', 'other_cosmetics']  # フィールドを追加
+        fields = ['make_name', 'image', 'make_memo', 'main_cosmetic', 'other_cosmetics']
 
     def save(self, commit=True):
         my_make = super().save(commit=False)

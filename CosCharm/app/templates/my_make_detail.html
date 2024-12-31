@@ -19,7 +19,7 @@
       <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>
     {% endfor %}
   </ul>
-
+</div>
 
 <p>メイクメモ: {{ my_make.make_memo }}</p>
 <p>作成日: {{ my_make.created_at }}</p>
@@ -35,6 +35,15 @@
             {% csrf_token %}
             <button type="submit">削除</button>
         </form>
+    {% else %}
+        <form action="{% url 'toggle_favorite' my_make.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">
+                {% if is_favorite %}❤️{% else %}♡{% endif %}
+            </button>
+        </form>
     {% endif %}
 </footer>
 {% endblock %}
+
+

@@ -29,14 +29,15 @@
 
     <div>
         <label>他使用コスメ:</label>
-        <select name="other_cosmetics" multiple>
+        <div>
             {% for cosmetic in all_cosmetics %}
-            <option value="{{ cosmetic.pk }}" 
-                {% if cosmetic.pk in other_cosmetic_ids %}selected{% endif %}>
+            <label>
+                <input type="checkbox" name="other_cosmetics" value="{{ cosmetic.pk }}" 
+                    {% if cosmetic.pk in other_cosmetic_ids %}checked{% endif %}>
                 {{ cosmetic.cosmetic_name }}
-            </option>
+            </label><br>
             {% endfor %}
-        </select>
+        </div>
     </div>
 
     <div>
@@ -49,3 +50,4 @@
     </div>
 </form>
 {% endblock %}
+

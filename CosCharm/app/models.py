@@ -160,6 +160,14 @@ class MyCosmetic(models.Model):
     #)
     #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
     #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')  # defaultを設定
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    my_make = models.ForeignKey(MyMake, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'my_make')
 
 
 # フォローモデル

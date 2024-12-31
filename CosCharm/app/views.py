@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SignupForm, LoginForm ,MyMakeForm
-from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake ,MyMakeCosmetic
+from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake ,MyMakeCosmetic, Favorite
 from .forms import ChangeEmailForm, ProfileForm, CosmeticForm
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth import update_session_auth_hash
@@ -416,8 +416,8 @@ def get_initial_cosmetics(request):
         'other_cosmetic_ids': other_cosmetic_ids,
         'all_cosmetics': all_cosmetics,
     })
-@login_required
-def my_make_detail(request, pk):
+
+#def my_make_detail(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
     main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
     other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
@@ -430,6 +430,25 @@ def my_make_detail(request, pk):
         'other_cosmetic_ids': other_cosmetic_ids,
         'all_cosmetics': all_cosmetics,
     })
+
+
+@login_required
+def my_make_detail(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
+    other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
+    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)
+    all_cosmetics = CosmeticMaster.objects.all()
+    is_favorite = Favorite.objects.filter(user=request.user, my_make=my_make).exists()
+    return render(request, 'my_make_detail.html', {
+        'my_make': my_make,
+        'main_cosmetic': main_cosmetic.cosmetic.cosmetic_name if main_cosmetic else None,
+        'other_cosmetics': other_cosmetics,
+        'other_cosmetic_ids': other_cosmetic_ids,
+        'all_cosmetics': all_cosmetics,
+        'is_favorite': is_favorite,
+    })
+
 
 def update_main_cosmetic(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
@@ -673,8 +692,32 @@ def my_make_post(request, pk):
 def modal_select_cosmetics(request):
     # 必要に応じてデータをテンプレートに渡す
     return render(request, 'modal_select_cosmetics.html')
-def favorites_make(request):
+
+#def favorites_make(request):
     return render(request, 'favorites_make.html') #マイメイクお気に入り
+
+
+#def favorites_make(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('my_make')
+    return render(request, 'favorites_make.html', {'favorites': favorites})
+
+
+@login_required
+def favorites_make(request):
+    favorites_list = Favorite.objects.filter(user=request.user).select_related('my_make')
+    paginator = Paginator(favorites_list, 10)  # 1ページに表示するアイテム数を設定
+    page_number = request.GET.get('page')
+    favorites = paginator.get_page(page_number)
+    return render(request, 'favorites_make.html', {'favorites': favorites})
+
+@login_required
+def toggle_favorite(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, my_make=my_make)
+    if not created:
+        favorite.delete()
+    return redirect('my_make_detail', pk=my_make.pk)
+
 
 #マイページ
 def my_page(request):
@@ -742,11 +785,16 @@ def password_change(request):
 def liked_posts(request):
     return render(request, 'liked_posts.html')
 
+
 #def follower_list(request):
     return render(request, 'follower_list.html')
 
 #def following_list(request):
     return render(request, 'following_list_list.html')
+@login_required
+def favorites_make(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('my_make')
+    return render(request, 'favorites_make.html', {'favorites': favorites})
 
 # フォロー一覧
 def following_list(request):
