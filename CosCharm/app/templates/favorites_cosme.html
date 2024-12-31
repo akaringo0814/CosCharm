@@ -5,9 +5,8 @@
 <div>
     {% for cosmetic in favorite_cosmetics %}
     <div>
-        <img src="{{ cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic_name }}">
-        <p>{{ cosmetic.brand }}</p>
-        <p><a href="{% url 'my_cosmetic_detail' cosmetic.pk %}">{{ cosmetic.cosmetic_name }}</a></p>
+        <p>{{ cosmetic.cosmetic.brand }}</p>
+        <p><a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}">{{ cosmetic.cosmetic.cosmetic_name }}</a></p>
     </div>
     {% endfor %}
 </div>
@@ -34,3 +33,5 @@
     <a href="{% url 'home' %}">ホームに戻る</a>
 </p>
 {% endblock %}
+
+

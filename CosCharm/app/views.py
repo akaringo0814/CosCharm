@@ -223,7 +223,7 @@ def delete_my_cosmetic(request, pk):
     cosmetic.delete()
     return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
 
-def favorites_cosme(request):
+#def favorites_cosme(request):
     # お気に入りのコスメをフィルタリング
     favorite_cosmetics_list = MyCosmetic.objects.filter(is_favorite=True)
 
@@ -234,6 +234,17 @@ def favorites_cosme(request):
     
     return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
+
+def favorites_cosme(request):
+    # 現在のユーザーのお気に入りのコスメをフィルタリング
+    favorite_cosmetics_list = MyCosmetic.objects.filter(user=request.user, is_favorite=True)
+
+    # ページネーションの設定
+    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+    
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
 #def my_cosmetic_register(request):
     return render(request, 'my_cosme_register.html') #マイコスメ登録画面
