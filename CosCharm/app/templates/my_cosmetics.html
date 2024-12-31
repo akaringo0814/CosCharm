@@ -10,8 +10,10 @@
   <ul class="list-group mb-4">
     {% for cosmetic in cosmetics %}
     <li class="list-group-item">
-      {{ cosmetic.cosmetic.name }}  
+      {{ cosmetic.cosmetic.cosmetic_name }}  <!-- MyCosmeticモデルのフィールド名に合わせて変更 -->
     </li>
+    {% empty %}
+    <li class="list-group-item">コスメが登録されていません。</li>
     {% endfor %}
   </ul>
 
@@ -21,4 +23,3 @@
   </div>
 </div>
 {% endblock %}
-

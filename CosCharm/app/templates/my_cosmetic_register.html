@@ -5,11 +5,6 @@
 マイコスメ登録・編集画面
 {% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-{% endblock %}
-
 {% block content %}
 <h1>マイコスメ登録・編集画面</h1>
 
@@ -101,35 +96,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script src="{% static 'js/scripts.js' %}"></script>
-<script>
-function performSearch() {
-    var keyword = $('#keyword-input').val();
-    var brand = $('#brand-input').val(); // ここにブランドの入力フィールドを追加してください
-    var category = $('#category-select').val();
-    
-    $.ajax({
-        url: "{% url 'search_cosmetics' %}",
-        data: {
-            'keyword': keyword,
-            'brand': brand,
-            'category': category
-        },
-        dataType: 'json',
-        success: function (data) {
-            $('#search-results').empty();
-            for (var i = 0; i < data.results.length; i++) {
-                var item = data.results[i];
-                $('#search-results').append('<div class="result-item" onclick="addToRegisteredCosmetics(' + item.id + ', \'' + item.name + '\')">' + item.name + '</div>');
-            }
-        }
-    });
-}
-
-function addToRegisteredCosmetics(cosmeticId, cosmeticName) {
-    // 登録コスメの表示に追加する処理をここに書きます
-    // 例：
-    $('#registered-cosmetics').append('<div>' + cosmeticName + '</div>');
-}
-</script>
 {% endblock %}
 

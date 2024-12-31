@@ -20,7 +20,7 @@ from django.shortcuts import render, get_object_or_404, redirect , Http404
 from django.core.paginator import Paginator
 import json
 from django.views.decorators.http import require_POST
-
+from django.db.models import Max
 
 
 
@@ -94,13 +94,22 @@ def logout(request):
 
 
 #def my_cosmetics(request):
-    cosmetics = CosmeticMaster.objects.all()
+    cosmetics = MyCosmetic.objects.filter(user=request.user)  # ログインユーザーのコスメのみを取得
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
 
 
 def my_cosmetics(request):
-    cosmetics = MyCosmetic.objects.all()
+    # ログインユーザーのコスメを取得し、重複を排除
+    cosmetics = MyCosmetic.objects.filter(user=request.user).distinct('cosmetic')
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
+
+
+def my_cosmetics(request):
+    # ログインユーザーのコスメを取得し、最新の登録を表示
+    latest_cosmetic_ids = MyCosmetic.objects.filter(user=request.user).values('cosmetic').annotate(latest_id=Max('id')).values('latest_id')
+    cosmetics = MyCosmetic.objects.filter(id__in=latest_cosmetic_ids)
+    return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
+
 
 #def my_cosmetic_register(request):
     if request.method == 'POST':
@@ -266,7 +275,11 @@ COSMETIC_CATEGORIES = {
     "ベースメイク": ["下地", "ファンデーション", "フェイスパウダー"],
 }
 
-#コスメの登録画面表示
+
+
+
+
+
 def my_cosmetic_register(request):
     context = {
         "categories": COSMETIC_CATEGORIES,
@@ -286,13 +299,11 @@ def my_cosmetic_register(request):
                 is_favorite=is_favorite,
                 usage_status=usage_status
             )
-            
             return redirect('my_cosmetics')
         else:
             # cosmetic_id が None の場合のエラーメッセージを追加
             context['error'] = "コスメを選択してください。"
     return render(request, 'my_cosmetic_register.html', context)
-
 
 # カテゴリに基づくコスメの検索
 #def search_cosmetics(request):
