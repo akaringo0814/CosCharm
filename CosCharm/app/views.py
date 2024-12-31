@@ -59,6 +59,35 @@ class LoginView(View):
         return render(request, "login.html", {"form": form})
 
 
+#class HomeView(LoginRequiredMixin, TemplateView):
+    #template_name = "home.html"
+    #login_url = "login"
+
+    #def get(self, request):
+        # フォローしているユーザーを取得
+        followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
+        
+        # フォローしているユーザーの投稿を取得
+        follow_user_posts = MyMake.objects.filter(
+            user__in=followed_users
+        ).order_by("-created_at")
+        
+        # 未使用のコスメを取得
+        unused_cosmetics = MyCosmetic.objects.filter(
+            user=request.user, used_in_make=False
+        )
+        
+        # フォローしているユーザーオブジェクトを取得
+        users_followed = User.objects.filter(id__in=followed_users)
+        
+        context = {
+            'follow_user_posts': follow_user_posts,
+            'unused_cosmetics': unused_cosmetics,
+            'users_followed': users_followed
+        }
+        return render(request, 'home.html', context)
+
+
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
     login_url = "login"
@@ -72,9 +101,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
             user__in=followed_users
         ).order_by("-created_at")
         
-        # 未使用のコスメを取得
+        # 未使用のコスメを取得（使用状況が「未使用」のコスメ）
         unused_cosmetics = MyCosmetic.objects.filter(
-            user=request.user, used_in_make=False
+            user=request.user, usage_status='not_used'
         )
         
         # フォローしているユーザーオブジェクトを取得

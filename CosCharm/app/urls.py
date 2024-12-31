@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from django.urls import path
-from app.views import SignupView  # クラスベースビューの場合
+from app.views import SignupView, HomeView  # クラスベースビューの場合
 
 
 
@@ -48,6 +48,7 @@ urlpatterns = [
     path('get_initial_cosmetics/', views.get_initial_cosmetics, name='get_initial_cosmetics'),
     #path('signup/', views.signup_view, name='signup'),
     path('signup/', SignupView.as_view(), name='signup'),
+    path('home/', HomeView.as_view(), name='home'),
     path('modal/select-cosmetics/', views.modal_select_cosmetics, name='modal_select_cosmetics'),
     path('search_cosmetics/', views.search_cosmetics, name='search_cosmetics'),  # 既存の検索用URL
     path('my_make/<int:pk>/update_main_cosmetic/', views.update_main_cosmetic, name='update_main_cosmetic'),

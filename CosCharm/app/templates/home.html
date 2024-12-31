@@ -9,7 +9,7 @@
         <h2>未使用のマイコスメ</h2>
         <ul>
             {% for cosmetic in unused_cosmetics %}
-                <li>{{ cosmetic.name }}</li>
+                <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>  <!-- 使用状況が「未使用」のコスメ名を表示 -->
             {% empty %}
                 <p>未使用のコスメはありません。</p>
             {% endfor %}
