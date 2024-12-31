@@ -93,8 +93,13 @@ def logout(request):
 
 
 
-def my_cosmetics(request):
+#def my_cosmetics(request):
     cosmetics = CosmeticMaster.objects.all()
+    return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
+
+
+def my_cosmetics(request):
+    cosmetics = MyCosmetic.objects.all()
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
 
 #def my_cosmetic_register(request):
@@ -221,7 +226,7 @@ def favorites_cosme(request):
     # JSON 形式で返す
     results = list(cosmetics.values('id', 'cosmetic_name', 'category', 'subcategory'))
     return JsonResponse({'results': results})
-def search_cosmetics(request):
+#def search_cosmetics(request):
     keyword = request.GET.get('keyword', '').lower()
     brand = request.GET.get('brand', '').lower()
     category = request.GET.get('category', '').lower()
@@ -290,13 +295,32 @@ def my_cosmetic_register(request):
 
 
 # カテゴリに基づくコスメの検索
-def search_cosmetics(request):
+#def search_cosmetics(request):
     category = request.GET.get('category', '').lower()
     results = []
 
     if category:
         cosmetics = CosmeticMaster.objects.filter(category__iexact=category)
         results = [{'id': cosmetic.id, 'name': cosmetic.name} for cosmetic in cosmetics]
+
+    return JsonResponse({"results": results})
+
+
+def search_cosmetics(request):
+    keyword = request.GET.get('keyword', '').lower()
+    brand = request.GET.get('brand', '').lower()
+    category = request.GET.get('category', '').lower()
+
+    query = CosmeticMaster.objects.all()
+
+    if keyword:
+        query = query.filter(name__icontains=keyword)
+    if brand:
+        query = query.filter(brand__icontains=brand)
+    if category:
+        query = query.filter(category__icontains=category)
+
+    results = [{'id': cosmetic.id, 'name': cosmetic.name} for cosmetic in query]
 
     return JsonResponse({"results": results})
 
