@@ -25,7 +25,7 @@
 <p>作成日: {{ my_make.created_at }}</p>
 <div>
   <h2>写真:</h2>
-  <img src="{{ my_make.image.url }}" alt="メイク画像">
+  <img src="{{ my_make.image.url }}" alt="メイク画像" class="make-image">
 </div>
 
 <footer>
@@ -44,6 +44,14 @@
         </form>
     {% endif %}
 </footer>
+
+<style>
+.make-image {
+    width: 150px; /* 希望の幅に調整 */
+    height: auto; /* アスペクト比を維持 */
+}
+</style>
 {% endblock %}
+
 
 

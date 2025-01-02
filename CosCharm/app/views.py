@@ -252,8 +252,12 @@ def delete_my_cosmetic(request, pk):
     return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
 
+#def my_cosmetic_detail(request, pk):
+    my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk, user=request.user)
+    return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
+
 def my_cosmetic_detail(request, pk):
-    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
     return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
 
 #def my_cosmetic_detail(request, pk):

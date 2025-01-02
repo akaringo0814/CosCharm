@@ -10,7 +10,7 @@
         {% for favorite in favorites %}
         <li>
             <a href="{% url 'my_make_detail' favorite.my_make.pk %}">
-                <img src="{{ favorite.my_make.image.url }}" alt="{{ favorite.my_make.make_name }}">
+                <img src="{{ favorite.my_make.image.url }}" alt="{{ favorite.my_make.make_name }}" class="favorite-make-image">
                 <p>{{ favorite.my_make.make_name }}</p>
             </a>
         </li>
@@ -41,4 +41,11 @@
 <p>
     <a href="{% url 'home' %}">ホームに戻る</a>
 </p>
+
+<style>
+.favorite-make-image {
+    width: 150px; /* 希望の幅に調整 */
+    height: auto; /* アスペクト比を維持 */
+}
+</style>
 {% endblock %}
