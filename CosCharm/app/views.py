@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SignupForm, LoginForm ,MyMakeForm
 from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake ,MyMakeCosmetic, Favorite
-from .forms import ChangeEmailForm, ProfileForm, CosmeticForm
+from .forms import ChangeEmailForm, ProfileForm, CosmeticForm, MyCosmeticForm
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
@@ -208,11 +208,16 @@ def delete_my_cosmetic(request, pk):
     return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
 
 
-def my_cosmetic_detail(request, pk):
+#def my_cosmetic_detail(request, pk):
     print(f"Fetching MyCosmetic with pk={pk}")
     cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
     print(f"Found MyCosmetic: {cosmetic}")
     return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
+
+
+def my_cosmetic_detail(request, pk):
+    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
 
 #def my_cosmetic_detail(request, pk):
     cosmetic = get_object_or_404(MyCosmetic, pk=pk)
@@ -505,6 +510,25 @@ def get_initial_cosmetics(request):
         'other_cosmetic_ids': other_cosmetic_ids,
         'all_cosmetics': all_cosmetics,
     })
+
+
+def my_cosmetic_edit(request, pk):
+    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = MyCosmeticForm(request.POST, instance=my_cosmetic)
+        if form.is_valid():
+            form.save()
+            return redirect('my_cosmetics')
+    else:
+        form = MyCosmeticForm(instance=my_cosmetic)
+    return render(request, 'my_cosmetic_edit.html', {'form': form})
+
+def my_cosmetic_delete(request, pk):
+    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    if request.method == 'POST':
+        my_cosmetic.delete()
+        return redirect('my_cosmetics')
+    return render(request, 'my_cosmetic_confirm_delete.html', {'my_cosmetic': my_cosmetic})
 
 
 @login_required

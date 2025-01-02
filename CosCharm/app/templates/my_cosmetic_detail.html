@@ -1,57 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}
-メイク詳細
-{% endblock %}
+{% block title %}{{ my_cosmetic.cosmetic.cosmetic_name }}の詳細{% endblock %}
 
 {% block content %}
-<h1>{{ my_make.make_name }}</h1>
-
-<div>
-  <h2>メインコスメ:</h2>
-  <p>{{ main_cosmetic }}</p>
+<div class="container">
+  <h1 style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ my_cosmetic.cosmetic.cosmetic_name }}の詳細</h1>
+  <div class="row">
+    <!-- コスメの写真を表示 -->
+    <div class="col-md-4">
+      {% if my_cosmetic.cosmetic.photo %}
+        <img src="{{ my_cosmetic.cosmetic.photo.url }}" alt="{{ my_cosmetic.cosmetic.cosmetic_name }}" class="img-fluid" style="max-width: 200px; height: auto;">
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="cosmetic-details">
+        <p><strong>ブランド名:</strong> {{ my_cosmetic.cosmetic.brand }}</p>
+        <p><strong>カテゴリ:</strong> {{ my_cosmetic.cosmetic.get_category_display }}</p>
+        <p><strong>サブカテゴリ:</strong> {{ my_cosmetic.cosmetic.get_sub_category_display }}</p>
+        <p><strong>使用状況:</strong> {{ my_cosmetic.get_usage_status_display }}</p>
+        <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
+        <p><strong>作成日:</strong> {{ my_cosmetic.created_at }}</p>
+        <p><strong>更新日:</strong> {{ my_cosmetic.updated_at }}</p>
+        <div class="btn-group">
+          <a href="{% url 'my_cosmetic_edit' my_cosmetic.pk %}" class="btn btn-primary">編集</a>
+          <a href="{% url 'my_cosmetic_delete' my_cosmetic.pk %}" class="btn btn-danger">削除</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div>
-  <h2>他使用コスメ:</h2>
-  <ul>
-    {% for cosmetic in other_cosmetics %}
-      <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>
-    {% endfor %}
-  </ul>
-
-  <!-- 他使用コスメを選択するフォーム -->
-  <form action="{% url 'update_other_cosmetics' my_make.pk %}" method="post">
-    {% csrf_token %}
-    <select name="other_cosmetics" multiple>
-      {% for cosmetic in all_cosmetics %}
-        <option value="{{ cosmetic.pk }}" 
-          {% if cosmetic.pk in other_cosmetic_ids %}selected{% endif %}>
-          {{ cosmetic.cosmetic_name }}
-        </option>
-      {% endfor %}
-    </select>
-    <button type="submit">更新</button>
-  </form>
-</div>
-
-<p>メイクメモ: {{ my_make.make_memo }}</p>
-<p>作成日: {{ my_make.created_at }}</p>
-<div>
-  <h2>写真:</h2>
-  <img src="{{ my_make.image.url }}" alt="メイク画像">
-</div>
-
-<footer>
-    {% if my_make.user == request.user %}
-        <button onclick="location.href='{% url 'my_make_post' my_make.pk %}'">編集</button>
-        <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">削除</button>
-        </form>
-    {% endif %}
-</footer>
 {% endblock %}
-
-
 

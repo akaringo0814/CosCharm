@@ -51,6 +51,12 @@ urlpatterns = [
     path('home/', HomeView.as_view(), name='home'),
     path('modal/select-cosmetics/', views.modal_select_cosmetics, name='modal_select_cosmetics'),
     path('search_cosmetics/', views.search_cosmetics, name='search_cosmetics'),  # 既存の検索用URL
+    path('home/', HomeView.as_view(), name='home'),
+    path('my_cosmetics/', views.my_cosmetics, name='my_cosmetics'),
+    path('my_cosmetic_register/', views.my_cosmetic_register, name='my_cosmetic_register'),
+    path('favorites_cosme/', views.favorites_cosme, name='favorites_cosme'),
+    path('my_cosmetic/<int:pk>/edit/', views.my_cosmetic_edit, name='my_cosmetic_edit'),
+    path('my_cosmetic/<int:pk>/delete/', views.my_cosmetic_delete, name='my_cosmetic_delete'),
     path('my_make/<int:pk>/update_main_cosmetic/', views.update_main_cosmetic, name='update_main_cosmetic'),
     path('my_make/<int:pk>/update_other_cosmetics/', views.update_other_cosmetics, name='update_other_cosmetics'),
 ]

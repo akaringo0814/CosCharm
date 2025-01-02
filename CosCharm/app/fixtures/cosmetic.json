@@ -5,9 +5,10 @@
         "fields": {
             "cosmetic_name": "薬用スキンコンディショナー エッセンシャル",
             "brand": "アルビオン",
-            "category": 0,  
+            "category": 0,
             "sub_category": 0,
-            "price": 3300
+            "price": 3300,
+            "photo": "cosmetics/image1.jpg"
         }
     },
     {
@@ -18,7 +19,8 @@
             "brand": "ナチュリエ",
             "category": 0,
             "sub_category": 0,
-            "price": 715
+            "price": 715,
+            "photo": "cosmetics/image2.jpg"
         }
     },
     {
@@ -29,7 +31,8 @@
             "brand": "資生堂",
             "category": 0,
             "sub_category": 1,
-            "price": 6600
+            "price": 6600,
+            "photo": "cosmetics/image3.jpg"
         }
     },
     {
@@ -40,7 +43,8 @@
             "brand": "無印良品",
             "category": 0,
             "sub_category": 1,
-            "price": 490
+            "price": 490,
+            "photo": "cosmetics/image4.jpg"
         }
     },
     {
@@ -51,7 +55,8 @@
             "brand": "RMK",
             "category": 0,
             "sub_category": 2,
-            "price": 7150
+            "price": 7150,
+            "photo": "cosmetics/image5.jpg"
         }
     },
     {
@@ -62,7 +67,8 @@
             "brand": "RMK",
             "category": 0,
             "sub_category": 2,
-            "price": 4840
+            "price": 4840,
+            "photo": "cosmetics/image6.jpg"
         }
     },
     {
@@ -73,7 +79,8 @@
             "brand": "ビーアイドル",
             "category": 1,
             "sub_category": 5,
-            "price": 1980
+            "price": 1980,
+            "photo": "cosmetics/image7.jpg"
         }
     },
     {
@@ -84,7 +91,8 @@
             "brand": "CipiCipi",
             "category": 1,
             "sub_category": 4,
-            "price": 1540
+            "price": 1540,
+            "photo": "cosmetics/image8.jpg"
         }
     },
     {
@@ -95,7 +103,8 @@
             "brand": "ロムアンド",
             "category": 1,
             "sub_category": 3,
-            "price": 880
+            "price": 880,
+            "photo": "cosmetics/image9.jpg"
         }
     },
     {
@@ -106,7 +115,8 @@
             "brand": "エチュセ",
             "category": 1,
             "sub_category": 5,
-            "price": 1540
+            "price": 1540,
+            "photo": "cosmetics/image10.jpg"
         }
     },
     {
@@ -117,7 +127,8 @@
             "brand": "Fujiko",
             "category": 1,
             "sub_category": 8,
-            "price": 1400
+            "price": 1400,
+            "photo": "cosmetics/image11.jpg"
         }
     },
     {
@@ -128,7 +139,8 @@
             "brand": "BBIA",
             "category": 1,
             "sub_category": 8,
-            "price": 1100
+            "price": 1100,
+            "photo": "cosmetics/image12.jpg"
         }
     },
     {
@@ -139,7 +151,8 @@
             "brand": "クレ・ド・ポー ボーテ",
             "category": 2,
             "sub_category": 9,
-            "price": 7700
+            "price": 7700,
+            "photo": "cosmetics/image13.jpg"
         }
     },
     {
@@ -150,7 +163,8 @@
             "brand": "マキアージュ",
             "category": 2,
             "sub_category": 9,
-            "price": 2970
+            "price": 2970,
+            "photo": "cosmetics/image14.jpg"
         }
     },
     {
@@ -161,7 +175,8 @@
             "brand": "NARS",
             "category": 2,
             "sub_category": 10,
-            "price": 7920
+            "price": 7920,
+            "photo": "cosmetics/image15.jpg"
         }
     },
     {
@@ -172,7 +187,8 @@
             "brand": "Dior",
             "category": 2,
             "sub_category": 10,
-            "price": 7480
+            "price": 7480,
+            "photo": "cosmetics/image16.jpg"
         }
     },
     {
@@ -183,7 +199,8 @@
             "brand": "Vim Beauty",
             "category": 2,
             "sub_category": 11,
-            "price": 2300
+            "price": 2300,
+            "photo": "cosmetics/image17.jpg"
         }
     },
     {
@@ -194,7 +211,8 @@
             "brand": "Wonjonyo",
             "category": 2,
             "sub_category": 11,
-            "price": 1980
+            "price": 1980,
+            "photo": "cosmetics/image18.jpg"
         }
     }
 ]

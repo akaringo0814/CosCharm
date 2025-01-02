@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}マイコスメ編集{% endblock %}
+
+{% block content %}
+<h1>マイコスメ編集</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">保存</button>
+    <a href="{% url 'my_cosmetics' %}" class="btn btn-secondary">キャンセル</a>
+</form>
+{% endblock %}

@@ -10,7 +10,7 @@
   <ul class="list-group mb-4">
     {% for cosmetic in cosmetics %}
     <li class="list-group-item">
-      {{ cosmetic.cosmetic.cosmetic_name }}  <!-- MyCosmeticモデルのフィールド名に合わせて変更 -->
+      <a href="{% url 'my_cosmetic_detail' cosmetic.pk %}">{{ cosmetic.cosmetic.cosmetic_name }}</a>
     </li>
     {% empty %}
     <li class="list-group-item">コスメが登録されていません。</li>

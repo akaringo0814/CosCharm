@@ -136,3 +136,9 @@ class MyMakeForm(forms.ModelForm):
             my_make.save()
             self.save_m2m()
         return my_make
+
+
+class MyCosmeticForm(forms.ModelForm):
+    class Meta:
+        model = MyCosmetic
+        fields = ['cosmetic', 'is_favorite', 'usage_status']

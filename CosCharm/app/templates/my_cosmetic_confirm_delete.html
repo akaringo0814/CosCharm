@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}マイコスメ削除確認{% endblock %}
+
+{% block content %}
+<h1>マイコスメ削除確認</h1>
+<p>以下のコスメを本当に削除してよろしいですか？</p>
+<p>{{ my_cosmetic.cosmetic.cosmetic_name }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">削除</button>
+    <a href="{% url 'my_cosmetics' %}" class="btn btn-secondary">キャンセル</a>
+</form>
+{% endblock %}
+
