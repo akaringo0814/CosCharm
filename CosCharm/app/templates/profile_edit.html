@@ -7,36 +7,30 @@
 
 {% block content %}
 <div class="container">
-    <h1>プロフィール編集画面</h1>
-
+    <h1>プロフィール編集</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
         <!-- プロフィール画像 -->
         <div class="profile-image">
             {% if user.profile_image %}
-                <img src="{{ user.profile_image.url }}" alt="プロフィール画像">
-            <!-- {% else %}  -->
-                 <!-- <img src="{% static 'images/' %}" alt="デフォルト画像"> --> 
+                <img src="{{ user.profile_image.url }}" alt="プロフィール画像" class="profile-img">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}" alt="デフォルト画像" class="profile-img">
             {% endif %}
             <label for="profile_image">画像をアップロード</label>
             <input type="file" id="profile_image" name="profile_image">
         </div>
-
         <!-- 編集フォーム -->
         <label for="username">ユーザー名</label>
         <input type="text" id="username" name="username" value="{{ user.username }}">
-
         <label for="age">年齢</label>
         <input type="number" id="age" name="age" value="{{ user.age }}">
-
         <label for="gender">性別</label>
         <select id="gender" name="gender">
             <option value="男性" {% if user.gender == "男性" %}selected{% endif %}>男性</option>
             <option value="女性" {% if user.gender == "女性" %}selected{% endif %}>女性</option>
             <option value="その他" {% if user.gender == "その他" %}selected{% endif %}>その他</option>
         </select>
-
         <label for="skin_type">肌質</label>
         <select id="skin_type" name="skin_type">
             <option value="乾燥肌" {% if user.skin_type == "乾燥肌" %}selected{% endif %}>乾燥肌</option>
@@ -45,7 +39,6 @@
             <option value="混合肌" {% if user.skin_type == "混合肌" %}selected{% endif %}>混合肌</option>
             <option value="不明" {% if user.skin_type == "不明" %}selected{% endif %}>不明</option>
         </select>
-
         <label for="personal_color">パーソナルカラー</label>
         <select id="personal_color" name="personal_color">
             <option value="イエベ春" {% if user.personal_color == "イエベ春" %}selected{% endif %}>イエベ春</option>
@@ -54,11 +47,17 @@
             <option value="ブルベ冬" {% if user.personal_color == "ブルベ冬" %}selected{% endif %}>ブルベ冬</option>
             <option value="不明" {% if user.personal_color == "不明" %}selected{% endif %}>不明</option>
         </select>
-
         <button type="submit">更新</button>
     </form>
 </div>
 <p>
     <a href="{% url 'home' %}">ホームに戻る</a>
 </p>
+
+<style>
+    .profile-img {
+        width: 150px; /* ここで希望の幅に調整 */
+        height: auto; /* アスペクト比を維持 */
+    }
+</style>
 {% endblock %}

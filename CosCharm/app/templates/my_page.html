@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像">
+<h1>マイページ</h1>
+{% if user.profile_image %}
+    <img src="{{ user.profile_image.url }}" alt="プロフィール画像" class="profile-img">
+{% else %}
+    <p>プロフィール画像がありません。</p>
+{% endif %}
 <p>ユーザー名: {{ request.user.username }}</p>
 <p>年齢: {{ profile.age }}</p>
 <p>性別: {{ profile.gender }}</p>
@@ -18,5 +23,11 @@
 <p>フォロワー: {{ followers }}</p>
 <a href="{% url 'following_list' request.user.id %}">フォロー一覧を見る</a>
 <a href="{% url 'follower_list' request.user.id %}">フォロワー一覧を見る</a>
-{% endblock %}
 
+<style>
+.profile-img {
+    width: 150px; /* ここで希望の幅に調整 */
+    height: auto; /* アスペクト比を維持 */
+}
+</style>
+{% endblock %}
