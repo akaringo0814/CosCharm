@@ -7,6 +7,14 @@
 {% block content %}
 <h1>マイコスメ一覧</h1>
 <div class="container">
+  <!-- キーワード検索フォーム -->
+  <form method="GET" class="form-inline mb-4">
+    <input type="text" name="q" class="form-control mr-2" placeholder="コスメ名で検索" value="{{ query }}">
+    <label for="include_used" class="form-check-label mr-2">使用済みを含む</label>
+    <input type="checkbox" name="include_used" id="include_used" class="form-check-input" {% if include_used %}checked{% endif %}>
+    <button type="submit" class="btn btn-primary ml-2">検索</button>
+  </form>
+
   <ul class="list-group mb-4">
     {% for cosmetic in cosmetics %}
     <li class="list-group-item">
@@ -17,9 +25,9 @@
     {% endfor %}
   </ul>
 
-  <!-- コスメ登録画面へ遷移するボタン -->
   <div class="d-flex justify-content-end">
-    <a href="{% url 'my_cosmetic_register' %}" class="btn btn-primary">コスメ登録画面へ</a>
+    <a href="{% url 'my_cosmetic_register' %}" class="btn btn-success">コスメを登録する</a>
   </div>
 </div>
 {% endblock %}
+

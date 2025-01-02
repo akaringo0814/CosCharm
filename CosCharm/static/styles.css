@@ -159,4 +159,41 @@ body {
     border-radius: 5px;
     background-color: #f9f9f9;
   }
-  
+  /* styles.css */
+
+.container {
+    padding: 20px;
+}
+
+.form-inline {
+    display: flex;
+    align-items: center;
+}
+
+.form-inline .form-control {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-inline .btn {
+    margin-left: 10px;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-group-item a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.list-group-item a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    margin-left: 5px;
+}

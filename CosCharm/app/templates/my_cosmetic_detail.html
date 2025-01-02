@@ -20,7 +20,6 @@
         <p><strong>使用状況:</strong> {{ my_cosmetic.get_usage_status_display }}</p>
         <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
         <p><strong>作成日:</strong> {{ my_cosmetic.created_at }}</p>
-        <p><strong>更新日:</strong> {{ my_cosmetic.updated_at }}</p>
         <div class="btn-group">
           <a href="{% url 'my_cosmetic_edit' my_cosmetic.pk %}" class="btn btn-primary">編集</a>
           <a href="{% url 'my_cosmetic_delete' my_cosmetic.pk %}" class="btn btn-danger">削除</a>

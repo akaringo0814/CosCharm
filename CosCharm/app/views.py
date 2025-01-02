@@ -21,7 +21,7 @@ from django.core.paginator import Paginator
 import json
 from django.views.decorators.http import require_POST
 from django.db.models import Max
-
+from django.db.models import Q, Max
 
 
 class PortfolioView(View):
@@ -127,18 +127,55 @@ def logout(request):
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
 
 
-def my_cosmetics(request):
+#def my_cosmetics(request):
     # ログインユーザーのコスメを取得し、重複を排除
     cosmetics = MyCosmetic.objects.filter(user=request.user).distinct('cosmetic')
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
 
 
-def my_cosmetics(request):
+#def my_cosmetics(request):
     # ログインユーザーのコスメを取得し、最新の登録を表示
     latest_cosmetic_ids = MyCosmetic.objects.filter(user=request.user).values('cosmetic').annotate(latest_id=Max('id')).values('latest_id')
     cosmetics = MyCosmetic.objects.filter(id__in=latest_cosmetic_ids)
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics})
 
+
+#def my_cosmetics(request):
+    query = request.GET.get('q')
+    include_used = request.GET.get('include_used') == 'on'
+
+    latest_cosmetic_ids = MyCosmetic.objects.filter(user=request.user).values('cosmetic').annotate(latest_id=Max('id')).values('latest_id')
+    cosmetics = MyCosmetic.objects.filter(id__in=latest_cosmetic_ids)
+
+    if query:
+        cosmetics = cosmetics.filter(
+            Q(cosmetic__cosmetic_name__icontains=query) |
+            Q(cosmetic__brand__icontains=query)
+        )
+
+    if not include_used:
+        cosmetics = cosmetics.filter(Q(usage_status='not_used') | Q(usage_status='in_use'))
+
+    return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics, 'query': query, 'include_used': include_used})
+
+
+def my_cosmetics(request):
+    query = request.GET.get('q')
+    include_used = request.GET.get('include_used') == 'on'
+
+    latest_cosmetic_ids = MyCosmetic.objects.filter(user=request.user).values('cosmetic').annotate(latest_id=Max('id')).values('latest_id')
+    cosmetics = MyCosmetic.objects.filter(id__in=latest_cosmetic_ids)
+
+    if query:
+        cosmetics = cosmetics.filter(
+            Q(cosmetic__cosmetic_name__icontains=query) |
+            Q(cosmetic__brand__icontains=query)
+        )
+
+    if not include_used:
+        cosmetics = cosmetics.filter(Q(usage_status='not_used') | Q(usage_status='in_use'))
+
+    return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics, 'query': query, 'include_used': include_used})
 
 #def my_cosmetic_register(request):
     if request.method == 'POST':
