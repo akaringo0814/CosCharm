@@ -1,32 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ my_cosmetic.cosmetic.cosmetic_name }}の詳細{% endblock %}
+{% block title %}{{ my_cosmetic.cosmetic_name }}の詳細{% endblock %}
 
 {% block content %}
 <div class="container">
-  <h1 style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ my_cosmetic.cosmetic.cosmetic_name }}の詳細</h1>
+  <h1 style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ my_cosmetic.cosmetic_name }}の詳細</h1>
   <div class="row">
     <!-- コスメの写真を表示 -->
     <div class="col-md-4">
-      {% if my_cosmetic.cosmetic.photo %}
-        <img src="{{ my_cosmetic.cosmetic.photo.url }}" alt="{{ my_cosmetic.cosmetic.cosmetic_name }}" class="img-fluid" style="max-width: 200px; height: auto;">
+      {% if my_cosmetic.photo %}
+        <img src="{{ my_cosmetic.photo.url }}" alt="{{ my_cosmetic.cosmetic_name }}" class="img-fluid" style="max-width: 200px; height: auto;">
       {% endif %}
     </div>
     <div class="col-md-8">
       <div class="cosmetic-details">
-        <p><strong>ブランド名:</strong> {{ my_cosmetic.cosmetic.brand }}</p>
-        <p><strong>カテゴリ:</strong> {{ my_cosmetic.cosmetic.get_category_display }}</p>
-        <p><strong>サブカテゴリ:</strong> {{ my_cosmetic.cosmetic.get_sub_category_display }}</p>
-        <p><strong>使用状況:</strong> {{ my_cosmetic.get_usage_status_display }}</p>
+        <p><strong>ブランド名:</strong> {{ my_cosmetic.brand }}</p>
+        <p><strong>カテゴリ:</strong> {{ my_cosmetic.get_category_display }}</p>
+        <p><strong>サブカテゴリ:</strong> {{ my_cosmetic.get_sub_category_display }}</p>
         <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
-        <p><strong>作成日:</strong> {{ my_cosmetic.created_at }}</p>
+        
         <div class="btn-group">
           <a href="{% url 'my_cosmetic_edit' my_cosmetic.pk %}" class="btn btn-primary">編集</a>
-          <a href="{% url 'my_cosmetic_delete' my_cosmetic.pk %}" class="btn btn-danger">削除</a>
+          <a href="{% url 'delete_my_cosmetic' my_cosmetic.pk %}" class="btn btn-primary">削除</a>
+          
         </div>
       </div>
     </div>
   </div>
 </div>
+<a href="{% url 'my_cosmetics' %}">マイコスメ画面へ</a>
 {% endblock %}
+
+
+
+
+
+
+
 

@@ -95,26 +95,34 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get(self, request):
         # フォローしているユーザーを取得
         followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
-        
+
         # フォローしているユーザーの投稿を取得
         follow_user_posts = MyMake.objects.filter(
             user__in=followed_users
         ).order_by("-created_at")
-        
+
         # 未使用のコスメを取得（使用状況が「未使用」のコスメ）
-        unused_cosmetics = MyCosmetic.objects.filter(
+        unused_cosmetics_qs = MyCosmetic.objects.filter(
             user=request.user, usage_status='not_used'
         )
-        
+
+        # 手動で重複を排除
+        cosmetics_seen = set()
+        unused_cosmetics = []
+        for cosmetic in unused_cosmetics_qs:
+            if cosmetic.cosmetic.cosmetic_name not in cosmetics_seen:
+                unused_cosmetics.append(cosmetic)
+                cosmetics_seen.add(cosmetic.cosmetic.cosmetic_name)
+
         # フォローしているユーザーオブジェクトを取得
         users_followed = User.objects.filter(id__in=followed_users)
-        
+
         context = {
             'follow_user_posts': follow_user_posts,
             'unused_cosmetics': unused_cosmetics,
             'users_followed': users_followed
         }
-        return render(request, 'home.html', context)
+        return render(request, self.template_name, context)
 
 def logout(request):
     auth_logout(request)
@@ -159,7 +167,7 @@ def logout(request):
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics, 'query': query, 'include_used': include_used})
 
 
-def my_cosmetics(request):
+#def my_cosmetics(request):
     query = request.GET.get('q')
     include_used = request.GET.get('include_used') == 'on'
 
@@ -177,7 +185,27 @@ def my_cosmetics(request):
 
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics, 'query': query, 'include_used': include_used})
 
-#def my_cosmetic_register(request):
+
+def my_cosmetics(request):
+    query = request.GET.get('q')
+    include_used = request.GET.get('include_used') == 'on'
+
+    # データが存在するもののみフィルタリング
+    latest_cosmetic_ids = MyCosmetic.objects.filter(user=request.user, cosmetic__isnull=False).values('cosmetic').annotate(latest_id=Max('id')).values('latest_id')
+    cosmetics = MyCosmetic.objects.filter(id__in=latest_cosmetic_ids)
+
+    if query:
+        cosmetics = cosmetics.filter(
+            Q(cosmetic__cosmetic_name__icontains=query) |
+            Q(cosmetic__brand__icontains=query)
+        )
+
+    if not include_used:
+        cosmetics = cosmetics.filter(Q(usage_status='not_used') | Q(usage_status='in_use'))
+    
+    return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics, 'query': query, 'include_used': include_used})
+
+def my_cosmetic_register(request):
     if request.method == 'POST':
         cosmetic_id = request.POST.get('cosmetic_id')
         is_favorite = request.POST.get('is_favorite') == 'on'
@@ -239,24 +267,25 @@ COSMETIC_DATA = load_cosmetic_data()
    # return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
 
-def delete_my_cosmetic(request, pk):
-    cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
-    cosmetic.delete()
-    return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
+#def delete_my_cosmetic(request, pk):
+    #cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
+    #cosmetic.delete()
+    #return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
 
 
 #def my_cosmetic_detail(request, pk):
-    print(f"Fetching MyCosmetic with pk={pk}")
-    cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
-    print(f"Found MyCosmetic: {cosmetic}")
-    return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
+    #print(f"Fetching MyCosmetic with pk={pk}")
+    #cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
+    #print(f"Found MyCosmetic: {cosmetic}")
+    #return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
 
-#def my_cosmetic_detail(request, pk):
-    my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk, user=request.user)
-    return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
 
 def my_cosmetic_detail(request, pk):
+    my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
+    return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
+
+#def my_cosmetic_detail(request, pk):
     my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
     return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
 
@@ -264,10 +293,13 @@ def my_cosmetic_detail(request, pk):
     cosmetic = get_object_or_404(MyCosmetic, pk=pk)
     return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
+
 def delete_my_cosmetic(request, pk):
     cosmetic = get_object_or_404(MyCosmetic, pk=pk)
     cosmetic.delete()
-    return redirect('my_cosmetic')  # マイコスメ一覧画面のURLにリダイレクト
+    return redirect('my_cosmetics')  # 正しいURLネームにリダイレクト
+
+
 
 #def favorites_cosme(request):
     # お気に入りのコスメをフィルタリング
