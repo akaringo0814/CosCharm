@@ -7,7 +7,7 @@
 {% block content %}
 <div class="user-profile">
     <div class="profile-info">
-        <img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像">
+        <img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像" class="small-image">
         <h2>{{ user_profile.username }}</h2>
         <p>年齢: {{ user_profile.age }}</p>
         <p>性別: {{ user_profile.gender }}</p>
@@ -37,7 +37,7 @@
         {% for make in my_make_list %}
         <div class="make-item">
             <a href="{% url 'my_make_detail' make.id %}">
-                <img src="{{ make.image.url }}" alt="{{ make.make_name }}">
+                <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="small-image">
                 <p>{{ make.make_name }}</p>
             </a>
             <footer>
@@ -53,4 +53,13 @@
         {% endfor %}
     </div>
 </div>
+
+<style>
+.small-image {
+    width: 100px; /* 希望の幅に調整 */
+    height: auto; /* アスペクト比を維持 */
+}
+</style>
 {% endblock %}
+
+

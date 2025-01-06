@@ -19,11 +19,6 @@
         <p><strong>サブカテゴリ:</strong> {{ my_cosmetic.get_sub_category_display }}</p>
         <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
         
-        <div class="btn-group">
-          <a href="{% url 'my_cosmetic_edit' my_cosmetic.pk %}" class="btn btn-primary">編集</a>
-          <a href="{% url 'delete_my_cosmetic' my_cosmetic.pk %}" class="btn btn-primary">削除</a>
-          
-        </div>
       </div>
     </div>
   </div>

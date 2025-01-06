@@ -114,18 +114,14 @@ class CosmeticMaster(models.Model):
         return f"{self.brand} - {self.cosmetic_name}"  # 修正: name -> cosmetic_name
 
 
+
 class MyCosmetic(models.Model):
     """マイコスメ"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cosmetics', verbose_name="ユーザー")  # 修正: user_name -> user
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cosmetics', verbose_name="ユーザー")
     cosmetic = models.ForeignKey(CosmeticMaster, on_delete=models.CASCADE, verbose_name="コスメ")
     used_in_make = models.BooleanField(default=False, verbose_name="メイクに使用")
     is_favorite = models.BooleanField(default=False, verbose_name="お気に入り")
-    #status = models.CharField(
-        #max_length=10,
-        #choices=[('未使用', '未使用'), ('使用中', '使用中'), ('使用済み', '使用済み')],
-        #default='未使用',
-        #verbose_name="使用ステータス"
-    #)
+
     USAGE_STATUS_CHOICES = [
         ('not_used', '未使用'),
         ('in_use', '使用中'),
@@ -135,12 +131,20 @@ class MyCosmetic(models.Model):
         max_length=20,
         choices=USAGE_STATUS_CHOICES,
         default='not_used',
+        verbose_name="使用ステータス"
     )
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日", null=True)
     updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日", null=True)
+    is_deleted = models.BooleanField(default=False, verbose_name="削除済み")
 
     def __str__(self):
         return f"{self.user.username} - {self.cosmetic.brand} - {self.cosmetic.cosmetic_name}"
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
+
 
 
 # プロフィールモデル

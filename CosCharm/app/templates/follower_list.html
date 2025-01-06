@@ -6,12 +6,57 @@
 
 {% block content %}
 <h2>{{ user_profile.username }}のフォロワー一覧</h2>
-<ul>
+<ul class="follower-list">
     {% for user in followers %}
-    <li>
+    <li class="follower-item">
+        <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="small-image">
         <a href="{% url 'user_page' user.id %}">{{ user.username }}</a>
+        {% if not user in request.user.following.all %}
+            <form method="POST" action="{% url 'follow' user.id %}">
+                {% csrf_token %}
+                <button type="submit" class="follow-button">フォローする</button>
+            </form>
+        {% endif %}
     </li>
     {% endfor %}
 </ul>
 <a href="{% url 'my_page' %}">戻る</a>
+
+<style>
+.follower-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.follower-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.small-image {
+    width: 50px; /* 希望のサイズに調整 */
+    height: 50px; /* 固定の高さを指定 */
+    border-radius: 50%; /* 円形にする */
+    margin-right: 10px;
+}
+
+.follow-button {
+    margin-left: auto;
+    padding: 5px 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.follow-button:hover {
+    background-color: #45a049;
+}
+</style>
 {% endblock %}
+

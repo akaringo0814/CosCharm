@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SignupForm, LoginForm ,MyMakeForm
 from .models import MyMake, MyCosmetic, CosmeticMaster, Follow, User,MyMake ,MyMakeCosmetic, Favorite
-from .forms import ChangeEmailForm, ProfileForm, CosmeticForm, MyCosmeticForm
+from .forms import ChangeEmailForm, ProfileForm, CosmeticForm, MyCosmeticForm,MyCosmeticEditForm
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
@@ -96,10 +96,16 @@ class HomeView(LoginRequiredMixin, TemplateView):
         # フォローしているユーザーを取得
         followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
 
+        # パーソナルカラーフィルタを取得
+        personal_color = request.GET.get('personal_color')
+
         # フォローしているユーザーの投稿を取得
         follow_user_posts = MyMake.objects.filter(
             user__in=followed_users
         ).order_by("-created_at")
+
+        if personal_color:
+            follow_user_posts = follow_user_posts.filter(user__personal_color=personal_color)
 
         # 未使用のコスメを取得（使用状況が「未使用」のコスメ）
         unused_cosmetics_qs = MyCosmetic.objects.filter(
@@ -120,9 +126,11 @@ class HomeView(LoginRequiredMixin, TemplateView):
         context = {
             'follow_user_posts': follow_user_posts,
             'unused_cosmetics': unused_cosmetics,
-            'users_followed': users_followed
+            'users_followed': users_followed,
+            'personal_color': personal_color  # コンテキストに追加
         }
         return render(request, self.template_name, context)
+
 
 def logout(request):
     auth_logout(request)
@@ -294,7 +302,13 @@ def my_cosmetic_detail(request, pk):
     return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
 
+
 def delete_my_cosmetic(request, pk):
+    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    my_cosmetic.delete()
+    return redirect('my_cosmetics')
+
+#def delete_my_cosmetic(request, pk):
     cosmetic = get_object_or_404(MyCosmetic, pk=pk)
     cosmetic.delete()
     return redirect('my_cosmetics')  # 正しいURLネームにリダイレクト
@@ -435,7 +449,7 @@ def my_cosmetic_register(request):
     return JsonResponse({"results": results})
 
 
-def search_cosmetics(request):
+#def search_cosmetics(request):
     keyword = request.GET.get('keyword', '').lower()
     brand = request.GET.get('brand', '').lower()
     category = request.GET.get('category', '').lower()
@@ -446,6 +460,22 @@ def search_cosmetics(request):
         query = query.filter(name__icontains=keyword)
     if brand:
         query = query.filter(brand__icontains=brand)
+    if category:
+        query = query.filter(category__icontains=category)
+
+    results = [{'id': cosmetic.id, 'name': cosmetic.name} for cosmetic in query]
+
+    return JsonResponse({"results": results})
+
+
+def search_cosmetics(request):
+    keyword = request.GET.get('keyword', '').lower()
+    category = request.GET.get('category', '').lower()
+
+    query = CosmeticMaster.objects.all()
+
+    if keyword:
+        query = query.filter(name__icontains=keyword)
     if category:
         query = query.filter(category__icontains=category)
 
@@ -585,7 +615,30 @@ def get_initial_cosmetics(request):
     })
 
 
+
 def my_cosmetic_edit(request, pk):
+    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = MyCosmeticEditForm(request.POST, instance=my_cosmetic)
+        if form.is_valid():
+            form.save()
+            return redirect('my_cosmetics')
+    else:
+        form = MyCosmeticEditForm(instance=my_cosmetic)
+    return render(request, 'my_cosmetic_edit.html', {'form': form, 'my_cosmetic': my_cosmetic})
+
+#def my_cosmetic_edit(request, pk):
+    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = MyCosmeticEditForm(request.POST, instance=my_cosmetic)
+        if form.is_valid():
+            form.save()
+            return redirect('my_cosmetics')
+    else:
+        form = MyCosmeticEditForm(instance=my_cosmetic)
+    return render(request, 'my_cosmetic_edit.html', {'form': form})
+
+#def my_cosmetic_edit(request, pk):
     my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
     if request.method == 'POST':
         form = MyCosmeticForm(request.POST, instance=my_cosmetic)
@@ -1032,3 +1085,15 @@ def unfollow(request, user_id):
     following = get_object_or_404(User, id=user_id)
     Follow.objects.filter(follower=request.user, following=following).delete()
     return redirect('user_page', user_id=user_id)
+
+
+
+def follow_user_posts(request):
+    personal_color = request.GET.get('personal_color')
+    follow_user_posts = MyMake.objects.filter(user__in=request.user.following.all())
+
+    if personal_color:
+        follow_user_posts = follow_user_posts.filter(user__personal_color=personal_color)
+
+    return render(request, 'timeline.html', {'follow_user_posts': follow_user_posts, 'personal_color': personal_color})
+

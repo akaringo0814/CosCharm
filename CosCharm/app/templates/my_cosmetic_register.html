@@ -21,38 +21,15 @@
 {% endif %}
 
 <div class="container">
-  <!-- 左側: 検索セクション -->
   <div class="row">
-    <div class="col-md-6">
-      <div class="search-section">
-        <h2>検索</h2>
-        <input type="text" id="keyword-input" placeholder="キーワードで検索" class="form-control" oninput="performSearch()">
-        <select id="category-select" class="form-select mt-2" onchange="performSearch()">
-          <option value="">カテゴリで検索</option>
-          {% for category, subcategories in categories.items %}
-          <optgroup label="{{ category }}">
-            {% for subcategory in subcategories %}
-            <option value="{{ subcategory }}">{{ subcategory }}</option>
-            {% endfor %}
-          </optgroup>
-          {% endfor %}
-        </select>
-        <button class="btn btn-secondary mt-2" onclick="performSearch()">検索</button>
-      </div>
-      <div id="search-results" class="mt-3">
-        <!-- 検索結果がここに表示されます -->
-      </div>
-    </div>
-
-    <!-- 右側: 登録コスメ表示エリア -->
-    <div class="col-md-6">
+    <div class="col-md-12">
       <div class="cosmetics-display">
         <h2>登録コスメ</h2>
         <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
           {% csrf_token %}
           <div class="mb-3">
             <label for="cosmetic_id" class="form-label">コスメを選択:</label>
-            <select name="cosmetic_id" id="cosmetic_id" class="form-select">
+            <select name="cosmetic_id" id="cosmetic_id" class="form-select" style="width: 100%;">
               {% for cosmetic in cosmetics %}
               <option value="{{ cosmetic.id }}">{{ cosmetic.cosmetic_name }}</option>
               {% endfor %}
@@ -81,7 +58,6 @@
               </div>
             </div>
           </div>
-
 
           <button type="submit" class="btn btn-primary">登録</button>
         </form>

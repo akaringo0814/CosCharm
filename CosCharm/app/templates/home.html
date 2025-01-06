@@ -19,6 +19,17 @@
     <!-- 右側: フォローユーザーの投稿 -->
     <section class="follow-user-posts">
         <h2>タイムライン</h2>
+        <form method="GET" action="">
+            <select name="personal_color">
+                <option value="">全て</option>
+                <option value="イエベ春" {% if personal_color == "イエベ春" %}selected{% endif %}>イエベ春</option>
+                <option value="ブルベ夏" {% if personal_color == "ブルベ夏" %}selected{% endif %}>ブルベ夏</option>
+                <option value="イエベ秋" {% if personal_color == "イエベ秋" %}selected{% endif %}>イエベ秋</option>
+                <option value="ブルベ冬" {% if personal_color == "ブルベ冬" %}selected{% endif %}>ブルベ冬</option>
+                <option value="不明" {% if personal_color == "不明" %}selected{% endif %}>不明</option>
+            </select>
+            <button type="submit" class="btn btn-primary">フィルター</button>
+        </form>
         <ul>
             {% for post in follow_user_posts %}
                 <li>

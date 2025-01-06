@@ -142,3 +142,9 @@ class MyCosmeticForm(forms.ModelForm):
     class Meta:
         model = MyCosmetic
         fields = ['cosmetic', 'is_favorite', 'usage_status']
+
+
+class MyCosmeticEditForm(forms.ModelForm):
+    class Meta:
+        model = MyCosmetic
+        fields = ['usage_status', 'is_favorite']
