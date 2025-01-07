@@ -2,11 +2,16 @@
 
 {% block content %}
 <h1>お気に入りコスメ</h1>
-<div>
+<div class="cosmetics-grid">
     {% for cosmetic in favorite_cosmetics %}
-    <div>
-        <p>{{ cosmetic.cosmetic.brand }}</p>
-        <p><a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}">{{ cosmetic.cosmetic.cosmetic_name }}</a></p>
+    <div class="cosmetic-item">
+        {% if cosmetic.cosmetic.photo %}
+            <img src="{{ cosmetic.cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
+        {% endif %}
+        <div class="cosmetic-info text-center">
+            <p>{{ cosmetic.cosmetic.brand }}</p>
+            <a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}" class="cosmetic-name">{{ cosmetic.cosmetic.cosmetic_name }}</a>
+        </div>
     </div>
     {% endfor %}
 </div>
@@ -32,6 +37,65 @@
 <p>
     <a href="{% url 'home' %}">ホームに戻る</a>
 </p>
+
+<style>
+.cosmetics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
+    gap: 20px; /* 各アイテム間の間隔を設定 */
+}
+
+.cosmetic-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.cosmetic-item:hover {
+    background-color: #e9e9e9;
+}
+
+.cosmetic-image {
+    width: 100px; /* 写真のサイズを調整 */
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+}
+
+.cosmetic-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* コスメ名を中央に配置 */
+}
+
+.cosmetic-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+.cosmetic-name:hover {
+    text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.step-links a, .step-links .current {
+    margin: 0 5px;
+}
+</style>
 {% endblock %}
+
 
 

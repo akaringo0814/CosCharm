@@ -4,12 +4,12 @@
 
 {% block content %}
 <div class="container">
-  <h1 style="width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ my_cosmetic.cosmetic_name }}の詳細</h1>
+  <h2 class="cosmetic-title">{{ my_cosmetic.cosmetic_name }}の詳細</h2>
   <div class="row">
     <!-- コスメの写真を表示 -->
     <div class="col-md-4">
       {% if my_cosmetic.photo %}
-        <img src="{{ my_cosmetic.photo.url }}" alt="{{ my_cosmetic.cosmetic_name }}" class="img-fluid" style="max-width: 200px; height: auto;">
+        <img src="{{ my_cosmetic.photo.url }}" alt="{{ my_cosmetic.cosmetic_name }}" class="img-fluid cosmetic-image">
       {% endif %}
     </div>
     <div class="col-md-8">
@@ -18,13 +18,91 @@
         <p><strong>カテゴリ:</strong> {{ my_cosmetic.get_category_display }}</p>
         <p><strong>サブカテゴリ:</strong> {{ my_cosmetic.get_sub_category_display }}</p>
         <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
-        
       </div>
     </div>
   </div>
+
+  <!-- このコスメを使用したマイメイク投稿を表示 -->
+  <div class="my-make-using-cosmetic">
+    <h3>このコスメを使用したマイメイク投稿</h3>
+    <div class="make-grid">
+      {% for make in my_make_using_cosmetic %}
+      <div class="make-item">
+        <a href="{% url 'my_make_detail' make.id %}">
+          <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="small-image">
+          <p>{{ make.make_name }}</p>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
-<a href="{% url 'my_cosmetics' %}">マイコスメ画面へ</a>
+<a href="{% url 'my_cosmetics' %}" class="back-button">マイコスメ画面へ</a>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+
+
+.cosmetic-title {
+    font-size: 24px; /* 文字サイズを小さくする */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cosmetic-image {
+    max-width: 150px; /* 画像の最大幅を小さく調整 */
+    height: auto;
+    margin: 0 auto; /* 画像を中央に配置 */
+    display: block;
+}
+
+.small-image {
+    width: 100px; /* 希望の幅に調整 */
+    height: auto; /* アスペクト比を維持 */
+}
+
+.make-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* 投稿アイテムを中央に配置 */
+}
+
+.make-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.make-item:hover {
+    background-color: #e9e9e9;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #45a049;
+}
+</style>
 {% endblock %}
+
 
 
 

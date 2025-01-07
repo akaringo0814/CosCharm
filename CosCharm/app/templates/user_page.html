@@ -42,11 +42,10 @@
             </a>
             <footer>
                 {% if make.user == request.user %}
-                    <button onclick="location.href='{% url 'my_make_post' make.id %}'">編集</button>
-                    <form action="{% url 'delete_my_make' make.id %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">削除</button>
-                    </form>
+                    <div class="action-links">
+                        <a href="{% url 'my_make_post' make.id %}" class="edit-link">編集</a>
+                        <a href="{% url 'delete_my_make' make.id %}" class="delete-link">削除</a>
+                    </div>
                 {% endif %}
             </footer>
         </div>
@@ -59,7 +58,32 @@
     width: 100px; /* 希望の幅に調整 */
     height: auto; /* アスペクト比を維持 */
 }
+
+.action-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.edit-link, .delete-link {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.edit-link {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-link {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-link:hover, .delete-link:hover {
+    opacity: 0.8;
+}
 </style>
 {% endblock %}
-
 

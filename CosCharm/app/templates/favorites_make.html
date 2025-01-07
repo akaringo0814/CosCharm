@@ -6,12 +6,12 @@
 <h1>マイメイクお気に入り</h1>
 
 <div class="favorite-list">
-    <ul>
+    <ul class="cosmetics-grid">
         {% for favorite in favorites %}
-        <li>
+        <li class="cosmetic-item">
             <a href="{% url 'my_make_detail' favorite.my_make.pk %}">
                 <img src="{{ favorite.my_make.image.url }}" alt="{{ favorite.my_make.make_name }}" class="favorite-make-image">
-                <p>{{ favorite.my_make.make_name }}</p>
+                <p class="cosmetic-name">{{ favorite.my_make.make_name }}</p>
             </a>
         </li>
         {% empty %}
@@ -43,9 +43,57 @@
 </p>
 
 <style>
+.cosmetics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
+    gap: 20px; /* 各アイテム間の間隔を設定 */
+    list-style-type: none; /* リストスタイルを削除 */
+    padding: 0;
+}
+
+.cosmetic-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.cosmetic-item:hover {
+    background-color: #e9e9e9;
+}
+
 .favorite-make-image {
-    width: 150px; /* 希望の幅に調整 */
-    height: auto; /* アスペクト比を維持 */
+    width: 100px; /* 写真のサイズを調整 */
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+}
+
+.cosmetic-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    text-align: center;
+}
+
+.cosmetic-name:hover {
+    text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.step-links a, .step-links .current {
+    margin: 0 5px;
 }
 </style>
 {% endblock %}

@@ -22,6 +22,8 @@ import json
 from django.views.decorators.http import require_POST
 from django.db.models import Max
 from django.db.models import Q, Max
+import logging
+
 
 
 class PortfolioView(View):
@@ -288,8 +290,17 @@ COSMETIC_DATA = load_cosmetic_data()
     #return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
 
-
 def my_cosmetic_detail(request, pk):
+    my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
+    my_make_using_cosmetic = MyMake.objects.filter(cosmetics=my_cosmetic)
+    context = {
+        'my_cosmetic': my_cosmetic,
+        'my_make_using_cosmetic': my_make_using_cosmetic,
+    }
+    return render(request, 'my_cosmetic_detail.html', context)
+
+
+#def my_cosmetic_detail(request, pk):
     my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
     return render(request, 'my_cosmetic_detail.html', {'my_cosmetic': my_cosmetic})
 
@@ -1097,3 +1108,21 @@ def follow_user_posts(request):
 
     return render(request, 'timeline.html', {'follow_user_posts': follow_user_posts, 'personal_color': personal_color})
 
+
+logger = logging.getLogger(__name__)
+
+@login_required
+def follow_user(request, user_id):
+    if request.method == "POST":
+        target_user = get_object_or_404(User, id=user_id)
+        request.user.following.add(target_user)
+        return JsonResponse({"status": "followed"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+@login_required
+def unfollow_user(request, user_id):
+    if request.method == "POST":
+        target_user = get_object_or_404(User, id=user_id)
+        request.user.following.remove(target_user)
+        return JsonResponse({"status": "unfollowed"})
+    return JsonResponse({"error": "Invalid request"}, status=400)

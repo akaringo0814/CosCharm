@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block title %}
-マイコスメ登録・編集画面
+マイコスメ登録画面
 {% endblock %}
 
 {% block content %}
-<h1>マイコスメ登録・編集画面</h1>
+<h1>マイコスメ登録画面</h1>
 
 {% if messages %}
   <div class="alert alert-success">
@@ -20,10 +20,10 @@
 <div class="alert alert-danger">{{ error }}</div>
 {% endif %}
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="cosmetics-display">
+<div class="container-2">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="cosmetics-display2">
         <h2>登録コスメ</h2>
         <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
           {% csrf_token %}
@@ -36,12 +36,12 @@
             </select>
           </div>
 
-          <div class="mb-3 d-flex align-items-center">
+          <div class="mb-3 form-check-inline">
             <input type="checkbox" class="form-check-input me-2" name="is_favorite" id="is_favorite">
             <label for="is_favorite" class="form-check-label mb-0">お気に入り登録</label>
           </div>
 
-          <div class="mb-3">
+          <div class="mb-4">
             <label class="form-label">使用状況:</label>
             <div class="d-flex">
               <div class="form-check me-3">
@@ -59,18 +59,28 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary">登録</button>
+          <button type="submit" class="btn btn-primary w-100">登録</button>
         </form>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
-
+<style>
+  .container-2 {
+    display: flex;
+    justify-content: space-between;
+    padding: 300px;
+}
+.cosmetics-display2 {
+    width: 200%;
+    padding: 100px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    background-color: #f9f9f9;
+}
+</style>
 {% block extra_js %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-<script src="{% static 'js/scripts.js' %}"></script>
 {% endblock %}
+
 

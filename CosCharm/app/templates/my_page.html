@@ -5,29 +5,111 @@
 {% endblock %}
 
 {% block content %}
-<h1>マイページ</h1>
-{% if user.profile_image %}
-    <img src="{{ user.profile_image.url }}" alt="プロフィール画像" class="profile-img">
-{% else %}
-    <p>プロフィール画像がありません。</p>
-{% endif %}
-<p>ユーザー名: {{ request.user.username }}</p>
-<p>年齢: {{ profile.age }}</p>
-<p>性別: {{ profile.gender }}</p>
-<p>肌質: {{ profile.skin_type }}</p>
-<p>パーソナルカラー: {{ profile.personal_color }}</p>
+<h1 class="page-title">マイページ</h1>
+<div class="profile-container">
+    {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="プロフィール画像" class="profile-img">
+    {% else %}
+        <p>プロフィール画像がありません。</p>
+    {% endif %}
+    <div class="profile-details">
+        <p><strong>ユーザー名:</strong> {{ request.user.username }}</p>
+        <p><strong>年齢:</strong> {{ profile.age }}</p>
+        <p><strong>性別:</strong> {{ profile.gender }}</p>
+        <p><strong>肌質:</strong> {{ profile.skin_type }}</p>
+        <p><strong>パーソナルカラー:</strong> {{ profile.personal_color }}</p>
+        <a href="{% url 'profile_edit' %}" class="btn btn-primary">プロフィール編集画面へ</a>
+    </div>
+</div>
 
-<a href="{% url 'profile_edit' %}">プロフィール編集画面へ</a>
-
-<p>フォロー: {{ following }}</p>
-<p>フォロワー: {{ followers }}</p>
-<a href="{% url 'following_list' request.user.id %}">フォロー一覧を見る</a>
-<a href="{% url 'follower_list' request.user.id %}">フォロワー一覧を見る</a>
+<div class="follow-info">
+    <p>フォロー: <span class="follow-count">{{ following }}</span></p>
+    <p>フォロワー: <span class="follow-count">{{ followers }}</span></p>
+    <a href="{% url 'following_list' request.user.id %}" class="follow-link">フォロー一覧を見る</a>
+    <a href="{% url 'follower_list' request.user.id %}" class="follow-link">フォロワー一覧を見る</a>
+</div>
 
 <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.page-title {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .profile-img {
-    width: 150px; /* ここで希望の幅に調整 */
-    height: auto; /* アスペクト比を維持 */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-details p {
+    margin: 0;
+}
+
+.profile-details a {
+    margin-top: 10px;
+}
+
+.follow-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.follow-info p {
+    margin: 0;
+}
+
+.follow-count {
+    font-weight: bold;
+}
+
+.follow-link {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.follow-link:hover {
+    text-decoration: underline;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 </style>
 {% endblock %}

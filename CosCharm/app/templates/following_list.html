@@ -5,57 +5,106 @@
 {% endblock %}
 
 {% block content %}
-<h2>{{ user_profile.username }}がフォロー中のユーザー一覧</h2>
-<ul class="following-list">
-    {% for user in following %}
-    <li class="following-item">
-        <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="small-image">
-        <a href="{% url 'user_page' user.id %}">{{ user.username }}</a>
-        {% if not user in request.user.following.all %}
-            <form method="POST" action="{% url 'follow' user.id %}">
-                {% csrf_token %}
-                <button type="submit" class="follow-button">フォローする</button>
-            </form>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'my_page' %}">戻る</a>
+<div class="container">
+    <h2>{{ user_profile.username }}がフォロー中のユーザー一覧</h2>
+    <ul class="following-list">
+        {% for user in following %}
+        <li class="following-item">
+            <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="small-image">
+            <div class="user-details">
+                <a href="{% url 'user_page' user.id %}" class="user-name">{{ user.username }}</a>
+                <p class="user-info">フォロー数: {{ user.following.count }} | フォロワー数: {{ user.followers.count }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'my_page' %}" class="back-button">戻る</a>
+</div>
 
 <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: 50px; /* ヘッダーの下に配置 */
+}
+
 .following-list {
     list-style-type: none;
     padding: 0;
+    text-align: center;
 }
 
 .following-item {
     display: flex;
     align-items: center;
+    justify-content: center;
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.following-item:hover {
+    background-color: #e9e9e9;
 }
 
 .small-image {
-    width: 50px; /* 希望のサイズに調整 */
-    height: 50px; /* 固定の高さを指定 */
-    border-radius: 50%; /* 円形にする */
-    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
 }
 
-.follow-button {
-    margin-left: auto;
-    padding: 5px 10px;
-    border: none;
+.user-details {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+.user-name:hover {
+    text-decoration: underline;
+}
+
+.user-info {
+    font-size: 14px;
+    color: #666;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
+    text-decoration: none;
     border-radius: 5px;
-    cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    transition: background-color 0.3s;
 }
 
-.follow-button:hover {
+.back-button:hover {
     background-color: #45a049;
 }
 </style>
 {% endblock %}
+
