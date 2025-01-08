@@ -36,3 +36,4 @@ $(document).ready(function() {
     return cosmetic.text || cosmetic.id;
   }
 });
+

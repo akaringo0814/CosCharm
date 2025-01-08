@@ -90,6 +90,7 @@ class LoginView(View):
         return render(request, 'home.html', context)
 
 
+
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "home.html"
     login_url = "login"
@@ -98,8 +99,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
         # フォローしているユーザーを取得
         followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
 
-        # パーソナルカラーフィルタを取得
+        # フィルタを取得
         personal_color = request.GET.get('personal_color')
+        skin_type = request.GET.get('skin_type')
 
         # フォローしているユーザーの投稿を取得
         follow_user_posts = MyMake.objects.filter(
@@ -108,6 +110,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
         if personal_color:
             follow_user_posts = follow_user_posts.filter(user__personal_color=personal_color)
+        
+        if skin_type:
+            follow_user_posts = follow_user_posts.filter(user__skin_type=skin_type)
 
         # 未使用のコスメを取得（使用状況が「未使用」のコスメ）
         unused_cosmetics_qs = MyCosmetic.objects.filter(
@@ -129,7 +134,8 @@ class HomeView(LoginRequiredMixin, TemplateView):
             'follow_user_posts': follow_user_posts,
             'unused_cosmetics': unused_cosmetics,
             'users_followed': users_followed,
-            'personal_color': personal_color  # コンテキストに追加
+            'personal_color': personal_color,  # コンテキストに追加
+            'skin_type': skin_type  # コンテキストに追加
         }
         return render(request, self.template_name, context)
 
@@ -215,7 +221,7 @@ def my_cosmetics(request):
     
     return render(request, 'my_cosmetics.html', {'cosmetics': cosmetics, 'query': query, 'include_used': include_used})
 
-def my_cosmetic_register(request):
+#def my_cosmetic_register(request):
     if request.method == 'POST':
         cosmetic_id = request.POST.get('cosmetic_id')
         is_favorite = request.POST.get('is_favorite') == 'on'
@@ -230,6 +236,55 @@ def my_cosmetic_register(request):
     
     cosmetics = CosmeticMaster.objects.all()
     return render(request, 'my_cosmetic_register.html', {'cosmetics': cosmetics})
+
+
+#def my_cosmetic_register(request):
+    query = request.GET.get('q')
+    cosmetics = CosmeticMaster.objects.all()
+    
+    if query:
+        cosmetics = cosmetics.filter(cosmetic_name__icontains=query)
+    
+    if request.method == 'POST':
+        cosmetic_id = request.POST.get('cosmetic_id')
+        is_favorite = request.POST.get('is_favorite') == 'on'
+        usage_status = request.POST.get('usage_status')
+
+        cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
+        cosmetic.is_favorite = is_favorite
+        cosmetic.usage_status = usage_status
+        cosmetic.save()
+
+        return redirect('my_cosmetics')
+    
+    return render(request, 'my_cosmetic_register.html', {'cosmetics': cosmetics, 'filtered_cosmetics': cosmetics, 'query': query})
+
+def my_cosmetic_register(request):
+    query = request.GET.get('q', '')
+    cosmetics = CosmeticMaster.objects.all()
+    
+    if query:
+        cosmetics = cosmetics.filter(cosmetic_name__icontains=query)
+    
+    if request.method == 'POST':
+        cosmetic_id = request.POST.get('cosmetic_id')
+        is_favorite = request.POST.get('is_favorite') == 'on'
+        usage_status = request.POST.get('usage_status')
+
+        cosmetic = CosmeticMaster.objects.get(id=cosmetic_id)
+        cosmetic.is_favorite = is_favorite
+        cosmetic.usage_status = usage_status
+        cosmetic.save()
+
+        return redirect('my_cosmetics')
+    
+    context = {
+        'cosmetics': cosmetics,
+        'filtered_cosmetics': cosmetics,  # フィルタリングされたコスメをテンプレートに渡す
+        'query': query
+    }
+    
+    return render(request, 'my_cosmetic_register.html', context)
 
 #def my_cosmetic_detail(request):
     return render(request, 'my_cosmetic_detail.html') #マイコスメお気に入り
@@ -290,10 +345,43 @@ COSMETIC_DATA = load_cosmetic_data()
     #return render(request, 'my_cosmetic_detail.html', {'cosmetic': cosmetic})
 
 
+
+
+
 def my_cosmetic_detail(request, pk):
-    my_cosmetic = get_object_or_404(CosmeticMaster, pk=pk)
-    my_make_using_cosmetic = MyMake.objects.filter(cosmetics=my_cosmetic)
+    cosmetic_master = get_object_or_404(CosmeticMaster, pk=pk)
+    my_cosmetic = MyCosmetic.objects.filter(cosmetic=cosmetic_master, user=request.user).order_by('-updated_at').first()
+
+    # フォロワーのユーザーを取得
+    followers = Follow.objects.filter(following=request.user).values_list('follower', flat=True)
+
+    # 自分とフォロワーのメイクを取得
+    my_make_cosmetics = MyMakeCosmetic.objects.filter(cosmetic=cosmetic_master, my_make__user__in=[request.user] + list(followers))
+
+    # メインコスメ及び他使用コスメのメイクIDを取得
+    main_cosmetics = my_make_cosmetics.filter(is_main=True).values_list('my_make', flat=True)
+    other_cosmetics = my_make_cosmetics.filter(is_main=False).values_list('my_make', flat=True)
+
+    # 自分とフォロワーのすべての関連メイクを取得
+    all_related_makes = MyMake.objects.filter(id__in=set(list(main_cosmetics) + list(other_cosmetics)))
+
     context = {
+        'cosmetic_master': cosmetic_master,
+        'my_cosmetic': my_cosmetic,
+        'my_make_using_cosmetic': all_related_makes,
+    }
+    return render(request, 'my_cosmetic_detail.html', context)
+
+
+
+
+#def my_cosmetic_detail(request, pk):
+    cosmetic_master = get_object_or_404(CosmeticMaster, pk=pk)
+    my_cosmetic = MyCosmetic.objects.filter(cosmetic=cosmetic_master, user=request.user).order_by('-updated_at').first()
+    my_make_using_cosmetic = MyMake.objects.filter(cosmetics=cosmetic_master, user=request.user)
+    
+    context = {
+        'cosmetic_master': cosmetic_master,
         'my_cosmetic': my_cosmetic,
         'my_make_using_cosmetic': my_make_using_cosmetic,
     }

@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block title %}
 マイコスメ登録画面
@@ -25,6 +24,10 @@
     <div class="col-md-8">
       <div class="cosmetics-display2">
         <h2>登録コスメ</h2>
+        <form method="GET" class="mt-4" action="">
+          <input type="text" id="search_cosmetic" name="q" placeholder="検索..." class="search-input" value="{{ query }}">
+          <button type="submit" class="btn btn-primary">検索</button>
+        </form>
         <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
           {% csrf_token %}
           <div class="mb-3">
@@ -38,7 +41,7 @@
 
           <div class="mb-3 form-check-inline">
             <input type="checkbox" class="form-check-input me-2" name="is_favorite" id="is_favorite">
-            <label for="is_favorite" class="form-check-label mb-0">お気に入り登録</label>
+            <label for="is_favorite" class="form-check-label mb-0" style="text-align: left;">お気に入り登録</label>
           </div>
 
           <div class="mb-4">
@@ -66,21 +69,4 @@
   </div>
 </div>
 {% endblock %}
-<style>
-  .container-2 {
-    display: flex;
-    justify-content: space-between;
-    padding: 300px;
-}
-.cosmetics-display2 {
-    width: 200%;
-    padding: 100px;
-    border: 1px solid #ccc;
-    border-radius: 50px;
-    background-color: #f9f9f9;
-}
-</style>
-{% block extra_js %}
-{% endblock %}
-
 

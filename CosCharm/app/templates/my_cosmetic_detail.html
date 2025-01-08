@@ -1,23 +1,82 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ my_cosmetic.cosmetic_name }}の詳細{% endblock %}
+{% block title %}{{ cosmetic_master.cosmetic_name }}の詳細{% endblock %}
+
+{% block styles %}
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+.cosmetic-title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.cosmetic-image {
+    max-width: 100px; /* サイズを小さくする */
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+.small-image {
+    width: 10px; /* サイズを小さくする */
+    height: auto;
+}
+.make-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.make-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+.make-item:hover {
+    background-color: #e9e9e9;
+}
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+.back-button:hover {
+    background-color: #45a049;
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h2 class="cosmetic-title">{{ my_cosmetic.cosmetic_name }}の詳細</h2>
+<div class>
+  <h2 class="cosmetic-title">{{ cosmetic_master.cosmetic_name }}の詳細</h2>
   <div class="row">
-    <!-- コスメの写真を表示 -->
     <div class="col-md-4">
-      {% if my_cosmetic.photo %}
-        <img src="{{ my_cosmetic.photo.url }}" alt="{{ my_cosmetic.cosmetic_name }}" class="img-fluid cosmetic-image">
+      {% if cosmetic_master.photo %}
+        <img src="{{ cosmetic_master.photo.url }}" alt="{{ cosmetic_master.cosmetic_name }}" class="img-fluid cosmetic-image">
       {% endif %}
     </div>
     <div class="col-md-8">
       <div class="cosmetic-details">
-        <p><strong>ブランド名:</strong> {{ my_cosmetic.brand }}</p>
-        <p><strong>カテゴリ:</strong> {{ my_cosmetic.get_category_display }}</p>
-        <p><strong>サブカテゴリ:</strong> {{ my_cosmetic.get_sub_category_display }}</p>
+        <p><strong>ブランド名:</strong> {{ cosmetic_master.brand }}</p>
+        <p><strong>カテゴリ:</strong> {{ cosmetic_master.get_category_display }}</p>
+        <p><strong>サブカテゴリ:</strong> {{ cosmetic_master.get_sub_category_display }}</p>
+        {% if my_cosmetic %}
         <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
+        <p><strong>使用状況:</strong> {{ my_cosmetic.get_usage_status_display }}</p>
+        {% else %}
+        <p>このコスメは登録されていません。</p>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -35,79 +94,11 @@
       </div>
       {% endfor %}
     </div>
+    {% if not my_make_using_cosmetic %}
+      <p>このコスメを使用したマイメイク投稿はありません。</p>
+    {% endif %}
   </div>
 </div>
 <a href="{% url 'my_cosmetics' %}" class="back-button">マイコスメ画面へ</a>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-}
-
-
-
-.cosmetic-title {
-    font-size: 24px; /* 文字サイズを小さくする */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.cosmetic-image {
-    max-width: 150px; /* 画像の最大幅を小さく調整 */
-    height: auto;
-    margin: 0 auto; /* 画像を中央に配置 */
-    display: block;
-}
-
-.small-image {
-    width: 100px; /* 希望の幅に調整 */
-    height: auto; /* アスペクト比を維持 */
-}
-
-.make-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center; /* 投稿アイテムを中央に配置 */
-}
-
-.make-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s;
-    text-align: center;
-}
-
-.make-item:hover {
-    background-color: #e9e9e9;
-}
-
-.back-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-}
-
-.back-button:hover {
-    background-color: #45a049;
-}
-</style>
 {% endblock %}
-
-
-
-
-
-
-
-
 

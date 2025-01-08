@@ -21,14 +21,24 @@
         <h2>タイムライン</h2>
         <form method="GET" action="" class="filter-form">
             <select name="personal_color" class="filter-select">
-                <option value="">全て</option>
+                <option value="">パーソナルカラー全て</option>
                 <option value="イエベ春" {% if personal_color == "イエベ春" %}selected{% endif %}>イエベ春</option>
                 <option value="ブルベ夏" {% if personal_color == "ブルベ夏" %}selected{% endif %}>ブルベ夏</option>
                 <option value="イエベ秋" {% if personal_color == "イエベ秋" %}selected{% endif %}>イエベ秋</option>
                 <option value="ブルベ冬" {% if personal_color == "ブルベ冬" %}selected{% endif %}>ブルベ冬</option>
                 <option value="不明" {% if personal_color == "不明" %}selected{% endif %}>不明</option>
             </select>
-            <button type="submit" class="btn btn-primary">フィルター</button>
+            <select name="skin_type" class="filter-select">
+                    <option value="">肌質全て</option>
+                    <option value="乾燥肌" {% if skin_type == "乾燥肌" %}selected{% endif %}>乾燥肌</option>
+                    <option value="脂性肌" {% if skin_type == "脂性肌" %}selected{% endif %}>脂性肌</option>
+                    <option value="普通肌" {% if skin_type == "普通肌" %}selected{% endif %}>普通肌</option>
+                    <option value="混合肌" {% if skin_type == "混合肌" %}selected{% endif %}>混合肌</option>
+                    <option value="不明" {% if skin_type == "不明" %}selected{% endif %}>不明</option>
+                </select>
+                <button type="submit" class="btn btn-primary">フィルター</button>
+            </form>
+            
         </form>
         <ul class="posts-list">
             {% for post in follow_user_posts %}
