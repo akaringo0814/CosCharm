@@ -21,31 +21,32 @@
 
 <div class="container-2">
   <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class=>
       <div class="cosmetics-display2">
         <h2>登録コスメ</h2>
         <form method="GET" class="mt-4" action="">
           <input type="text" id="search_cosmetic" name="q" placeholder="検索..." class="search-input" value="{{ query }}">
-          <button type="submit" class="btn btn-primary">検索</button>
+          <button type="submit" class="btn">検索</button>
         </form>
         <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
           {% csrf_token %}
           <div class="mb-3">
             <label for="cosmetic_id" class="form-label">コスメを選択:</label>
-            <select name="cosmetic_id" id="cosmetic_id" class="form-select" style="width: 100%;">
+            <select name="cosmetic_id" id="cosmetic_id" class="form-select">
               {% for cosmetic in cosmetics %}
               <option value="{{ cosmetic.id }}">{{ cosmetic.cosmetic_name }}</option>
               {% endfor %}
             </select>
           </div>
 
-          <div class="mb-3 form-check-inline">
-            <input type="checkbox" class="form-check-input me-2" name="is_favorite" id="is_favorite">
-            <label for="is_favorite" class="form-check-label mb-0" style="text-align: left;">お気に入り登録</label>
+          <div class="mb-4">
+            <label class=>お気に入り登録:</label>
+            <input type="checkbox" class="form-check-input" name="is_favorite" id="is_favorite">
+            <label for="is_favorite" class="form-check-label" >お気に入り</label>
           </div>
 
           <div class="mb-4">
-            <label class="form-label">使用状況:</label>
+            <label class=>使用状況:</label>
             <div class="d-flex">
               <div class="form-check me-3">
                 <input type="radio" class="form-check-input" name="usage_status" value="not_used" id="not_used" checked>
@@ -62,11 +63,58 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100">登録</button>
+          <button type="submit" class="btn w-100">登録</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .container-2 {
+      max-width: 1000px; 
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #f9f9f9;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="file"],
+  select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+  }
+
+  .btn {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+      background-color: #0056b3;
+  }
+
+
+
+
+  .d-flex {
+      display: flex;
+      justify-content: space-between;
+  }
+
+  .w-100 {
+      width: 100%;
+  }
+</style>
 {% endblock %}
+
 

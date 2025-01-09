@@ -19,6 +19,7 @@ nav {
 /* パスワード変更画面 */
 body {
     font-family: Arial, sans-serif;
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -37,9 +38,11 @@ form {
     margin: 10px auto;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
 }
+
 
 .form-group {
     margin-bottom: 15px;
@@ -130,14 +133,7 @@ button:hover {
     margin-bottom: 5px;
 }
 
-body {
-    padding-top: 20px;
-  }
-  
-  h1 {
-    margin-bottom: 20px;
-  }
-  
+
   .search-section,
   .cosmetics-display {
     border: 1px solid #ddd;
@@ -182,8 +178,9 @@ body {
     margin-left: 5px;
 }
 
+
 .cosmetics-display2 {
-    width: 50%;
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 50px;
@@ -200,7 +197,7 @@ body {
 }
 .search-label {
     display: flex;
-    align-items: center;
+    align-items: flex-start;;
 }
 .cosmetics-grid {
     display: grid;
@@ -220,14 +217,7 @@ body {
 .cosmetic-item:hover {
     background-color: #e9e9e9;
 }
-.cosmetic-image {
-    width: 100px; /* 写真のサイズを調整 */
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
-}
-.cosmetic-info {
+.smetic-info {
     display: flex;
     flex-direction: column;
     align-items: center; /* コスメ名と編集ボタンを中央に配置 */
@@ -250,7 +240,14 @@ body {
     display: flex;
     align-items: flex-start;
 }
-
+.cosmetic-image {
+    width: 100px; /* 写真のサイズを調整 */
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+}
+.co
 /* 使用状況のラジオボタンを横並びにする */
 .d-flex {
     display: flex;
@@ -267,4 +264,12 @@ body {
   margin-right: 1rem;
 }
 
+
+
+img.small-image-2 {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+}
 

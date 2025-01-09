@@ -2,57 +2,10 @@
 
 {% block title %}{{ cosmetic_master.cosmetic_name }}の詳細{% endblock %}
 
-{% block styles %}
-<style>
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-}
 
-.cosmetic-details {
-    flex: 1;
-    max-width: 50%;
-}
-
-.my-make-using-cosmetic {
-    flex: 1;
-    max-width: 50%;
-}
-
-img.cosmetic-image {
-    max-width: 100px; /* コスメ写真の最大幅 */
-    height: auto;
-    display: block;
-    margin: 10px 0;
-    object-fit: contain; /* サイズ調整 */
-}
-
-img.small-image-2 {
-    max-width: 20px; /* マイメイク写真の最大幅 */
-    height: auto;
-    display: block;
-    margin: 10px auto;
-    object-fit: contain; /* サイズ調整 */
-}
-
-.make-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.make-item {
-    text-align: center;
-    width: 100px;
-}
-
-</style>
-{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-3">
   <!-- コスメ詳細 -->
   <div class="cosmetic-details">
     <h2>{{ cosmetic_master.cosmetic_name }}の詳細</h2>
@@ -79,7 +32,7 @@ img.small-image-2 {
       {% for make in my_make_using_cosmetic %}
       <div class="make-item">
         <a href="{% url 'my_make_detail' make.id %}">
-          <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="small-image-2">
+          <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="post-image">
           <p>{{ make.make_name }}</p>
         </a>
       </div>
@@ -93,3 +46,12 @@ img.small-image-2 {
 <a href="{% url 'my_cosmetics' %}" class="back-button">マイコスメ画面へ</a>
 {% endblock %}
 
+<style>
+.post-image {
+  width: 100px;
+  height: auto;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+</style>

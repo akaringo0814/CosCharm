@@ -10,6 +10,19 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/select2.css' %}" rel="stylesheet">
     {% block extra_head %}{% endblock %}
+
+    <style>
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
     <!-- ナビゲーションバー -->
@@ -17,7 +30,7 @@
         <nav>
             <a href="{% url 'home' %}">ホーム</a>
             <a href="{% url 'my_cosmetics' %}">マイコスメ</a>
-            
+
             <div class="mt-2">
                 <select id="favorites-select" class="form-select" onchange="navigateToCategory()">
                     <option value="">お気に入り</option>
@@ -25,7 +38,7 @@
                     <option value="{% url 'favorites_make' %}">マイメイクお気に入り</option>
                 </select>
             </div>
-            
+
             <script>
                 function navigateToCategory() {
                     const selectedValue = document.getElementById("favorites-select").value;
@@ -37,7 +50,7 @@
             </script>
 
             <a href="{% url 'my_page' %}">マイページ</a>
-            
+
             <div class="mt-2">
                 <select id="settings-select" class="form-select" onchange="navigateToSetting()">
                     <option value="">設定</option>
@@ -46,7 +59,7 @@
                     <option value="{% url 'logout' %}">ログアウト</option>
                 </select>
             </div>
-            
+
             <script>
                 function navigateToSetting() {
                     const selectedValue = document.getElementById("settings-select").value;
@@ -56,7 +69,6 @@
                     }
                 }
             </script>
-            
         </nav>
     </header>
 
