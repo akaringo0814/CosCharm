@@ -4,91 +4,82 @@
 
 {% block styles %}
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
 }
-.cosmetic-title {
-    font-size: 20px;
-    text-align: center;
-    margin-bottom: 20px;
+
+.cosmetic-details {
+    flex: 1;
+    max-width: 50%;
 }
-.cosmetic-image {
-    max-width: 100px; /* サイズを小さくする */
+
+.my-make-using-cosmetic {
+    flex: 1;
+    max-width: 50%;
+}
+
+img.cosmetic-image {
+    max-width: 100px; /* コスメ写真の最大幅 */
     height: auto;
-    margin: 0 auto;
     display: block;
+    margin: 10px 0;
+    object-fit: contain; /* サイズ調整 */
 }
-.small-image {
-    width: 10px; /* サイズを小さくする */
+
+img.small-image-2 {
+    max-width: 20px; /* マイメイク写真の最大幅 */
     height: auto;
+    display: block;
+    margin: 10px auto;
+    object-fit: contain; /* サイズ調整 */
 }
+
 .make-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    gap: 10px;
 }
+
 .make-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s;
     text-align: center;
+    width: 100px;
 }
-.make-item:hover {
-    background-color: #e9e9e9;
-}
-.back-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-}
-.back-button:hover {
-    background-color: #45a049;
-}
+
 </style>
 {% endblock %}
 
 {% block content %}
-<div class>
-  <h2 class="cosmetic-title">{{ cosmetic_master.cosmetic_name }}の詳細</h2>
-  <div class="row">
-    <div class="col-md-4">
+<div class="container">
+  <!-- コスメ詳細 -->
+  <div class="cosmetic-details">
+    <h2>{{ cosmetic_master.cosmetic_name }}の詳細</h2>
+    <div>
       {% if cosmetic_master.photo %}
-        <img src="{{ cosmetic_master.photo.url }}" alt="{{ cosmetic_master.cosmetic_name }}" class="img-fluid cosmetic-image">
+        <img src="{{ cosmetic_master.photo.url }}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
       {% endif %}
-    </div>
-    <div class="col-md-8">
-      <div class="cosmetic-details">
-        <p><strong>ブランド名:</strong> {{ cosmetic_master.brand }}</p>
-        <p><strong>カテゴリ:</strong> {{ cosmetic_master.get_category_display }}</p>
-        <p><strong>サブカテゴリ:</strong> {{ cosmetic_master.get_sub_category_display }}</p>
-        {% if my_cosmetic %}
-        <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
-        <p><strong>使用状況:</strong> {{ my_cosmetic.get_usage_status_display }}</p>
-        {% else %}
-        <p>このコスメは登録されていません。</p>
-        {% endif %}
-      </div>
+      <p><strong>ブランド名:</strong> {{ cosmetic_master.brand }}</p>
+      <p><strong>カテゴリ:</strong> {{ cosmetic_master.get_category_display }}</p>
+      <p><strong>サブカテゴリ:</strong> {{ cosmetic_master.get_sub_category_display }}</p>
+      {% if my_cosmetic %}
+      <p><strong>お気に入り:</strong> {{ my_cosmetic.is_favorite|yesno:"はい,いいえ" }}</p>
+      <p><strong>使用状況:</strong> {{ my_cosmetic.get_usage_status_display }}</p>
+      {% else %}
+      <p>このコスメは登録されていません。</p>
+      {% endif %}
     </div>
   </div>
 
-  <!-- このコスメを使用したマイメイク投稿を表示 -->
+  <!-- このコスメを使用したマイメイク投稿 -->
   <div class="my-make-using-cosmetic">
     <h3>このコスメを使用したマイメイク投稿</h3>
     <div class="make-grid">
       {% for make in my_make_using_cosmetic %}
       <div class="make-item">
         <a href="{% url 'my_make_detail' make.id %}">
-          <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="small-image">
+          <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="small-image-2">
           <p>{{ make.make_name }}</p>
         </a>
       </div>

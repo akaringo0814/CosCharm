@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>お気に入りコスメ</h1>
+<h1>最新のお気に入りコスメ</h1>
+
 <div class="cosmetics-grid">
     {% for cosmetic in favorite_cosmetics %}
     <div class="cosmetic-item">
@@ -13,10 +14,12 @@
             <a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}" class="cosmetic-name">{{ cosmetic.cosmetic.cosmetic_name }}</a>
         </div>
     </div>
+    {% empty %}
+    <p>お気に入りのコスメがまだ登録されていません。</p>
     {% endfor %}
 </div>
 
-<!-- ページネーションの例 -->
+<!-- ページネーション -->
 <div class="pagination">
     <span class="step-links">
         {% if favorite_cosmetics.has_previous %}
@@ -34,11 +37,14 @@
         {% endif %}
     </span>
 </div>
+
 <p>
     <a href="{% url 'home' %}">ホームに戻る</a>
 </p>
+{% endblock %}
 
 <style>
+/* グリッドデザイン */
 .cosmetics-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
@@ -95,7 +101,5 @@
     margin: 0 5px;
 }
 </style>
-{% endblock %}
-
 
 

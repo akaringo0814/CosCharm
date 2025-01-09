@@ -23,6 +23,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Max
 from django.db.models import Q, Max
 import logging
+from django.db.models import Subquery, OuterRef, Exists
 
 
 
@@ -426,7 +427,7 @@ def delete_my_cosmetic(request, pk):
     return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
 
-def favorites_cosme(request):
+#def favorites_cosme(request):
     # 現在のユーザーのお気に入りのコスメをフィルタリング
     favorite_cosmetics_list = MyCosmetic.objects.filter(user=request.user, is_favorite=True)
 
@@ -437,8 +438,68 @@ def favorites_cosme(request):
     
     return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
-#def my_cosmetic_register(request):
-    return render(request, 'my_cosme_register.html') #マイコスメ登録画面
+
+#def favorites_cosme(request):
+    # 現在のユーザーのお気に入りのコスメをフィルタリングして、最新順に並べる
+    favorite_cosmetics_list = MyCosmetic.objects.filter(user=request.user, is_favorite=True).order_by('-updated_at')
+
+    # ページネーションの設定
+    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+    
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
+
+
+#def favorites_cosme(request):
+    # Subqueryで最新の更新日のMyCosmeticを取得
+    latest_cosmetics = MyCosmetic.objects.filter(
+        user=request.user,
+        cosmetic_id=OuterRef('cosmetic_id')
+    ).order_by('-updated_at')
+
+    # cosmetic_idごとに最新のデータを取得してお気に入りをフィルタリング
+    favorite_cosmetics_list = MyCosmetic.objects.filter(
+        pk__in=Subquery(latest_cosmetics.values('pk')),
+        is_favorite=True
+    ).order_by('-updated_at')
+
+    # ページネーションの設定
+    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+    
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
+
+
+def favorites_cosme(request):
+    # 削除されていないレコードを対象とする
+    filtered_cosmetics = MyCosmetic.objects.filter(user=request.user, is_deleted=False)
+
+    # cosmetic_id ごとに最新の updated_at を持つレコードを取得
+    latest_cosmetics = (
+        filtered_cosmetics
+        .values('cosmetic_id')
+        .annotate(latest_id=Max('id'))  # 最新の ID を取得
+    )
+
+    # 最新のレコードで is_favorite=True のものをフィルタリング
+    favorite_cosmetics_list = MyCosmetic.objects.filter(
+        id__in=[item['latest_id'] for item in latest_cosmetics],
+        is_favorite=True
+    ).order_by('-updated_at')
+
+    # デバッグ用にログを出力
+    print(favorite_cosmetics_list.query)  # 実行されるSQL
+    print(list(favorite_cosmetics_list))  # 取得結果を確認
+
+    # ページネーションの設定
+    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+    
+    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
+
 
 #def my_cosmetic_register(request):
     if request.method == 'POST':
