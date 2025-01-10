@@ -3,6 +3,82 @@
 {% block title %}マイコスメ一覧{% endblock %}
 
 {% block content %}
+<style>
+    .search-form {
+        align-items: center;
+        margin-bottom: 20px;
+        width: 50%!important;
+        gap: 10px; /* 各要素間の間隔を設定 */
+    }
+
+    .search-input {
+        flex-grow: 1;
+        width: 40%
+    }
+
+    .cosmetics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
+        gap: 20px; /* 各アイテム間の間隔を設定 */
+    }
+
+    .cosmetic-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s;
+    }
+
+    .cosmetic-item:hover {
+        background-color: #e9e9e9;
+    }
+
+    .cosmetic-image {
+        width: 100px; /* 写真のサイズを調整 */
+        height: 100px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+    }
+
+    .cosmetic-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* コスメ名と編集ボタンを中央に配置 */
+    }
+
+    .cosmetic-name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .cosmetic-name:hover {
+        text-decoration: underline;
+    }
+
+    .edit-button {
+        margin-top: 5px;
+    }
+
+    .search-label {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-label input {
+        margin-right: 5px;
+        width: 10%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+</style>
+
 <h1>マイコスメ一覧</h1>
 <form method="GET" class="search-form">
     <input type="text" name="q" placeholder="検索..." value="{{ query }}" class="search-input">
@@ -33,79 +109,4 @@
 <div class="d-flex justify-content-end">
     <a href="{% url 'my_cosmetic_register' %}" class="btn btn-success">コスメを登録する</a>
 </div>
-
-<style>
-.search-form {
-    align-items: center;
-    margin-bottom: 20px;
-    width: 500%; /* 横幅を長くする */
-    gap: 10px; /* 各要素間の間隔を設定 */
-}
-
-
-.search-input {
-    flex-grow: 1;
-}
-
-
-
-.cosmetics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
-    gap: 20px; /* 各アイテム間の間隔を設定 */
-}
-
-.cosmetic-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s;
-}
-
-.cosmetic-item:hover {
-    background-color: #e9e9e9;
-}
-
-.cosmetic-image {
-    width: 100px; /* 写真のサイズを調整 */
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
-}
-
-.cosmetic-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* コスメ名と編集ボタンを中央に配置 */
-}
-
-.cosmetic-name {
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-    text-decoration: none;
-}
-
-.cosmetic-name:hover {
-    text-decoration: underline;
-}
-
-.edit-button {
-    margin-top: 5px;
-}
-.search-label {
-    display: flex;
-    align-items: center;
-}
-
-.search-label input {
-    margin-right: 5px;
-}
-
-</style>
 {% endblock %}

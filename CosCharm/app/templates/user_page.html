@@ -18,15 +18,15 @@
         <a href="{% url 'follower_list' user_profile.id %}">フォロー: {{ user_profile.followers.count }}</a>
         <a href="{% url 'following_list' user_profile.id %}">フォロワー: {{ user_profile.following.count }}</a>
         {% if is_following %}
-            <form method="POST" action="{% url 'unfollow' user_profile.id %}">
+            <form-2 method="POST" action="{% url 'unfollow' user_profile.id %}">
                 {% csrf_token %}
                 <button type="submit">フォロー解除</button>
-            </form>
+            </form-2>
         {% else %}
-            <form method="POST" action="{% url 'follow' user_profile.id %}">
+            <form-2 method="POST" action="{% url 'follow' user_profile.id %}">
                 {% csrf_token %}
                 <button type="submit">フォローする</button>
-            </form>
+            </form-2>
         {% endif %}
     </div>
 </div>

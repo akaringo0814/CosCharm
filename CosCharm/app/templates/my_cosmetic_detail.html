@@ -2,10 +2,58 @@
 
 {% block title %}{{ cosmetic_master.cosmetic_name }}の詳細{% endblock %}
 
-
-
 {% block content %}
 <div class="container-3">
+  <style>
+    .container-3 {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+    }
+    .cosmetic-details {
+      flex: 1;
+      margin-bottom: 20px;
+    }
+    .my-make-using-cosmetic {
+      flex: 1;
+    }
+    .cosmetic-image {
+      width: 200px;
+      height: auto;
+      border-radius: 5px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .make-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .make-item {
+      text-align: center;
+      width: 300px;
+    }
+    .post-image {
+      width: 200px;
+      height: auto;
+      border-radius: 5px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .back-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+
   <!-- コスメ詳細 -->
   <div class="cosmetic-details">
     <h2>{{ cosmetic_master.cosmetic_name }}の詳細</h2>
@@ -45,13 +93,3 @@
 </div>
 <a href="{% url 'my_cosmetics' %}" class="back-button">マイコスメ画面へ</a>
 {% endblock %}
-
-<style>
-.post-image {
-  width: 100px;
-  height: auto;
-  border-radius: 5px;
-  object-fit: cover;
-  margin-bottom: 10px;
-}
-</style>

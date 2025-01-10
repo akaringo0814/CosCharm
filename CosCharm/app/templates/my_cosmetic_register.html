@@ -22,12 +22,8 @@
 <div class="container-2">
   <div class="row justify-content-center">
     <div class=>
-      <div class="cosmetics-display2">
+      <div class=>
         <h2>登録コスメ</h2>
-        <form method="GET" class="mt-4" action="">
-          <input type="text" id="search_cosmetic" name="q" placeholder="検索..." class="search-input" value="{{ query }}">
-          <button type="submit" class="btn">検索</button>
-        </form>
         <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
           {% csrf_token %}
           <div class="mb-3">
@@ -112,7 +108,7 @@
   }
 
   .w-100 {
-      width: 100%;
+      width: 80%;
   }
 </style>
 {% endblock %}

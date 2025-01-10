@@ -7,6 +7,7 @@
 {% block content %}
 <div class="container">
     <h2>{{ user_profile.username }}がフォロー中のユーザー一覧</h2>
+    {% if following %}
     <ul class="following-list">
         {% for user in following %}
         <li class="following-item">
@@ -18,6 +19,9 @@
         </li>
         {% endfor %}
     </ul>
+    {% else %}
+    <p>フォロー中のユーザーはいません</p>
+    {% endif %}
     <a href="{% url 'my_page' %}" class="back-button">戻る</a>
 </div>
 
@@ -107,4 +111,7 @@ body {
 }
 </style>
 {% endblock %}
+
+
+
 
