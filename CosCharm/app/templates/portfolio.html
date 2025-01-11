@@ -4,9 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CosCharm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .header {
+            background-color: #f8e8f8;
+            padding: 20px 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #333;
+        }
+        .image-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .image-gallery img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .description {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .description p {
+            font-size: 1.2em;
+            color: #555;
+            line-height: 1.6;
+        }
+        .links {
+            margin: 20px 0;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
+            text-decoration: none;
+            color: #0073e6;
+            font-weight: bold;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover; /* 必要に応じて調整 */
+        }
+
+    </style>
 </head>
 <body>
-    <h1>ポートフォリオページ</h1>
+    <div class="header">
+        <h1>CosCharm</h1>
+    </div>
+
+    <div class="image-gallery">
+        <img src="/media/portfolio/picture1.png" alt="Picture 1">
+        <img src="/media/portfolio/picture2.png" alt="Picture 2">
+        <img src="/media/portfolio/picture3.png" alt="Picture 3">
+        <img src="/media/portfolio/picture4.png" alt="Picture 4">
+        
+    </div>
+
+    <div class="description">
+        <p>
+            CosCharmは、コスメを沢山所持していて使いきれていないコスメヲタクの課題を、コスメを管理、メイク方法をシェアすることでサポートするアプリです。
+        </p>
+        <p>
+            このアプリを使用することで、所持しているコスメやそのコスメを使ったメイク方法を管理できます。またユーザー同士でメイク方法を共有・閲覧できるため、コスメの効果的な使い方を学べ、メイクのバリエーションを広げることができます。
+        </p>
+    </div>
+
+    <div class="links">
+        <a href="https://docs.google.com/presentation/d/1564MMsPNUOlaf3Tganiw8_6Hct8RuUVptGzvkTD62lY/edit?disco=AAABYvgBAKM" target="_blank">企画書・画面設計図</a>
+        <a href="https://app.diagrams.net/#G1-11rNs2lwpwFpmXVn81BRox0CpM3lEVk#%7B%22pageId%22%3A%22Q3wOf7ezMJvrw86Ul2L6%22%7D" target="_blank">画面遷移図</a>
+        <a href="https://app.diagrams.net/#G1eEtPvmyQGe7fiZgR6zGjTTVM8T-mCJ6b#%7B%22pageId%22%3A%227wTWeQvq1aPBCPAO-z6F%22%7D" target="_blank">ER図</a>
+    </div>
     <a href="{% url 'login' %}">アプリへ</a>
 </body>
-</html>

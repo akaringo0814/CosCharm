@@ -3,21 +3,97 @@
 {% block title %}マイメイク投稿{% endblock %}
 
 {% block content %}
-<form method="post" enctype="multipart/form-data">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: 50px; /* ヘッダーの下に配置 */
+}
+
+.makeup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    width: 100%;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column; /* 一列に表示 */
+    gap: 10px;
+    align-items: flex-start; /* 左寄せ */
+    width: 100%;
+}
+
+.checkbox-inline {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.checkbox-inline input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.checkbox-inline label {
+    margin: 0; /* ラベルの余白を削除 */
+    white-space: nowrap; /* テキストを折り返さない */
+    overflow: visible; /* テキストが隠れないようにする */
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+</style>
+
+<form method="post" enctype="multipart/form-data" class="makeup-form">
     {% csrf_token %}
-    <div>
+    <div class="form-group">
         <label>メイク名:</label>
         {{ form.make_name }}
     </div>
 
-    <div>
+    <div class="form-group">
         <label>写真:</label>
         {{ form.image }}
     </div>
 
-    <div>
+    <div class="form-group">
         <label>メインコスメ:</label>
-        <select name="main_cosmetic">
+        <select name="main_cosmetic" class="form-control">
             {% for cosmetic in all_cosmetics %}
             <option value="{{ cosmetic.pk }}" 
                 {% if cosmetic.pk == main_cosmetic_id %}selected{% endif %}>
@@ -27,26 +103,26 @@
         </select>
     </div>
 
-    <div>
+    <div class="form-group">
         <label>他使用コスメ:</label>
-        <div>
+        <div class="checkbox-group">
             {% for cosmetic in all_cosmetics %}
-            <label>
+            <label class="checkbox-inline">
                 <input type="checkbox" name="other_cosmetics" value="{{ cosmetic.pk }}" 
                     {% if cosmetic.pk in other_cosmetic_ids %}checked{% endif %}>
                 {{ cosmetic.cosmetic_name }}
-            </label><br>
+            </label>
             {% endfor %}
         </div>
     </div>
 
-    <div>
+    <div class="form-group">
         <label>メイクメモ:</label>
         {{ form.make_memo }}
     </div>
 
-    <div>
-        <button type="submit">投稿</button>
+    <div class="form-group">
+        <button type="submit" class="btn">投稿</button>
     </div>
 </form>
 {% endblock %}
