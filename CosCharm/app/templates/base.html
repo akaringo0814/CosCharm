@@ -31,7 +31,7 @@
 
             <div class="mt-2">
                 <select id="favorites-select" class="form-select" onchange="navigateToCategory()">
-                    <option value="">お気に入り</option>
+                    <option value="" disabled selected>お気に入り</option>
                     <option value="{% url 'favorites_cosme' %}">マイコスメお気に入り</option>
                     <option value="{% url 'favorites_make' %}">マイメイクお気に入り</option>
                 </select>
@@ -51,7 +51,7 @@
 
             <div class="mt-2">
                 <select id="settings-select" class="form-select" onchange="navigateToSetting()">
-                    <option value="">設定</option>
+                    <option value="" disabled selected>設定</option>
                     <option value="{% url 'email_change' %}">メールアドレス変更</option>
                     <option value="{% url 'password_change' %}">パスワード変更</option>
                     <option value="{% url 'logout' %}">ログアウト</option>

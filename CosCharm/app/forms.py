@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import MyMake, MyCosmetic, CosmeticMaster,MyMakeCosmetic
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
-
+from django.core.exceptions import ValidationError
 
 class SignupForm(UserCreationForm):
     class Meta:
@@ -59,8 +59,6 @@ class CosmeticForm(forms.ModelForm):
         }
 
 
-
-
 class ChangeEmailForm(forms.Form):
     current_email = forms.EmailField(
         label='現在のメールアドレス',
@@ -75,12 +73,23 @@ class ChangeEmailForm(forms.Form):
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'メールアドレス再入力'}),
     )
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_current_email(self):
+        current_email = self.cleaned_data.get('current_email')
+        if current_email != self.user.email:
+            raise ValidationError("現在のメールアドレスが一致しません。")
+        return current_email
+
     def clean(self):
         cleaned_data = super().clean()
         new_email = cleaned_data.get("new_email")
         confirm_email = cleaned_data.get("confirm_email")
+
         if new_email != confirm_email:
-            raise forms.ValidationError("新しいメールアドレスが一致しません。")
+            raise ValidationError("新しいメールアドレスが一致しません。")
         return cleaned_data
 
 class ProfileForm(forms.ModelForm):

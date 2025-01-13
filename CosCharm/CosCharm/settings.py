@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-+nj@nwu=tke0kin30n93p%h+q@jaa7gxkgire$mlu$0ku-$54v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.11.64', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -81,6 +82,9 @@ TEMPLATES = [
         },
     },
 ]
+
+
+
 
 
 AUTH_USER_MODEL = "app.User"
@@ -154,16 +158,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-LOGIN_REDIRECT_URL = 'home'  # ログイン成功後のリダイレクト先（homeはURL名）
+
+LOGIN_URL = 'login'  # ログインURL
+LOGIN_REDIRECT_URL = 'home'  # ログイン後のリダイレクト先
 LOGOUT_REDIRECT_URL = 'login'  # ログアウト後のリダイレクト先
 
 
 # JSONファイルのディレクトリ
 FIXTURES_DIR = BASE_DIR / 'app' / 'fixtures'
 
-from pathlib import Path
-
-FIXTURES_DIR = BASE_DIR / 'app' / 'fixtures'  # パスを正しく結合
 
 
 

@@ -26,8 +26,14 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name="signup"),
     path('login/', LoginView.as_view(), name="login"),
     path('home/', HomeView.as_view(), name="home"),
-    path('', include('app.urls')),  # appのURLをプロジェクトに統合
+    #path('', include('app.urls')),  # appのURLをプロジェクトに統合
+    path('', include('portfolio.urls')),  # ポートフォリオをルートに
+    path('coscharm/', include('app.urls')),  # アプリを /coscharm/ に
+
 ]
 
+# メディアファイルの公開設定
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

@@ -16,6 +16,7 @@ from django.views.generic import CreateView, TemplateView
 import json
 import logging
 import os
+from django.contrib import messages  
 
 from .forms import (
     SignupForm, LoginForm, MyMakeForm, ChangeEmailForm,
@@ -59,6 +60,10 @@ class LoginView(View):
             login(request, form.user)
             return redirect("home")
         return render(request, "login.html", {"form": form})
+
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'  # カスタムテンプレートのパス
 
 
 class HomeView(LoginRequiredMixin, TemplateView):
@@ -108,8 +113,6 @@ class HomeView(LoginRequiredMixin, TemplateView):
             'skin_type': skin_type  # コンテキストに追加
         }
         return render(request, self.template_name, context)
-
-
 
 @login_required
 def logout(request):
@@ -469,16 +472,21 @@ def toggle_favorite(request, pk):
     return redirect('my_make_detail', pk=my_make.pk)
 
 
-#マイページ
+
 @login_required
 def my_page(request):
     profile = get_object_or_404(User, username=request.user.username)
     followers = Follow.objects.filter(following=request.user)
     following = Follow.objects.filter(follower=request.user)
+
+    # 自分の投稿を取得
+    my_posts = MyMake.objects.filter(user=request.user).order_by("-created_at")
+
     return render(request, 'my_page.html', {
         'profile': profile,
         'followers': followers.count(),
-        'following': following.count()
+        'following': following.count(),
+        'my_posts': my_posts,  # 自分の投稿をコンテキストに追加
     })
 
 @login_required
@@ -500,23 +508,21 @@ def profile_edit(request):
     return render(request, 'profile_edit.html', {'form': form})
 
 
+
 @login_required
 def email_change(request):
     if request.method == 'POST':
-        form = ChangeEmailForm(request.POST)
+        form = ChangeEmailForm(user=request.user, data=request.POST)
         if form.is_valid():
-            # フォームのデータを取得
-            current_email = form.cleaned_data['current_email']
-            new_email = form.cleaned_data['new_email']
-
-            # メールアドレス変更処理をここに記述
-            print(f"Current Email: {current_email}, New Email: {new_email}")
-
-            # 成功後にホーム画面へリダイレクト
-            return redirect('home')  # 'home' はホーム画面のURL名
+            # メールアドレスの更新処理
+            request.user.email = form.cleaned_data['new_email']
+            request.user.save()
+            # 成功メッセージを追加してリダイレクト
+            messages.success(request, 'メールアドレスが更新されました。')
+            return redirect('my_page')  # プロフィールページなどの適切なリダイレクト先に変更してください
     else:
-        form = ChangeEmailForm()
-
+        form = ChangeEmailForm(user=request.user)
+    
     return render(request, 'email_change.html', {'form': form})
 
 
@@ -528,10 +534,12 @@ def password_change(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)  # パスワード変更後もログイン状態を保持
+            messages.success(request, 'パスワードが更新されました。')
             return redirect('home')  # ホーム画面にリダイレクト
     else:
         form = PasswordChangeForm(user=request.user)
     return render(request, 'password_change.html', {'form': form})
+
 
 @login_required
 def liked_posts(request):

@@ -29,24 +29,21 @@
                 <option value="不明" {% if personal_color == "不明" %}selected{% endif %}>不明</option>
             </select>
             <select name="skin_type" class="filter-select">
-                    <option value="">肌質全て</option>
-                    <option value="乾燥肌" {% if skin_type == "乾燥肌" %}selected{% endif %}>乾燥肌</option>
-                    <option value="脂性肌" {% if skin_type == "脂性肌" %}selected{% endif %}>脂性肌</option>
-                    <option value="普通肌" {% if skin_type == "普通肌" %}selected{% endif %}>普通肌</option>
-                    <option value="混合肌" {% if skin_type == "混合肌" %}selected{% endif %}>混合肌</option>
-                    <option value="不明" {% if skin_type == "不明" %}selected{% endif %}>不明</option>
-                </select>
-                <button type="submit" class="btn btn-primary">フィルター</button>
-            </form>
-            
+                <option value="">肌質全て</option>
+                <option value="乾燥肌" {% if skin_type == "乾燥肌" %}selected{% endif %}>乾燥肌</option>
+                <option value="脂性肌" {% if skin_type == "脂性肌" %}selected{% endif %}>脂性肌</option>
+                <option value="普通肌" {% if skin_type == "普通肌" %}selected{% endif %}>普通肌</option>
+                <option value="混合肌" {% if skin_type == "混合肌" %}selected{% endif %}>混合肌</option>
+                <option value="不明" {% if skin_type == "不明" %}selected{% endif %}>不明</option>
+            </select>
+            <button type="submit" class="btn btn-primary">フィルター</button>
         </form>
+
         <ul class="posts-list">
             {% for post in follow_user_posts %}
-                <li class="post-item">
+                <li class="post-item" onclick="location.href='{% url 'my_make_detail' post.id %}'">
                     <img src="{{ post.image.url }}" alt="{{ post.make_name }}" class="post-image">
-                    <a href="{% url 'my_make_detail' post.id %}">
-                        <p>{{ post.make_name }}</p>
-                    </a>
+                    <p>{{ post.make_name }}</p>
                 </li>
             {% empty %}
                 <p>フォローしているユーザーの投稿がありません。</p>
@@ -82,6 +79,7 @@
 
 .unused-cosmetics li, .follow-user-posts li {
     margin-bottom: 10px;
+    cursor: pointer; /* カード全体をクリック可能にする */
 }
 
 .filter-form {
@@ -144,4 +142,5 @@
 }
 </style>
 {% endblock %}
+
 

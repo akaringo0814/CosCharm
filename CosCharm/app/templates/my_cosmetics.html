@@ -5,21 +5,25 @@
 {% block content %}
 <style>
     .search-form {
+        display: flex;
         align-items: center;
         margin-bottom: 20px;
-        width: 50%!important;
-        gap: 10px; /* 各要素間の間隔を設定 */
+        gap: 10px;
+        width: 100%;
     }
 
     .search-input {
         flex-grow: 1;
-        width: 40%
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 40%;
     }
 
     .cosmetics-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
-        gap: 20px; /* 各アイテム間の間隔を設定 */
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
     }
 
     .cosmetic-item {
@@ -31,6 +35,7 @@
         padding: 10px;
         background-color: #f9f9f9;
         transition: background-color 0.3s;
+        cursor: pointer; /* クリック可能であることを示す */
     }
 
     .cosmetic-item:hover {
@@ -38,17 +43,17 @@
     }
 
     .cosmetic-image {
-        width: 100px; /* 写真のサイズを調整 */
+        width: 100px;
         height: 100px;
         margin-bottom: 10px;
         border-radius: 5px;
-        object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+        object-fit: cover;
     }
 
     .cosmetic-info {
         display: flex;
         flex-direction: column;
-        align-items: center; /* コスメ名と編集ボタンを中央に配置 */
+        align-items: center;
     }
 
     .cosmetic-name {
@@ -73,30 +78,27 @@
 
     .search-label input {
         margin-right: 5px;
-        width: 10%;
         padding: 8px;
-        box-sizing: border-box;
     }
 </style>
 
 <h1>マイコスメ一覧</h1>
 <form method="GET" class="search-form">
-    <input type="text" name="q" placeholder="検索..." value="{{ query }}" class="search-input">
+    <input type="text" name="q" placeholder="例: ロムアンド、アイパレ" value="{{ query|default_if_none:'' }}" class="search-input">
     <label for="include_used" class="search-label">
         <input type="checkbox" name="include_used" id="include_used" {% if include_used %}checked{% endif %}>
         使用済みを含める
     </label>
-    
     <button type="submit" class="btn btn-primary search-button">検索</button>
 </form>
 
 <div class="cosmetics-grid">
     {% for cosmetic in cosmetics %}
-    <div class="cosmetic-item">
+    <div class="cosmetic-item" onclick="location.href='{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}'">
         {% if cosmetic.cosmetic.photo %}
             <img src="{{ cosmetic.cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
         {% endif %}
-        <div class="cosmetic-info text-center">
+        <div class="cosmetic-info">
             <a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}" class="cosmetic-name">{{ cosmetic.cosmetic.cosmetic_name }}</a>
             <a href="{% url 'my_cosmetic_edit' pk=cosmetic.pk %}" class="btn btn-primary edit-button">編集</a>
         </div>
@@ -110,3 +112,5 @@
     <a href="{% url 'my_cosmetic_register' %}" class="btn btn-success">コスメを登録する</a>
 </div>
 {% endblock %}
+
+
