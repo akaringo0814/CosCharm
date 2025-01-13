@@ -43,11 +43,121 @@
 </p>
 
 <style>
+/* ナビゲーションバー */
+nav {
+    background-color: #f8f8f8;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* タイムライン */
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+header nav {
+    background-color: #f8f9fa;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+form {
+    max-width: 500px;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 80%;
+    padding: 1px;
+    margin: 1px;
+    gap: 5px;
+}
+
+button {
+    display: block;
+    width: 65%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.search-box {
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.category-select {
+    margin-top: 10px;
+}
+
+.category-select details {
+    margin-bottom: 10px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.search-section {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.cosmetics-display {
+    width: 500%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+#cosmetics-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+#cosmetics-list li {
+    margin-bottom: 5px;
+}
+
 .cosmetics-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
-    gap: 20px; /* 各アイテム間の間隔を設定 */
-    list-style-type: none; /* リストスタイルを削除 */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    list-style-type: none;
     padding: 0;
 }
 
@@ -67,11 +177,11 @@
 }
 
 .favorite-make-image {
-    width: 100px; /* 写真のサイズを調整 */
+    width: 100px;
     height: 100px;
     margin-bottom: 10px;
     border-radius: 5px;
-    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+    object-fit: cover;
 }
 
 .cosmetic-name {

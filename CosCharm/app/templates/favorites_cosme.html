@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}最新のお気に入りコスメ{% endblock %}
+
 {% block content %}
 <h1>最新のお気に入りコスメ</h1>
 
@@ -41,65 +43,64 @@
 <p>
     <a href="{% url 'home' %}">ホームに戻る</a>
 </p>
-{% endblock %}
 
 <style>
-/* グリッドデザイン */
-.cosmetics-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
-    gap: 20px; /* 各アイテム間の間隔を設定 */
-}
+    .cosmetics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
+        gap: 20px; /* 各アイテム間の間隔を設定 */
+    }
 
-.cosmetic-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s;
-}
+    .cosmetic-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s;
+    }
 
-.cosmetic-item:hover {
-    background-color: #e9e9e9;
-}
+    .cosmetic-item:hover {
+        background-color: #e9e9e9;
+    }
 
-.cosmetic-image {
-    width: 100px; /* 写真のサイズを調整 */
-    height: 100px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
-}
+    .cosmetic-image {
+        width: 100px; /* 写真のサイズを調整 */
+        height: 100px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+    }
 
-.cosmetic-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* コスメ名を中央に配置 */
-}
+    .cosmetic-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* コスメ名を中央に配置 */
+    }
 
-.cosmetic-name {
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
-    text-decoration: none;
-}
+    .cosmetic-name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #000;
+        text-decoration: none;
+    }
 
-.cosmetic-name:hover {
-    text-decoration: underline;
-}
+    .cosmetic-name:hover {
+        text-decoration: underline;
+    }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
 
-.step-links a, .step-links .current {
-    margin: 0 5px;
-}
+    .step-links a, .step-links .current {
+        margin: 0 5px;
+    }
 </style>
+{% endblock %}
 
 

@@ -5,20 +5,196 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ホーム画面{% endblock %}</title>
     {% load static %}
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
     {% block extra_head %}{% endblock %}
 
     <style>
-        input[type="text"],
-        input[type="number"],
-        input[type="file"],
-        select {
-            width: 95%;
+        /* ナビゲーションバー */
+        nav {
+            background-color: #f8f8f8;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        /* タイムライン */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        header nav {
+            background-color: #f8f9fa;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        form {
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 80%;
+            padding: 1px;
+            margin: 1px;
+            gap: 5px;
+        }
+
+        button {
+            display: block;
+            width: 65%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-box {
+            width: 100%;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .category-select {
+            margin-top: 10px;
+        }
+
+        .category-select details {
+            margin-bottom: 10px;
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .search-section {
+            width: 30%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            background-color: #fff;
+            background-color: #f9f9f9;
+        }
+
+        .cosmetics-display {
+            width: 500%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        #cosmetics-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #cosmetics-list li {
+            margin-bottom: 5px;
+        }
+
+        .form-inline {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-inline .form-control {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .list-group-item a:hover {
+            text-decoration: underline;
+        }
+
+        .cosmetics-display2 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 50px;
+            background-color: #f9f9f9;
+        }
+
+        .search-form {
+            align-items: center;
+            margin-bottom: 20px;
+            width: 150%;
+            gap: 10px;
+        }
+
+        .cosmetics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .cosmetic-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .cosmetic-item:hover {
+            background-color: #e9e9e9;
+        }
+
+        .cosmetic-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .cosmetic-name:hover {
+            text-decoration: underline;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .step-links a, .step-links .current {
+            margin: 0 5px;
         }
     </style>
 </head>
@@ -81,3 +257,4 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+

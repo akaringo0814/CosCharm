@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}
-マイコスメ登録画面
-{% endblock %}
+{% block title %}マイコスメ登録画面{% endblock %}
 
 {% block content %}
 <h1>マイコスメ登録画面</h1>
@@ -21,8 +19,7 @@
 
 <div class="container-2">
   <div class="row justify-content-center">
-    <div class=>
-      <div class=>
+    <div class="col-md-8">
         <h2>登録コスメ</h2>
         <form method="POST" class="mt-4" action="{% url 'my_cosmetic_register' %}">
           {% csrf_token %}
@@ -36,13 +33,13 @@
           </div>
 
           <div class="mb-4">
-            <label class=>お気に入り登録:</label>
+            <label>お気に入り登録:</label>
             <input type="checkbox" class="form-check-input" name="is_favorite" id="is_favorite">
-            <label for="is_favorite" class="form-check-label" >お気に入り</label>
+            <label for="is_favorite" class="form-check-label">お気に入り</label>
           </div>
 
           <div class="mb-4">
-            <label class=>使用状況:</label>
+            <label>使用状況:</label>
             <div class="d-flex">
               <div class="form-check me-3">
                 <input type="radio" class="form-check-input" name="usage_status" value="not_used" id="not_used" checked>
@@ -67,21 +64,20 @@
 </div>
 
 <style>
+  /* マイコスメ登録画面用スタイル */
   .container-2 {
       max-width: 1000px; 
       border: 1px solid #ccc;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: #f9f9f9;
+      margin-top: 20px;
+      padding: 20px;
   }
 
-  input[type="text"],
-  input[type="number"],
-  input[type="file"],
-  select {
+  .form-select, .form-check-input {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
-      background-color: #fff;
+      border-radius: 5px;
   }
 
   .btn {
@@ -99,18 +95,13 @@
       background-color: #0056b3;
   }
 
-
-
-
   .d-flex {
       display: flex;
       justify-content: space-between;
   }
 
   .w-100 {
-      width: 80%;
+      width: 100%;
   }
 </style>
 {% endblock %}
-
-

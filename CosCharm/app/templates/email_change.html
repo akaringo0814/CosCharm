@@ -40,9 +40,40 @@
         {% endfor %}
     </ul>
 {% endif %}
+
+<style>
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select {
+        width: 95%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    button {
+        display: block;
+        width: 65%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
 {% endblock %}
-
-
+   
 
 
 

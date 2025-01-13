@@ -35,5 +35,4 @@ $(document).ready(function() {
   function formatCosmeticSelection(cosmetic) {
     return cosmetic.text || cosmetic.id;
   }
-});
-
+});  // セミコロンを追加

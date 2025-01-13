@@ -419,7 +419,7 @@ def my_make_post_new(request):
             return redirect('my_make_detail', pk=my_make.pk)
     else:
         form = MyMakeForm()
-    return render(request, 'my_make_post.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': None, 'other_cosmetic_ids': []})
+    return render(request, 'my_make_post_new.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': None, 'other_cosmetic_ids': []})
 
 
 @login_required

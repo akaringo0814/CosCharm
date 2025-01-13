@@ -9,7 +9,7 @@
         <h2>未使用のマイコスメ</h2>
         <ul>
             {% for cosmetic in unused_cosmetics %}
-                <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>  <!-- 使用状況が「未使用」のコスメ名を表示 -->
+                <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>
             {% empty %}
                 <p>未使用のコスメはありません。</p>
             {% endfor %}
@@ -58,14 +58,18 @@
 </div>
 
 <style>
+/* 全体のレイアウト */
 .container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 20px;
+    gap: 20px;
 }
 
 .unused-cosmetics, .follow-user-posts {
-    width: 45%;
+    flex: 1;
+    min-width: 300px;
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
@@ -75,26 +79,32 @@
 .unused-cosmetics ul, .follow-user-posts ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 .unused-cosmetics li, .follow-user-posts li {
     margin-bottom: 10px;
-    cursor: pointer; /* カード全体をクリック可能にする */
+    cursor: pointer;
 }
 
+/* フィルターフォームのデザイン */
 .filter-form {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
 .filter-select {
-    margin-right: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
+/* 投稿リストのデザイン */
 .posts-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 20px;
 }
 
@@ -107,21 +117,23 @@
     padding: 10px;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
+    transition: transform 0.3s, background-color 0.3s;
 }
 
 .post-item:hover {
+    transform: translateY(-5px);
     background-color: #e9e9e9;
 }
 
 .post-image {
     width: 100px;
-    height: auto;
+    height: 100px;
     border-radius: 5px;
     object-fit: cover;
     margin-bottom: 10px;
 }
 
+/* 投稿ボタンのデザイン */
 .post-button {
     text-align: center;
     margin-top: 20px;
@@ -140,7 +152,23 @@
 .post-button a:hover {
     background-color: #0056b3;
 }
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .unused-cosmetics, .follow-user-posts {
+        width: 100%;
+    }
+
+    .posts-list {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
 </style>
 {% endblock %}
+
 
 
