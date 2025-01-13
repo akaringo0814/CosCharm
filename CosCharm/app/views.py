@@ -519,7 +519,7 @@ def email_change(request):
             request.user.save()
             # 成功メッセージを追加してリダイレクト
             messages.success(request, 'メールアドレスが更新されました。')
-            return redirect('my_page')  # プロフィールページなどの適切なリダイレクト先に変更してください
+            return redirect('home')  # プロフィールページなどの適切なリダイレクト先に変更してください
     else:
         form = ChangeEmailForm(user=request.user)
     

@@ -15,18 +15,18 @@
         <p>パーソナルカラー: {{ user_profile.personal_color }}</p>
     </div>
     <div class="follow-buttons">
-        <a href="{% url 'follower_list' user_profile.id %}">フォロー: {{ user_profile.followers.count }}</a>
-        <a href="{% url 'following_list' user_profile.id %}">フォロワー: {{ user_profile.following.count }}</a>
+        <a href="{% url 'follower_list' user_profile.id %}">フォロワー: {{ user_profile.followers.count }}</a>
+        <a href="{% url 'following_list' user_profile.id %}">フォロー中: {{ user_profile.following.count }}</a>
         {% if is_following %}
-            <form-2 method="POST" action="{% url 'unfollow' user_profile.id %}">
+            <form method="POST" action="{% url 'unfollow' user_profile.id %}">
                 {% csrf_token %}
                 <button type="submit">フォロー解除</button>
-            </form-2>
+            </form>
         {% else %}
-            <form-2 method="POST" action="{% url 'follow' user_profile.id %}">
+            <form method="POST" action="{% url 'follow' user_profile.id %}">
                 {% csrf_token %}
                 <button type="submit">フォローする</button>
-            </form-2>
+            </form>
         {% endif %}
     </div>
 </div>
