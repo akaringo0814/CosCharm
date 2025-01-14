@@ -42,12 +42,12 @@
             margin-bottom: 15px;
         }
 
-        input {
+        /*input {
             width: 80%;
             padding: 1px;
             margin: 1px;
             gap: 5px;
-        }
+        }*/
 
         button {
             display: block;
@@ -196,6 +196,13 @@
         .step-links a, .step-links .current {
             margin: 0 5px;
         }
+
+        .form-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            height: 40px; /* 縦幅を40pxに設定 */
+        }
     </style>
 </head>
 <body>
@@ -257,4 +264,5 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+
 

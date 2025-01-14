@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-    max-width: 400px;
+    max-width: 200px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 5px;
@@ -25,25 +25,27 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 75%; 
+    width: 60%; 
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 65%;
 }
+
 .form-group-2 {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
+
 .form-control {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
-    width: 75%; /* 横幅を100%に設定 */
+    width: 90%; /* 横幅を100%に設定 */
 }
 
 .checkbox-group {
@@ -51,13 +53,14 @@ body {
     flex-direction: column; /* 一列に表示 */
     gap: 10px;
     align-items: flex-start; /* 左寄せ */
-    width: 100%;
+    width: 20%;
+    white-space: nowrap; /* テキストを折り返さない */
 }
 
 .checkbox-inline {
     display: flex;
     align-items: center;
-    width: auto; /* 自動幅 */
+    width: 100%; /* 横幅を100%に設定 */
 }
 
 .checkbox-inline input[type="checkbox"] {
@@ -65,12 +68,13 @@ body {
 }
 
 .checkbox-inline label {
-    flex: 1; /* ラベルが残りのスペースを占有 */
+    margin: 0;
+    flex: 1;
     white-space: nowrap; /* テキストを折り返さない */
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 10px 10px;
     border: none;
     border-radius: 5px;
     background-color: #007BFF;
@@ -85,7 +89,7 @@ body {
 
 
 </style>
-
+<h1>マイメイク投稿画面</h1>
 <form method="post" enctype="multipart/form-data" class="makeup-form">
     {% csrf_token %}
     <div class="form-group">

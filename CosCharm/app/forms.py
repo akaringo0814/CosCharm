@@ -16,8 +16,18 @@ class SignupForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)  # 非表示にする
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',  # クラス名を追加
+            'placeholder': 'メールアドレス'
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',  # クラス名を追加
+            'placeholder': 'パスワード'
+        })
+    )
 
     def clean(self):
         email = self.cleaned_data.get("email")

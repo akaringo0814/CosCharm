@@ -1,22 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CosCharm</title>
+    <title>CosCharm - 新規登録</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        form div label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            color: white; /* テキストの色を白に設定 */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            color: white; /* テキストの色を白に設定 */
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            text-align: center;
+            color: red;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>新規登録画面</h1>
+    <h1>新規アカウント登録</h1>
     <form method="post">
         {% csrf_token %}
-        <div>名前<input type="text" name="username" value="{{ form.name.value|default:'名前'}}"></div>
-        <div>メールアドレス<input type="email" name="email"></div>
-        <div>パスワード<input type="password" name="password1"></div>
-        <div>確認用パスワード<input type="password" name="password2"></div>
+        <div>
+            <label for="username">名前/ニックネーム</label>
+            <input type="text" id="username" name="username" placeholder="名前">
+        </div>
+        <div>
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="メールアドレス">
+        </div>
+        <div>
+            <label for="password1">パスワード</label>
+            <input type="password" id="password1" name="password1" placeholder="パスワード">
+        </div>
+        <div>
+            <label for="password2">確認用パスワード</label>
+            <input type="password" id="password2" name="password2" placeholder="パスワード確認">
+        </div>
         <button type="submit">登録</button>
+        <a href="{% url 'login' %}">ログインに戻る</a>
     </form>
-    {{ form.errors }}
-    <a href="{% url 'login' %}">ログインに戻る</a>
 </body>
 </html>
-

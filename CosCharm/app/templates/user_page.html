@@ -5,67 +5,174 @@
 {% endblock %}
 
 {% block content %}
-<div class="user-profile">
-    <div class="profile-info">
-        <img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像" class="small-image">
-        <h2>{{ user_profile.username }}</h2>
-        <p>年齢: {{ user_profile.age }}</p>
-        <p>性別: {{ user_profile.gender }}</p>
-        <p>肌質: {{ user_profile.skin_type }}</p>
-        <p>パーソナルカラー: {{ user_profile.personal_color }}</p>
-    </div>
-    <div class="follow-buttons">
-        <a href="{% url 'follower_list' user_profile.id %}">フォロワー: {{ user_profile.followers.count }}</a>
-        <a href="{% url 'following_list' user_profile.id %}">フォロー中: {{ user_profile.following.count }}</a>
-        {% if is_following %}
-            <form method="POST" action="{% url 'unfollow' user_profile.id %}">
-                {% csrf_token %}
-                <button type="submit">フォロー解除</button>
-            </form>
+<h1 class="page-title">{{ user_profile.username }}のユーザーページ</h1>
+
+<div class="main-container">
+    <div class="profile-container">
+        {% if user_profile.profile_image %}
+            <img src="{{ user_profile.profile_image.url }}" alt="ユーザー画像" class="profile-img">
         {% else %}
-            <form method="POST" action="{% url 'follow' user_profile.id %}">
-                {% csrf_token %}
-                <button type="submit">フォローする</button>
-            </form>
+            <p>プロフィール画像がありません。</p>
+        {% endif %}
+        <div class="profile-details">
+            <p><strong>ユーザー名:</strong> {{ user_profile.username }}</p>
+            <p><strong>年齢:</strong> {{ user_profile.age }}</p>
+            <p><strong>性別:</strong> {{ user_profile.gender }}</p>
+            <p><strong>肌質:</strong> {{ user_profile.skin_type }}</p>
+            <p><strong>パーソナルカラー:</strong> {{ user_profile.personal_color }}</p>
+            <div class="follow-info">
+                <p>フォロワー: <a href="{% url 'follower_list' user_profile.id %}">{{ user_profile.followers.count }}</a></p>
+                <p>フォロー中: <a href="{% url 'following_list' user_profile.id %}">{{ user_profile.following.count }}</a></p>
+            </div>
+            <div class="follow-buttons">
+                {% if is_following %}
+                <form method="POST" action="{% url 'unfollow' user_profile.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">フォロー解除</button>
+                </form>
+                {% else %}
+                <form method="POST" action="{% url 'follow' user_profile.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">フォローする</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="my-make-container">
+        <h2>投稿したマイメイク</h2>
+        <ul class="posts-list">
+            {% for make in my_make_list %}
+            <li class="post-item" onclick="location.href='{% url 'my_make_detail' make.id %}'">
+                {% if make.image %}
+                    <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="post-image">
+                {% endif %}
+                <p>{{ make.make_name }}</p>
+                {% if make.user == request.user %}
+                <div class="action-links">
+                    <a href="{% url 'my_make_post' make.id %}" class="edit-link">編集</a>
+                    <a href="{% url 'delete_my_make' make.id %}" class="delete-link">削除</a>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% if not my_make_list %}
+        <p>マイメイクの投稿がありません。</p>
         {% endif %}
     </div>
 </div>
 
-<div class="my-make-list">
-    <h3>投稿したマイメイク</h3>
-    <div class="make-grid">
-        {% for make in my_make_list %}
-        <div class="make-item">
-            <a href="{% url 'my_make_detail' make.id %}">
-                <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="small-image">
-                <p>{{ make.make_name }}</p>
-            </a>
-            <footer>
-                {% if make.user == request.user %}
-                    <div class="action-links">
-                        <a href="{% url 'my_make_post' make.id %}" class="edit-link">編集</a>
-                        <a href="{% url 'delete_my_make' make.id %}" class="delete-link">削除</a>
-                    </div>
-                {% endif %}
-            </footer>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
 <style>
-form {
-    width: 20%;
-    margin: 10px auto;
-    padding: 10px;
-    border: 1px solid #ccc;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.page-title {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    gap: 20px;
+}
+
+.profile-container,
+.my-make-container {
+    background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
+    padding: 20px;
+    width: 48%;
+    margin: auto; /* 中央寄せ */
 }
-.small-image {
-    width: 100px; /* 希望の幅に調整 */
-    height: auto; /* アスペクト比を維持 */
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 20px;
+    display: block; /* 中央寄せ */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 中央寄せ */
+    gap: 10px;
+}
+
+.profile-details p {
+    margin: 0;
+}
+
+.profile-details a {
+    margin-top: 10px;
+}
+
+.my-make-container h2 {
+    text-align: center;
+}
+
+.posts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.post-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.post-item:hover {
+    transform: translateY(-5px);
+    background-color: #e9e9e9;
+}
+
+.post-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.follow-info {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 
 .action-links {
@@ -95,4 +202,3 @@ form {
 }
 </style>
 {% endblock %}
-
