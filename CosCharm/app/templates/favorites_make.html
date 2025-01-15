@@ -107,22 +107,12 @@
 }
 /* 画像の横幅を統一 */
 .post-image {
-    width: 100px;  /* すべての画像が同じ横幅になる */
-    height: auto;  /* 高さは自動調整 */
+    width: 100px;  
+    height: 100px;  
     border-radius: 5px;
     object-fit: cover;
     margin-bottom: 10px;
 }
 
-/* モバイル対応 */
-@media (max-width: 768px) {
-    .favorite-list {
-        flex-direction: column;
-    }
-
-    .posts-list {
-        flex-direction: column;
-    }
-}
 </style>
 {% endblock %}

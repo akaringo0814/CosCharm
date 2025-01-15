@@ -203,6 +203,17 @@
             border: 1px solid #ccc;
             height: 40px; /* 縦幅を40pxに設定 */
         }
+
+        /* モバイル対応 */
+        @media (max-width: 768px) {
+         .favorite-list {
+            flex-direction: column;
+        }
+
+        .posts-list {
+        flex-direction: column;
+        }
+    }
     </style>
 </head>
 <body>
