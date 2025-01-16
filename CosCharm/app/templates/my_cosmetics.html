@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}マイコスメ一覧{% endblock %}
 
@@ -17,7 +18,9 @@
     {% for cosmetic in cosmetics %}
     <div class="cosmetic-item" onclick="location.href='{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}';">
         {% if cosmetic.cosmetic.photo %}
-            <img src="{{ cosmetic.cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
+            <img src="{% static cosmetic.cosmetic.photo %}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
+        {% else %}
+            <img src="{% static 'default_image.jpg' %}" alt="No image available" class="cosmetic-image">
         {% endif %}
         <div class="cosmetic-info">
             <a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}" class="cosmetic-name">{{ cosmetic.cosmetic.cosmetic_name }}</a>
@@ -36,14 +39,14 @@
 <style>
   /* マイコスメ一覧画面用スタイル */
   form {
-            max-width: 1000px;
-            margin: 10px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #f9f9f9;
-        }
+      max-width: 1000px;
+      margin: 10px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: #f9f9f9;
+  }
 
   .search-form {
       display: flex;
@@ -61,15 +64,15 @@
       width: 50%;
   }
   button {
-            display: block;
-            width: 15%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      display: block;
+      width: 15%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+  }
   .cosmetics-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -132,4 +135,5 @@
   }
 </style>
 {% endblock %}
+
 

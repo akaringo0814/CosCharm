@@ -8,7 +8,8 @@
             "category": 0,
             "sub_category": 0,
             "price": 3300,
-            "photo": "cosmetics/image1.jpg"
+            "photo": "static/cosmetics/image1.jpg"
+
         }
     },
     {
@@ -20,7 +21,7 @@
             "category": 0,
             "sub_category": 0,
             "price": 715,
-            "photo": "cosmetics/image2.jpg"
+            "photo": "static/cosmetics/image2.jpg"
         }
     },
     {
@@ -32,7 +33,7 @@
             "category": 0,
             "sub_category": 1,
             "price": 6600,
-            "photo": "cosmetics/image3.jpg"
+            "photo": "static/cosmetics/image3.jpg"
         }
     },
     {
@@ -44,7 +45,7 @@
             "category": 0,
             "sub_category": 1,
             "price": 490,
-            "photo": "cosmetics/image4.jpg"
+            "photo": "static/cosmetics/image4.jpg"
         }
     },
     {
@@ -56,7 +57,7 @@
             "category": 0,
             "sub_category": 2,
             "price": 7150,
-            "photo": "cosmetics/image5.jpg"
+            "photo": "static/cosmetics/image5.jpg"
         }
     },
     {
@@ -68,7 +69,7 @@
             "category": 0,
             "sub_category": 2,
             "price": 4840,
-            "photo": "cosmetics/image6.jpg"
+            "photo": "static/cosmetics/image6.jpg"
         }
     },
     {
@@ -80,7 +81,7 @@
             "category": 1,
             "sub_category": 5,
             "price": 1980,
-            "photo": "cosmetics/image7.jpg"
+            "photo": "static/cosmetics/image7.jpg"
         }
     },
     {
@@ -92,7 +93,7 @@
             "category": 1,
             "sub_category": 4,
             "price": 1540,
-            "photo": "cosmetics/image8.jpg"
+            "photo": "static/cosmetics/image8.jpg"
         }
     },
     {
@@ -104,7 +105,7 @@
             "category": 1,
             "sub_category": 3,
             "price": 880,
-            "photo": "cosmetics/image9.jpg"
+            "photo": "static/cosmetics/image9.jpg"
         }
     },
     {
@@ -116,7 +117,7 @@
             "category": 1,
             "sub_category": 5,
             "price": 1540,
-            "photo": "cosmetics/image10.jpg"
+            "photo": "static/cosmetics/image10.jpg"
         }
     },
     {
@@ -128,7 +129,7 @@
             "category": 1,
             "sub_category": 8,
             "price": 1400,
-            "photo": "cosmetics/image11.jpg"
+            "photo": "static/cosmetics/image11.jpg"
         }
     },
     {
@@ -140,7 +141,7 @@
             "category": 1,
             "sub_category": 8,
             "price": 1100,
-            "photo": "cosmetics/image12.jpg"
+            "photo": "static/cosmetics/image12.jpg"
         }
     },
     {
@@ -152,7 +153,7 @@
             "category": 2,
             "sub_category": 9,
             "price": 7700,
-            "photo": "cosmetics/image13.jpg"
+            "photo": "static/cosmetics/image13.jpg"
         }
     },
     {
@@ -164,7 +165,7 @@
             "category": 2,
             "sub_category": 9,
             "price": 2970,
-            "photo": "cosmetics/image14.jpg"
+            "photo": "static/cosmetics/image14.jpg"
         }
     },
     {
@@ -176,7 +177,7 @@
             "category": 2,
             "sub_category": 10,
             "price": 7920,
-            "photo": "cosmetics/image15.jpg"
+            "photo": "static/cosmetics/image15.jpg"
         }
     },
     {
@@ -188,7 +189,7 @@
             "category": 2,
             "sub_category": 10,
             "price": 7480,
-            "photo": "cosmetics/image16.jpg"
+            "photo": "static/cosmetics/image16.jpg"
         }
     },
     {
@@ -200,7 +201,7 @@
             "category": 2,
             "sub_category": 11,
             "price": 2300,
-            "photo": "cosmetics/image17.jpg"
+            "photo": "static/cosmetics/image17.jpg"
         }
     },
     {
@@ -212,7 +213,7 @@
             "category": 2,
             "sub_category": 11,
             "price": 1980,
-            "photo": "cosmetics/image18.jpg"
+            "photo": "static/cosmetics/image18.jpg"
         }
     }
 ]

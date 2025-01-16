@@ -59,7 +59,6 @@ class User(AbstractUser):
 class MyMake(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='makes')
     make_name = models.CharField(max_length=100)
-    #make_memo = models.TextField()  # 修正: ()を追加
     make_memo = models.CharField(max_length=255, default="")
     image = models.ImageField(upload_to='make_images/')
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -67,9 +66,7 @@ class MyMake(models.Model):
     cosmetics = models.ManyToManyField('CosmeticMaster', through='MyMakeCosmetic', related_name='my_makes')
 
 class MyMakeCosmetic(models.Model):
-    #my_make = models.ForeignKey(MyMake, on_delete=models.CASCADE, related_name="cosmetics")
     my_make = models.ForeignKey(MyMake, on_delete=models.CASCADE, related_name='my_make_cosmetics')
-    #cosmetic = models.ForeignKey('CosmeticMaster', on_delete=models.CASCADE)
     cosmetic = models.ForeignKey('CosmeticMaster', on_delete=models.CASCADE, related_name='cosmetic_my_makes')
     is_main = models.BooleanField(default=False)  # メインコスメかどうか
 
@@ -78,8 +75,8 @@ class CosmeticMaster(models.Model):
     cosmetic_name = models.CharField(max_length=100, verbose_name="商品名", null=True)
     brand = models.CharField(max_length=100, verbose_name="ブランド名")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="価格")
-    photo = models.ImageField(upload_to='cosmetics/', blank=True, null=True, verbose_name="画像")
-
+    #photo = models.ImageField(upload_to='cosmetics/', blank=True, null=True, verbose_name="画像")
+    photo = models.CharField(max_length=255, null=True, blank=True)
     CATEGORY_CHOICES = [
         (0, 'フェイスケア'),
         (1, 'ポイントメイク'),

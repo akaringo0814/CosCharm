@@ -151,12 +151,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'app.CustomUser'  # カスタムユーザーを使用している場合
 AUTH_USER_MODEL = 'app.User'  # 'app' は該当するアプリ名
 
+import os
 
-
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 
 LOGIN_URL = 'login'  # ログインURL
