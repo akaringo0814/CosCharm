@@ -15,6 +15,17 @@
             display: flex;
             justify-content: space-around;
         }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgb(210, 160, 169); /* 背景色をピンクに設定 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 下に影を追加 */
+        }
+        main {
+            padding-top: 60px; /* ヘッダーの高さ分だけ余白を追加 */
+        }
 
         /* タイムライン */
         .container {
@@ -30,6 +41,7 @@
             align-items: center;
             gap: 15px;
         }
+
 
         form {
             margin: 10px auto;
