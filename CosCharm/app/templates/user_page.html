@@ -49,12 +49,6 @@
                     <img src="{{ make.image.url }}" alt="{{ make.make_name }}" class="post-image">
                 {% endif %}
                 <p>{{ make.make_name }}</p>
-                {% if make.user == request.user %}
-                <div class="action-links">
-                    <a href="{% url 'my_make_post' make.id %}" class="edit-link">編集</a>
-                    <a href="{% url 'delete_my_make' make.id %}" class="delete-link">削除</a>
-                </div>
-                {% endif %}
             </li>
             {% endfor %}
         </ul>

@@ -5,274 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ホーム画面{% endblock %}</title>
     {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     {% block extra_head %}{% endblock %}
 
     <style>
-        /* ナビゲーションバー */
-        nav {
-            background-color: #f8f8f8;
-            padding: 10px;
-            display: flex;
-            justify-content: space-around;
-        }
         header {
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            background-color: rgb(210, 160, 169); /* 背景色をピンクに設定 */
+            background-color: #dda0dd; /* 背景色を薄い紫に設定 */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 下に影を追加 */
         }
         main {
-            padding-top: 60px; /* ヘッダーの高さ分だけ余白を追加 */
+            padding-top: 70px; /* ヘッダーの高さ分だけ余白を追加 */
         }
-
-        /* タイムライン */
-        .container {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-        }
-
-        header nav {
-            background-color: #f8f9fa;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-
-        form {
-            margin: 10px auto;
-            padding: 10px;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        /*input {
-            width: 80%;
-            padding: 1px;
-            margin: 1px;
-            gap: 5px;
-        }*/
-
-        button {
-            display: block;
-            width: 65%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .search-box {
-            width: 100%;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        .category-select {
-            margin-top: 10px;
-        }
-
-        .category-select details {
-            margin-bottom: 10px;
-        }
-
-        .register-form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .search-section {
-            width: 30%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-
-        .cosmetics-display {
-            width: 500%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-
-        #cosmetics-list ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #cosmetics-list li {
-            margin-bottom: 5px;
-        }
-
-        .form-inline {
-            display: flex;
-            align-items: center;
-        }
-
-        .form-inline .form-control {
-            width: auto;
-            margin-right: 10px;
-        }
-
-        .list-group-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .list-group-item a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .list-group-item a:hover {
-            text-decoration: underline;
-        }
-
-        .cosmetics-display2 {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 50px;
-            background-color: #f9f9f9;
-        }
-
-        .search-form {
-            align-items: center;
-            margin-bottom: 20px;
-            width: 150%;
-            gap: 10px;
-        }
-
-        .cosmetics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .cosmetic-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s;
-        }
-
-        .cosmetic-item:hover {
-            background-color: #e9e9e9;
-        }
-
-        .cosmetic-name {
-            font-size: 16px;
+        .navbar-brand {
             font-weight: bold;
-            color: #000;
-            text-decoration: none;
         }
-
-        .cosmetic-name:hover {
-            text-decoration: underline;
+        .dropdown-menu {
+            min-width: 200px;
         }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .step-links a, .step-links .current {
-            margin: 0 5px;
-        }
-
-        .form-select {
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            height: 40px; /* 縦幅を40pxに設定 */
-        }
-
-        /* モバイル対応 */
-        @media (max-width: 768px) {
-         .favorite-list {
-            flex-direction: column;
-        }
-
-        .posts-list {
-        flex-direction: column;
-        }
-    }
     </style>
 </head>
 <body>
     <!-- ナビゲーションバー -->
     <header>
-        <nav>
-            <a href="{% url 'home' %}">ホーム</a>
-            <a href="{% url 'my_cosmetics' %}">マイコスメ</a>
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #dda0dd !important;">
+            <div class="container-fluid">
+                <!-- ブランド名 -->
+                <a class="navbar-brand" href="{% url 'home' %}">CosCharm</a>
 
-            <div class="mt-2">
-                <select id="favorites-select" class="form-select" onchange="navigateToCategory()">
-                    <option value="" disabled selected>お気に入り</option>
-                    <option value="{% url 'favorites_cosme' %}">マイコスメお気に入り</option>
-                    <option value="{% url 'favorites_make' %}">マイメイクお気に入り</option>
-                </select>
+                <!-- トグルボタン -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- ナビゲーションメニュー -->
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- ホーム -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">ホーム</a>
+                        </li>
+
+                        <!-- マイコスメ -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_cosmetics' %}">マイコスメ</a>
+                        </li>
+
+                        <!-- お気に入りドロップダウン -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFavorites" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                お気に入り
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownFavorites">
+                                <li><a class="dropdown-item" href="{% url 'favorites_cosme' %}">マイコスメお気に入り</a></li>
+                                <li><a class="dropdown-item" href="{% url 'favorites_make' %}">マイメイクお気に入り</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- マイページ -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_page' %}">マイページ</a>
+                        </li>
+
+                        <!-- 設定ドロップダウン -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSettings" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                設定
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownSettings">
+                                <li><a class="dropdown-item" href="{% url 'email_change' %}">メールアドレス変更</a></li>
+                                <li><a class="dropdown-item" href="{% url 'password_change' %}">パスワード変更</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
-            <script>
-                function navigateToCategory() {
-                    const selectedValue = document.getElementById("favorites-select").value;
-                    if (selectedValue) {
-                        // 選択されたURLに遷移
-                        window.location.href = selectedValue;
-                    }
-                }
-            </script>
-
-            <a href="{% url 'my_page' %}">マイページ</a>
-
-            <div class="mt-2">
-                <select id="settings-select" class="form-select" onchange="navigateToSetting()">
-                    <option value="" disabled selected>設定</option>
-                    <option value="{% url 'email_change' %}">メールアドレス変更</option>
-                    <option value="{% url 'password_change' %}">パスワード変更</option>
-                    <option value="{% url 'logout' %}">ログアウト</option>
-                </select>
-            </div>
-
-            <script>
-                function navigateToSetting() {
-                    const selectedValue = document.getElementById("settings-select").value;
-                    if (selectedValue) {
-                        // 選択されたURLに遷移
-                        window.location.href = selectedValue;
-                    }
-                }
-            </script>
         </nav>
     </header>
 
@@ -284,8 +95,7 @@
     </main>
 
     <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
-
-
