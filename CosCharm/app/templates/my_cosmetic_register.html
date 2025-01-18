@@ -34,23 +34,23 @@
 
           <div class="mb-4">
             <label>お気に入り登録:</label>
-            <input type="checkbox" class="form-check-input" name="is_favorite" id="is_favorite">
+            <input type="checkbox" name="is_favorite" id="is_favorite">
           </div>
 
           <div class="mb-4">
             <label>使用状況:</label>
             <div class="d-flex">
               <div class="form-check me-3">
-                <input type="radio" class="form-check-input" name="usage_status" value="not_used" id="not_used" checked>
-                <label for="not_used" class="form-check-label">未使用</label>
+                <input type="radio" name="usage_status" value="not_used" id="not_used" checked>
+                <label for="not_used">未使用</label>
               </div>
               <div class="form-check me-3">
-                <input type="radio" class="form-check-input" name="usage_status" value="in_use" id="in_use">
-                <label for="in_use" class="form-check-label">使用中</label>
+                <input type="radio" name="usage_status" value="in_use" id="in_use">
+                <label for="in_use">使用中</label>
               </div>
               <div class="form-check">
-                <input type="radio" class="form-check-input" name="usage_status" value="used" id="used">
-                <label for="used" class="form-check-label">使用済み</label>
+                <input type="radio" name="usage_status" value="used" id="used">
+                <label for="used">使用済み</label>
               </div>
             </div>
           </div>
@@ -73,7 +73,7 @@
       padding: 20px;
   }
 
-  .form-select, .form-check-input {
+  .form-select {
       width: 100%;
       padding: 10px;
       border-radius: 5px;
@@ -101,6 +101,41 @@
 
   .w-100 {
       width: 100%;
+  }
+
+  /* チェックボックスとラジオボタンのスタイルをリセット */
+  input[type="checkbox"],
+  input[type="radio"] {
+      appearance: none; /* デフォルトのスタイルを除去 */
+      margin: 0;
+      padding: 0;
+      width: auto;
+      height: auto;
+  }
+
+  /* デフォルトのチェックボックスとラジオボタンのスタイル */
+  input[type="checkbox"]::before,
+  input[type="radio"]::before {
+      content: "";
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      border: 1px solid #000;
+      background-color: #fff;
+  }
+
+  /* チェックボックスがチェックされたときのスタイル */
+  input[type="checkbox"]:checked::before {
+      background-color: #007BFF;
+      border-color: #007BFF;
+  }
+
+  /* ラジオボタンがチェックされたときのスタイル */
+  input[type="radio"]:checked::before {
+      border-radius: 50%;
+      background-color: #007BFF;
+      border-color: #007BFF;
   }
 </style>
 {% endblock %}

@@ -7,6 +7,7 @@ from .models import MyMake, MyCosmetic, CosmeticMaster,MyMakeCosmetic
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import PasswordChangeForm as AuthPasswordChangeForm
 
 class SignupForm(UserCreationForm):
     class Meta:
@@ -142,7 +143,47 @@ class MyCosmeticForm(forms.ModelForm):
         fields = ['cosmetic', 'is_favorite', 'usage_status']
 
 
+
 class MyCosmeticEditForm(forms.ModelForm):
+    USAGE_CHOICES = [
+        ('not_used', '未使用'),
+        ('in_use', '使用中'),
+        ('used', '使用済み')
+    ]
+
+    usage_status = forms.ChoiceField(
+        label='使用状況',
+        choices=USAGE_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'radio-inline'})
+    )
+
     class Meta:
         model = MyCosmetic
         fields = ['usage_status', 'is_favorite']
+
+
+
+class PasswordChangeForm(AuthPasswordChangeForm):
+    old_password = forms.CharField(
+        label='現在のパスワード',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '現在のパスワード'}),
+    )
+    new_password1 = forms.CharField(
+        label='新しいパスワード',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '新しいパスワード'}),
+    )
+    new_password2 = forms.CharField(
+        label='新しいパスワード（確認）',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '新しいパスワード（確認）'}),
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(user, *args, **kwargs)
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        if not self.user.check_password(old_password):
+            raise ValidationError("現在のパスワードが一致しません。")
+        return old_password
+

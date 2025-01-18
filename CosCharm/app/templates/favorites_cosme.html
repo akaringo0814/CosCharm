@@ -21,7 +21,6 @@
     {% endfor %}
 </div>
 
-<!-- ページネーション -->
 <div class="pagination">
     <span class="step-links">
         {% if favorite_cosmetics.has_previous %}
@@ -47,8 +46,8 @@
 <style>
     .cosmetics-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 1行に3つ表示 */
-        gap: 20px; /* 各アイテム間の間隔を設定 */
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
     }
 
     .cosmetic-item {
@@ -67,17 +66,17 @@
     }
 
     .cosmetic-image {
-        width: 100px; /* 写真のサイズを調整 */
+        width: 100px;
         height: 100px;
         margin-bottom: 10px;
         border-radius: 5px;
-        object-fit: cover; /* アスペクト比を保ちながら画像を小さくする */
+        object-fit: cover;
     }
 
     .cosmetic-info {
         display: flex;
         flex-direction: column;
-        align-items: center; /* コスメ名を中央に配置 */
+        align-items: center;
     }
 
     .cosmetic-name {
@@ -102,3 +101,4 @@
     }
 </style>
 {% endblock %}
+

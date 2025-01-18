@@ -14,8 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -64,13 +63,16 @@ WSGI_APPLICATION = 'CosCharm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        #'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # プロジェクト全体のテンプレートディレクトリ
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # os.path.joinを使用
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,7 +84,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 
 
@@ -141,8 +142,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = BASE_DIR / 'media'
 
 #LOGIN_REDIRECT_URL = '/home/'
 #LOGOUT_REDIRECT_URL = '/login/'  
@@ -151,13 +152,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'app.CustomUser'  # カスタムユーザーを使用している場合
 AUTH_USER_MODEL = 'app.User'  # 'app' は該当するアプリ名
 
-import os
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'),
 ]
+# 静的ファイルの画像ディレクトリを設定
+STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'))
 
 # Media files (User uploads)
 MEDIA_URL = '/media/'
@@ -171,7 +175,52 @@ LOGOUT_REDIRECT_URL = 'login'  # ログアウト後のリダイレクト先
 
 
 # JSONファイルのディレクトリ
-FIXTURES_DIR = BASE_DIR / 'app' / 'fixtures'
+#FIXTURES_DIR = BASE_DIR / 'app' / 'fixtures'
+FIXTURES_DIR = os.path.join(BASE_DIR, 'app', 'fixtures')
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'),
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+FIXTURES_DIR = os.path.join(BASE_DIR, 'app', 'fixtures')
+
+
+
+
+
+
+
+
 
 
 

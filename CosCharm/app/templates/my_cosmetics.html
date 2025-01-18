@@ -18,7 +18,7 @@
     {% for cosmetic in cosmetics %}
     <div class="cosmetic-item" onclick="location.href='{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}';">
         {% if cosmetic.cosmetic.photo %}
-            <img src="{% static cosmetic.cosmetic.photo %}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
+            <img src="{% static 'images/cosmetics/'|add:cosmetic.cosmetic.photo %}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
         {% else %}
             <img src="{% static 'default_image.jpg' %}" alt="No image available" class="cosmetic-image">
         {% endif %}
@@ -63,6 +63,7 @@
       border-radius: 5px;
       width: 50%;
   }
+
   button {
       display: block;
       width: 15%;
@@ -73,6 +74,7 @@
       border-radius: 5px;
       cursor: pointer;
   }
+
   .cosmetics-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -135,5 +137,3 @@
   }
 </style>
 {% endblock %}
-
-
