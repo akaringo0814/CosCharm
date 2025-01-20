@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}最新のお気に入りコスメ{% endblock %}
 
@@ -9,7 +10,7 @@
     {% for cosmetic in favorite_cosmetics %}
     <div class="cosmetic-item">
         {% if cosmetic.cosmetic.photo %}
-            <img src="{{ cosmetic.cosmetic.photo.url }}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
+        <img src="{% static cosmetic_master.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
         {% endif %}
         <div class="cosmetic-info text-center">
             <p>{{ cosmetic.cosmetic.brand }}</p>

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ cosmetic_master.cosmetic_name }}の詳細{% endblock %}
 
@@ -70,7 +71,7 @@
     <h2>{{ cosmetic_master.cosmetic_name }}の詳細</h2>
     <div>
       {% if cosmetic_master.photo %}
-        <img src="{{ cosmetic_master.photo.url }}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
+      <img src="{% static cosmetic_master.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
       {% endif %}
       <p><strong>ブランド名:</strong> {{ cosmetic_master.brand }}</p>
       <p><strong>カテゴリ:</strong> {{ cosmetic_master.get_category_display }}</p>

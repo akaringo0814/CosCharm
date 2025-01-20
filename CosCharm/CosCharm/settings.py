@@ -154,14 +154,15 @@ AUTH_USER_MODEL = 'app.User'  # 'app' は該当するアプリ名
 
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'),
-]
+#STATICFILES_DIRS = [
+    #os.path.join(BASE_DIR, 'static'),
+    #os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'),
+#]
 # 静的ファイルの画像ディレクトリを設定
-STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'))
+#STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'static', 'images', 'cosmetics'))
+
 
 # Media files (User uploads)
 MEDIA_URL = '/media/'

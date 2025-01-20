@@ -75,7 +75,8 @@ class CosmeticMaster(models.Model):
     cosmetic_name = models.CharField(max_length=100, verbose_name="商品名", null=True)
     brand = models.CharField(max_length=100, verbose_name="ブランド名")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="価格")
-    photo = models.ImageField(upload_to='cosmetics/', blank=True, null=True, verbose_name="画像")
+    #photo = models.ImageField(upload_to='cosmetics/', blank=True, null=True, verbose_name="画像")
+    photo = models.CharField(max_length=100, blank=True, null=True, verbose_name="画像のパス")
     #photo = models.CharField(max_length=255, null=True, blank=True)
     CATEGORY_CHOICES = [
         (0, 'フェイスケア'),

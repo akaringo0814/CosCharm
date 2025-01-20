@@ -28,9 +28,10 @@ urlpatterns = [
     path('coscharm/home/', HomeView.as_view(), name="home"),
     path('', include('portfolio.urls')),  # ポートフォリオをルートに
     path('coscharm/', include('app.urls')),  # アプリを /coscharm/ に
-]
+] 
 # メディアファイルの公開設定
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
  

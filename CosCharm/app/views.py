@@ -495,9 +495,35 @@ def my_make_post_new(request):
         form = MyMakeForm()
     return render(request, 'my_make_post_new.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': None, 'other_cosmetic_ids': []})
 
-
 @login_required
 def my_make_post(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    all_cosmetics = CosmeticMaster.objects.all()
+    main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
+    other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
+    if request.method == 'POST':
+        form = MyMakeForm(request.POST, request.FILES, instance=my_make)
+        if form.is_valid():
+            form.save()
+            MyMakeCosmetic.objects.filter(my_make=my_make).delete()
+            other_cosmetics = form.cleaned_data.get('other_cosmetics', [])
+            main_cosmetic = form.cleaned_data.get('main_cosmetic')
+
+            for cosmetic in other_cosmetics:
+                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=cosmetic, is_main=False)
+
+            if main_cosmetic:
+                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=main_cosmetic, is_main=True)
+            
+            return redirect('my_make_detail', pk=my_make.pk)
+    else:
+        form = MyMakeForm(instance=my_make)
+    main_cosmetic_id = main_cosmetic.cosmetic.pk if main_cosmetic else None
+    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)
+    return render(request, 'my_make_post_new.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': main_cosmetic_id, 'other_cosmetic_ids': other_cosmetic_ids})
+
+
+#def my_make_post(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
     all_cosmetics = CosmeticMaster.objects.all()
     main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
