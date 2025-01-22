@@ -37,7 +37,6 @@
 
 <footer>
     {% if my_make.user == request.user %}
-        <button onclick="location.href='{% url 'my_make_post_new' my_make.pk %}'" class="btn btn-primary">編集</button>
         <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">削除</button>

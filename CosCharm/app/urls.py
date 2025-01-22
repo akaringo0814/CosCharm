@@ -14,6 +14,7 @@ urlpatterns = [
     path('my_cosmetic_register/', views.my_cosmetic_register, name='my_cosmetic_register'),
     path('my_make_detail/<int:pk>/', views.my_make_detail, name='my_make_detail'),
     path('my_make_post_new/', views.my_make_post_new, name='my_make_post_new'),
+    path('my_make_post_new/<int:pk>/', views.my_make_post_new, name='my_make_post_new'),
     path('my_make_post/<int:pk>/', views.my_make_post, name='my_make_post'),
     path('delete_my_make/<int:pk>/', views.delete_my_make, name='delete_my_make'),
     path('toggle_favorite/<int:pk>/', views.toggle_favorite, name='toggle_favorite'),
