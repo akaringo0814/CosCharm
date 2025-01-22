@@ -117,7 +117,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect('/login/')
+    return redirect('/coscharm/login/')
 
 @login_required
 def my_cosmetics(request):
