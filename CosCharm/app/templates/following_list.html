@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 {{ user_profile.username }}がフォロー中のユーザー一覧
@@ -11,7 +12,11 @@
     <ul class="follower-list">
         {% for user in following %}
         <li class="follower-item" onclick="location.href='{% url 'user_page' user.id %}'">
-            <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="small-image">
+            {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="small-image">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}" alt="{{ user.username }}" class="small-image">
+            {% endif %}
             <div class="user-details">
                 <a href="{% url 'user_page' user.id %}" class="user-name">{{ user.username }}</a>
                 <p class="user-info">フォロー数: {{ user.following.count }} | フォロワー数: {{ user.followers.count }}</p>
@@ -107,5 +112,6 @@ body {
 }
 </style>
 {% endblock %}
+
 
 

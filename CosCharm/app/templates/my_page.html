@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 マイページ
@@ -12,7 +13,7 @@
         {% if user.profile_image %}
             <img src="{{ user.profile_image.url }}" alt="プロフィール画像" class="profile-img">
         {% else %}
-            <p>プロフィール画像がありません。</p>
+        <img src="{% static 'images/default_profile.png' %}" alt="デフォルト画像" class="profile-img">
         {% endif %}
         <div class="profile-details">
             <p><strong>ユーザー名:</strong> {{ request.user.username }}</p>
