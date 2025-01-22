@@ -18,7 +18,7 @@
     {% for cosmetic in cosmetics %}
     <div class="cosmetic-item" onclick="location.href='{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}';">
         {% if cosmetic.cosmetic.photo %}
-        <img src="{% static cosmetic_master.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
+        <img src="{% static cosmetic.cosmetic.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
         {% else %}
         <img src="{% static 'images/cosmetics/default_image.jpg' %}" alt="デフォルト画像" class="cosmetic-image">
 

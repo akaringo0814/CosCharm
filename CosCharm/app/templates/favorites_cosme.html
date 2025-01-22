@@ -10,7 +10,7 @@
     {% for cosmetic in favorite_cosmetics %}
     <div class="cosmetic-item">
         {% if cosmetic.cosmetic.photo %}
-        <img src="{% static cosmetic_master.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
+        <img src="{% static cosmetic.cosmetic.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
         {% endif %}
         <div class="cosmetic-info text-center">
             <p>{{ cosmetic.cosmetic.brand }}</p>
