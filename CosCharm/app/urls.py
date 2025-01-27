@@ -45,4 +45,6 @@ urlpatterns = [
     path('my_cosmetic/<int:pk>/delete/', views.delete_my_cosmetic, name='delete_my_cosmetic'),
     path('my_make/<int:pk>/update_main_cosmetic/', views.update_main_cosmetic, name='update_main_cosmetic'),
     path('my_make/<int:pk>/update_other_cosmetics/', views.update_other_cosmetics, name='update_other_cosmetics'),
+    path('toggle_follow/<int:user_id>/', views.toggle_follow, name='toggle_follow'),
 ]
+

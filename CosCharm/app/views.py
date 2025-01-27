@@ -272,33 +272,6 @@ def favorites_cosme(request):
     return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
 
-#def favorites_cosme(request):
-    # 現在のユーザーに関連する削除されていないレコードを対象とする
-    filtered_cosmetics = MyCosmetic.objects.filter(user=request.user, is_deleted=False)
-
-    # cosmetic_id ごとに最新の updated_at を持つレコードを取得
-    latest_cosmetics = (
-        filtered_cosmetics
-        .values('cosmetic_id')
-        .annotate(latest_id=Max('id'))  # 最新の ID を取得
-    )
-
-    # 最新のレコードで is_favorite=True のものをフィルタリング
-    favorite_cosmetics_list = MyCosmetic.objects.filter(
-        id__in=[item['latest_id'] for item in latest_cosmetics],
-        is_favorite=True
-    ).order_by('-updated_at')
-
-    # デバッグ用にログを出力
-    print(favorite_cosmetics_list.query)  # 実行されるSQL
-    print(list(favorite_cosmetics_list))  # 取得結果を確認
-
-    # ページネーションの設定
-    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
-    page_number = request.GET.get('page')
-    favorite_cosmetics = paginator.get_page(page_number)
-    
-    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
 # 初期データ
 COSMETIC_CATEGORIES = {
@@ -372,28 +345,6 @@ def get_initial_cosmetics(request):
     return JsonResponse({"cosmetics": filtered_cosmetics})
 
 
-#def my_cosmetic_edit(request, pk):
-    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
-    if request.method == 'POST':
-        form = MyCosmeticEditForm(request.POST, instance=my_cosmetic)
-        if form.is_valid():
-            form.save()
-            return redirect('my_cosmetics')
-    else:
-        form = MyCosmeticEditForm(instance=my_cosmetic)
-    return render(request, 'my_cosmetic_edit.html', {'form': form, 'my_cosmetic': my_cosmetic})
-
-#def my_cosmetic_edit(request, pk):
-    my_cosmetic = get_object_or_404(MyCosmetic, pk=pk, user=request.user)
-    if request.method == 'POST':
-        form = MyCosmeticEditForm(request.POST, instance=my_cosmetic)
-        if form.is_valid():
-            form.save()
-            print(f"Updated is_favorite: {my_cosmetic.is_favorite}")  # デバッグ用メッセージ
-            return redirect('my_cosmetics')
-    else:
-        form = MyCosmeticEditForm(instance=my_cosmetic)
-    return render(request, 'my_cosmetic_edit.html', {'form': form, 'my_cosmetic': my_cosmetic})
 
 @login_required
 def my_cosmetic_edit(request, pk):
@@ -418,8 +369,8 @@ def my_cosmetic_delete(request, pk):
     return render(request, 'my_cosmetic_confirm_delete.html', {'my_cosmetic': my_cosmetic})
 
 
-@login_required
-def my_make_detail(request, pk):
+
+#def my_make_detail(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
     main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
     other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
@@ -433,6 +384,27 @@ def my_make_detail(request, pk):
         'other_cosmetic_ids': other_cosmetic_ids,
         'all_cosmetics': all_cosmetics,
         'is_favorite': is_favorite,
+    })
+
+
+@login_required
+def my_make_detail(request, pk):
+    my_make = get_object_or_404(MyMake, pk=pk)
+    main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
+    other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
+    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)
+    all_cosmetics = CosmeticMaster.objects.all()
+    is_favorite = Favorite.objects.filter(user=request.user, my_make=my_make).exists()
+    is_following = Follow.objects.filter(follower=request.user, following=my_make.user).exists()
+
+    return render(request, 'my_make_detail.html', {
+        'my_make': my_make,
+        'main_cosmetic': main_cosmetic.cosmetic.cosmetic_name if main_cosmetic else None,
+        'other_cosmetics': other_cosmetics,
+        'other_cosmetic_ids': other_cosmetic_ids,
+        'all_cosmetics': all_cosmetics,
+        'is_favorite': is_favorite,
+        'is_following': is_following,
     })
 
 @login_required
@@ -787,3 +759,16 @@ def unfollow_user(request, user_id):
         request.user.following.remove(target_user)
         return JsonResponse({"status": "unfollowed"})
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
+@login_required
+def toggle_follow(request, user_id):
+    following = get_object_or_404(User, id=user_id)
+    if request.user.following.filter(id=user_id).exists():
+        # フォロー解除
+        Follow.objects.filter(follower=request.user, following=following).delete()
+    else:
+        # フォロー
+        Follow.objects.create(follower=request.user, following=following)
+    return redirect('user_page', user_id=user_id)
