@@ -223,34 +223,6 @@ def delete_my_cosmetic(request, pk):
 
 
 #def favorites_cosme(request):
-    # 削除されていないレコードを対象とする
-    filtered_cosmetics = MyCosmetic.objects.filter(user=request.user, is_deleted=False)
-
-    # cosmetic_id ごとに最新の updated_at を持つレコードを取得
-    latest_cosmetics = (
-        filtered_cosmetics
-        .values('cosmetic_id')
-        .annotate(latest_id=Max('id'))  # 最新の ID を取得
-    )
-
-    # 最新のレコードで is_favorite=True のものをフィルタリング
-    favorite_cosmetics_list = MyCosmetic.objects.filter(
-        id__in=[item['latest_id'] for item in latest_cosmetics],
-        is_favorite=True
-    ).order_by('-updated_at')
-
-    # デバッグ用にログを出力
-    print(favorite_cosmetics_list.query)  # 実行されるSQL
-    print(list(favorite_cosmetics_list))  # 取得結果を確認
-
-    # ページネーションの設定
-    paginator = Paginator(favorite_cosmetics_list, 10)  # 1ページあたり10件表示
-    page_number = request.GET.get('page')
-    favorite_cosmetics = paginator.get_page(page_number)
-    
-    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
-@login_required
-def favorites_cosme(request):
     filtered_cosmetics = MyCosmetic.objects.filter(user=request.user, is_deleted=False)
     latest_cosmetics = (
         filtered_cosmetics
@@ -272,6 +244,39 @@ def favorites_cosme(request):
     return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
 
 
+
+@login_required
+def favorites_cosme(request):
+    filtered_cosmetics = MyCosmetic.objects.filter(user=request.user, is_deleted=False)
+    latest_cosmetics = (
+        filtered_cosmetics
+        .values('cosmetic_id')
+        .annotate(latest_id=Max('id'))
+    )
+    
+    latest_ids = [item['latest_id'] for item in latest_cosmetics]
+
+    # Check if latest_ids is empty and set a default value to prevent EmptyResultSet
+    if not latest_ids:
+        latest_ids = [-1]  # Assign a non-existing ID to prevent EmptyResultSet
+
+    favorite_cosmetics_list = MyCosmetic.objects.filter(
+        id__in=latest_ids,
+        is_favorite=True
+    ).order_by('-updated_at')
+
+    print(favorite_cosmetics_list.query)  # 実行されるSQL
+    print(list(favorite_cosmetics_list))  # 取得結果を確認
+
+    paginator = Paginator(favorite_cosmetics_list, 10)
+    page_number = request.GET.get('page')
+    favorite_cosmetics = paginator.get_page(page_number)
+
+    context = {
+        'favorite_cosmetics': favorite_cosmetics,
+    }
+    
+    return render(request, 'favorites_cosme.html', context)
 
 # 初期データ
 COSMETIC_CATEGORIES = {
@@ -370,23 +375,6 @@ def my_cosmetic_delete(request, pk):
 
 
 
-#def my_make_detail(request, pk):
-    my_make = get_object_or_404(MyMake, pk=pk)
-    main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
-    other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
-    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)
-    all_cosmetics = CosmeticMaster.objects.all()
-    is_favorite = Favorite.objects.filter(user=request.user, my_make=my_make).exists()
-    return render(request, 'my_make_detail.html', {
-        'my_make': my_make,
-        'main_cosmetic': main_cosmetic.cosmetic.cosmetic_name if main_cosmetic else None,
-        'other_cosmetics': other_cosmetics,
-        'other_cosmetic_ids': other_cosmetic_ids,
-        'all_cosmetics': all_cosmetics,
-        'is_favorite': is_favorite,
-    })
-
-
 @login_required
 def my_make_detail(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
@@ -442,29 +430,6 @@ def delete_my_make(request, pk):
 
 
 
-#def my_make_post_new(request):
-    all_cosmetics = CosmeticMaster.objects.all()
-    if request.method == 'POST':
-        form = MyMakeForm(request.POST, request.FILES)
-        if form.is_valid():
-            my_make = form.save(commit=False)
-            my_make.user = request.user
-            my_make.save()
-            form.save_m2m()
-            other_cosmetics = form.cleaned_data.get('other_cosmetics', [])
-            main_cosmetic = form.cleaned_data.get('main_cosmetic')
-
-            for cosmetic in other_cosmetics:
-                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=cosmetic, is_main=False)
-
-            if main_cosmetic:
-                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=main_cosmetic, is_main=True)
-            
-            return redirect('my_make_detail', pk=my_make.pk)
-    else:
-        form = MyMakeForm()
-    return render(request, 'my_make_post_new.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': None, 'other_cosmetic_ids': []})
-
 @login_required
 def my_make_post_new(request, pk=None):
     all_cosmetics = CosmeticMaster.objects.all()
@@ -517,31 +482,6 @@ def my_make_post(request, pk):
     return render(request, 'my_make_post_new.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': main_cosmetic_id, 'other_cosmetic_ids': other_cosmetic_ids})
 
 
-#def my_make_post(request, pk):
-    my_make = get_object_or_404(MyMake, pk=pk)
-    all_cosmetics = CosmeticMaster.objects.all()
-    main_cosmetic = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=True).first()
-    other_cosmetics = MyMakeCosmetic.objects.filter(my_make=my_make, is_main=False)
-    if request.method == 'POST':
-        form = MyMakeForm(request.POST, request.FILES, instance=my_make)
-        if form.is_valid():
-            form.save()
-            MyMakeCosmetic.objects.filter(my_make=my_make).delete()
-            other_cosmetics = form.cleaned_data.get('other_cosmetics', [])
-            main_cosmetic = form.cleaned_data.get('main_cosmetic')
-
-            for cosmetic in other_cosmetics:
-                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=cosmetic, is_main=False)
-
-            if main_cosmetic:
-                MyMakeCosmetic.objects.create(my_make=my_make, cosmetic=main_cosmetic, is_main=True)
-            
-            return redirect('my_make_detail', pk=my_make.pk)
-    else:
-        form = MyMakeForm(instance=my_make)
-    main_cosmetic_id = main_cosmetic.cosmetic.pk if main_cosmetic else None
-    other_cosmetic_ids = other_cosmetics.values_list('cosmetic__pk', flat=True)
-    return render(request, 'my_make_post.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': main_cosmetic_id, 'other_cosmetic_ids': other_cosmetic_ids})
 
 @login_required
 def modal_select_cosmetics(request):
