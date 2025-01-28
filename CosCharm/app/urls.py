@@ -38,7 +38,6 @@ urlpatterns = [
     path('search_cosmetics/', views.search_cosmetics, name='search_cosmetics'),
     path('my_cosmetics/', views.my_cosmetics, name='my_cosmetics'),
     path('my_cosmetic/<int:pk>/', views.my_cosmetic_detail, name='my_cosmetic_detail'),
-    #path('my_cosmetic/<int:id>/edit/', views.my_cosmetic_edit, name='my_cosmetic_edit'),
     path('my_cosmetic_register/', views.my_cosmetic_register, name='my_cosmetic_register'),
     path('favorites_cosme/', views.favorites_cosme, name='favorites_cosme'),
     path('my_cosmetic/<int:pk>/edit/', views.my_cosmetic_edit, name='my_cosmetic_edit'),

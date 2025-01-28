@@ -213,28 +213,6 @@ def delete_my_cosmetic(request, pk):
     return redirect('my_cosmetics')
 
 
-#def favorites_cosme(request):
-    filtered_cosmetics = MyCosmetic.objects.filter(user=request.user, is_deleted=False)
-    latest_cosmetics = (
-        filtered_cosmetics
-        .values('cosmetic_id')
-        .annotate(latest_id=Max('id'))
-    )
-    favorite_cosmetics_list = MyCosmetic.objects.filter(
-        id__in=[item['latest_id'] for item in latest_cosmetics],
-        is_favorite=True
-    ).order_by('-updated_at')
-
-    print(favorite_cosmetics_list.query)  # 実行されるSQL
-    print(list(favorite_cosmetics_list))  # 取得結果を確認
-
-    paginator = Paginator(favorite_cosmetics_list, 10)
-    page_number = request.GET.get('page')
-    favorite_cosmetics = paginator.get_page(page_number)
-    
-    return render(request, 'favorites_cosme.html', {'favorite_cosmetics': favorite_cosmetics})
-
-
 
 @login_required
 def favorites_cosme(request):
@@ -566,17 +544,6 @@ def password_change(request):
     return render(request, 'password_change.html', {'form': form})
 
 
-#def password_change(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)  # パスワード変更後もログイン状態を保持
-            messages.success(request, 'パスワードが更新されました。')
-            return redirect('home')  # ホーム画面にリダイレクト
-    else:
-        form = PasswordChangeForm(user=request.user)
-    return render(request, 'password_change.html', {'form': form})
 
 
 @login_required
