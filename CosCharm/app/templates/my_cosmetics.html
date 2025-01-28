@@ -21,7 +21,6 @@
         <img src="{% static cosmetic.cosmetic.photo %}" alt="{{ cosmetic_master.cosmetic_name }}" class="cosmetic-image">
         {% else %}
         <img src="{% static 'images/cosmetics/default_image.jpg' %}" alt="デフォルト画像" class="cosmetic-image">
-
         {% endif %}
         <div class="cosmetic-info">
             <a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}" class="cosmetic-name">{{ cosmetic.cosmetic.cosmetic_name }}</a>
@@ -33,9 +32,7 @@
     {% endfor %}
 </div>
 
-<div class="d-flex justify-content-end">
-    <a href="{% url 'my_cosmetic_register' %}" class="btn btn-success">コスメを登録する</a>
-</div>
+<a href="{% url 'my_cosmetic_register' %}" class="btn btn-success register-button">コスメを登録する</a>
 
 <style>
   /* マイコスメ一覧画面用スタイル */
@@ -135,6 +132,24 @@
   .search-label input {
       margin-right: 5px;
       padding: 8px;
+  }
+
+  /* コスメを登録するボタンを左下に固定 */
+  .register-button {
+      bottom: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+  }
+
+  .register-button:hover {
+      background-color: #218838;
+      text-decoration: none;
   }
 </style>
 {% endblock %}
