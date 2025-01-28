@@ -56,14 +56,14 @@
 <p>メイクメモ: {{ my_make.make_memo }}</p>
 <p>作成日: {{ my_make.created_at }}</p>
 
-<footer>
+<div>
     {% if my_make.user == request.user %}
         <form action="{% url 'delete_my_make' my_make.pk %}" method="post" style="display:inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">削除</button>
         </form>
     {% endif %}
-</footer>
+</div>
 
 <style>
 .profile-section {

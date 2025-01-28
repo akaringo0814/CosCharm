@@ -71,23 +71,18 @@ class HomeView(LoginRequiredMixin, TemplateView):
     login_url = "login"
 
     def get(self, request):
-        # フォローしているユーザーを取得
-        followed_users = Follow.objects.filter(follower=request.user).values_list('following', flat=True)
-
         # フィルタを取得
         personal_color = request.GET.get('personal_color')
         skin_type = request.GET.get('skin_type')
 
-        # フォローしているユーザーの投稿を取得
-        follow_user_posts = MyMake.objects.filter(
-            user__in=followed_users
-        ).order_by("-created_at")
+        # 全ユーザーの投稿を取得
+        all_user_posts = MyMake.objects.all().order_by("-created_at")
 
         if personal_color:
-            follow_user_posts = follow_user_posts.filter(user__personal_color=personal_color)
+            all_user_posts = all_user_posts.filter(user__personal_color=personal_color)
         
         if skin_type:
-            follow_user_posts = follow_user_posts.filter(user__skin_type=skin_type)
+            all_user_posts = all_user_posts.filter(user__skin_type=skin_type)
 
         # 未使用のコスメを取得（使用状況が「未使用」のコスメ）
         unused_cosmetics_qs = MyCosmetic.objects.filter(
@@ -102,13 +97,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
                 unused_cosmetics.append(cosmetic)
                 cosmetics_seen.add(cosmetic.cosmetic.cosmetic_name)
 
-        # フォローしているユーザーオブジェクトを取得
-        users_followed = User.objects.filter(id__in=followed_users)
-
         context = {
-            'follow_user_posts': follow_user_posts,
+            'follow_user_posts': all_user_posts,  # 全ユーザー投稿に変更
             'unused_cosmetics': unused_cosmetics,
-            'users_followed': users_followed,
             'personal_color': personal_color,  # コンテキストに追加
             'skin_type': skin_type  # コンテキストに追加
         }
