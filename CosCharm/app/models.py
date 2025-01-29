@@ -144,24 +144,6 @@ class MyCosmetic(models.Model):
         self.save()
 
 
-
-# プロフィールモデル
-#class Profile(models.Model):
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)  # 修正: user_name -> user
-    #age = models.PositiveIntegerField(null=True, blank=True)
-    #gender = models.CharField(max_length=10, choices=[('男性', '男性'), ('女性', '女性')], blank=True)
-    #skin_type = models.CharField(
-        #max_length=10,
-        #choices=[('乾燥肌', '乾燥肌'), ('脂性肌', '脂性肌'), ('普通肌', '普通肌'), ('混合肌', '混合肌'), ('不明', '不明')],
-        #blank=True
-    #)
-    #personal_color = models.CharField(
-        #max_length=10,
-        #choices=[('イエベ春', 'イエベ春'), ('ブルベ夏', 'ブルベ夏'), ('イエベ秋', 'イエベ秋'), ('ブルベ冬', 'ブルベ冬'), ('不明', '不明')],
-        #blank=True
-    #)
-    #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True)
-    #profile_image = models.ImageField(upload_to='profiles/', blank=True, null=True, default='profiles/default.jpg')  # defaultを設定
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     my_make = models.ForeignKey(MyMake, on_delete=models.CASCADE)
