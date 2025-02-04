@@ -46,8 +46,10 @@
                     <p>{{ post.make_name }}</p>
                 </li>
             {% empty %}
-                <p>該当投稿はありません</p>
+                <li class="no-post">該当する投稿はありません</li>
             {% endfor %}
+        </ul>
+        
         </ul>
     </section>
 </div>
@@ -105,7 +107,7 @@
 /* 投稿リストのデザイン */
 .posts-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 20px;
 }
 
