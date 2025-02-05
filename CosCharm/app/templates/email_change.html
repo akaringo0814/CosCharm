@@ -39,6 +39,10 @@
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
+    {% for message in messages %}
+        {% empty %}
+        {% for m in messages.get_messages %}{% endfor %}
+    {% endfor %}
 {% endif %}
 
 <style>
