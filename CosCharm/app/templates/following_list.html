@@ -27,10 +27,13 @@
     {% else %}
     <p>フォロー中のユーザーはいません</p>
     {% endif %}
+    
     <div class="back-button-container">
-        <a href="{% url 'my_page' %}" class="back-button">戻る</a>
+        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="back-button">戻る</a>
     </div>
 </div>
+
+
 
 <style>
 /* フォロワー一覧と同じCSSを使用 */

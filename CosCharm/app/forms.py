@@ -9,11 +9,25 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import PasswordChangeForm as AuthPasswordChangeForm
 
+
+
+
+
 class SignupForm(UserCreationForm):
+    password1 = forms.CharField(
+        label="パスワード",
+        widget=forms.PasswordInput,
+        help_text="8文字以上の英数字を含むパスワードを設定してください。",
+    )
+    password2 = forms.CharField(
+        label="パスワード確認",
+        widget=forms.PasswordInput,
+        help_text="確認のため、同じパスワードを入力してください。",
+    )
+
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
-
 
 
 class LoginForm(forms.Form):
@@ -44,6 +58,27 @@ class MyMakeForm(forms.ModelForm):
     class Meta:
         model = MyMake
         fields = ['make_name', 'image']  # 必要なフィールドを指定
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'age', 'gender', 'skin_type', 'personal_color', 'profile_image']
+
+    def clean_age(self):
+        age = self.cleaned_data.get('age')
+        if age is not None and age < 0:
+            raise forms.ValidationError("年齢は0以上を入力してください。")
+        return age
+
+    def clean_profile_image(self):
+        profile_image = self.cleaned_data.get('profile_image')
+        if profile_image:
+            # 画像サイズの制限（例：5MB）
+            if profile_image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("画像のサイズは5MB以下にしてください。")
+        return profile_image
+
 
 # MyCosme用フォーム
 class MyCosmeticForm(forms.ModelForm):
@@ -103,12 +138,12 @@ class ChangeEmailForm(forms.Form):
             raise ValidationError("新しいメールアドレスが一致しません。")
         return cleaned_data
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
+#class ProfileForm(forms.ModelForm):
+    #class Meta:
         model = User
         fields = ['username','age', 'gender', 'skin_type', 'personal_color', 'profile_image']
 
-    def clean_profile_image(self):
+    #def clean_profile_image(self):
         profile_image = self.cleaned_data.get('profile_image')
         if profile_image:
             # 画像サイズなどのバリデーションを追加できます

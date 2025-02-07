@@ -17,6 +17,7 @@ import json
 import logging
 import os
 from django.contrib import messages  
+from django.contrib.auth import login
 
 from .forms import (
     SignupForm, LoginForm, MyMakeForm, ChangeEmailForm,
@@ -48,6 +49,19 @@ class SignupView(View):
             "form": form 
         })
 
+
+class SignupView(View):
+    def get(self, request):
+        form = SignupForm()
+        return render(request, "signup.html", {"form": form})
+
+    def post(self, request):
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("home")
+        return render(request, "signup.html", {"form": form})  # エラー時も form を渡す
 
 class LoginView(View): 
     def get(self, request):
@@ -398,8 +412,6 @@ def delete_my_make(request, pk):
     return render(request, 'delete_confirmation.html', {'my_make': my_make})
 
 
-
-@login_required
 def my_make_post_new(request, pk=None):
     all_cosmetics = CosmeticMaster.objects.all()
     if request.method == 'POST':
@@ -423,7 +435,7 @@ def my_make_post_new(request, pk=None):
         form = MyMakeForm()
     return render(request, 'my_make_post_new.html', {'form': form, 'all_cosmetics': all_cosmetics, 'main_cosmetic_id': None, 'other_cosmetic_ids': []})
 
-@login_required
+
 def my_make_post(request, pk):
     my_make = get_object_or_404(MyMake, pk=pk)
     all_cosmetics = CosmeticMaster.objects.all()
@@ -658,6 +670,16 @@ def unfollow_user(request, user_id):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
+#def toggle_follow(request, user_id):
+    following = get_object_or_404(User, id=user_id)
+    if request.user.following.filter(id=user_id).exists():
+        # フォロー解除
+        Follow.objects.filter(follower=request.user, following=following).delete()
+    else:
+        # フォロー
+        Follow.objects.create(follower=request.user, following=following)
+    return redirect('user_page', user_id=user_id)
+
 
 @login_required
 def toggle_follow(request, user_id):
@@ -668,4 +690,6 @@ def toggle_follow(request, user_id):
     else:
         # フォロー
         Follow.objects.create(follower=request.user, following=following)
-    return redirect('user_page', user_id=user_id)
+    
+    # フォロー・フォロー解除後も元のページに戻る
+    return redirect(request.META.get('HTTP_REFERER', 'my_make_detail'))
