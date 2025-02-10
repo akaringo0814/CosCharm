@@ -18,6 +18,8 @@ import logging
 import os
 from django.contrib import messages  
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+
 
 from .forms import (
     SignupForm, LoginForm, MyMakeForm, ChangeEmailForm,
@@ -555,8 +557,6 @@ def password_change(request):
     return render(request, 'password_change.html', {'form': form})
 
 
-
-
 @login_required
 def liked_posts(request):
     return render(request, 'liked_posts.html')
@@ -625,19 +625,6 @@ def following_list(request, user_id):
     }
     return render(request, 'following_list.html', context)
 
-# フォロー処理
-@login_required
-def follow(request, user_id):
-    following = get_object_or_404(User, id=user_id)
-    Follow.objects.get_or_create(follower=request.user, following=following)
-    return redirect('user_page', user_id=user_id)
-
-#フォロー解除処理
-@login_required
-def unfollow(request, user_id):
-    following = get_object_or_404(User, id=user_id)
-    Follow.objects.filter(follower=request.user, following=following).delete()
-    return redirect('user_page', user_id=user_id)
 
 
 @login_required
@@ -670,26 +657,27 @@ def unfollow_user(request, user_id):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
-#def toggle_follow(request, user_id):
+
+# フォロー処理
+@login_required
+def follow(request, user_id):
     following = get_object_or_404(User, id=user_id)
-    if request.user.following.filter(id=user_id).exists():
-        # フォロー解除
-        Follow.objects.filter(follower=request.user, following=following).delete()
-    else:
-        # フォロー
-        Follow.objects.create(follower=request.user, following=following)
-    return redirect('user_page', user_id=user_id)
+    Follow.objects.get_or_create(follower=request.user, following=following)
+    return redirect(request.META.get('HTTP_REFERER', f'/coscharm/user/{user_id}/'))  # 元のページへリダイレクト
 
+# フォロー解除処理
+@login_required
+def unfollow(request, user_id):
+    following = get_object_or_404(User, id=user_id)
+    Follow.objects.filter(follower=request.user, following=following).delete()
+    return redirect(request.META.get('HTTP_REFERER', f'/coscharm/user/{user_id}/'))  # 元のページへリダイレクト
 
+# フォローのトグル処理
 @login_required
 def toggle_follow(request, user_id):
     following = get_object_or_404(User, id=user_id)
-    if request.user.following.filter(id=user_id).exists():
-        # フォロー解除
-        Follow.objects.filter(follower=request.user, following=following).delete()
+    if Follow.objects.filter(follower=request.user, following=following).exists():
+        Follow.objects.filter(follower=request.user, following=following).delete()  # フォロー解除
     else:
-        # フォロー
-        Follow.objects.create(follower=request.user, following=following)
-    
-    # フォロー・フォロー解除後も元のページに戻る
-    return redirect(request.META.get('HTTP_REFERER', 'my_make_detail'))
+        Follow.objects.create(follower=request.user, following=following)  # フォロー
+    return redirect(request.META.get('HTTP_REFERER', f'/coscharm/user/{user_id}/'))  # 元のページへリダイレクト

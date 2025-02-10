@@ -5,32 +5,21 @@
 {% block content %}
 <h1 class="page-title">マイコスメ編集</h1>
 
-{% if messages %}
-  <div class="alert alert-success">
-    {% for message in messages %}
-      {{ message }}
-    {% endfor %}
-  </div>
-{% endif %}
-
-{% if error %}
-<div class="alert alert-danger">{{ error }}</div>
-{% endif %}
 
 <div class="container-2">
   <div class="row justify-content-center">
     <div class="col-md-8">
-        <h2>編集コスメ</h2>
-        <form method="POST" class="mt-4" action="{% url 'my_cosmetic_edit' pk=my_cosmetic.pk %}">
-          {% csrf_token %}
-          <div class="mb-3">
-            {{ form.as_p }}
-          </div>
-          
-          <button type="submit" class="btn w-100 btn-primary">保存</button>
-          <a href="{% url 'my_cosmetics' %}" class="btn w-100 btn-secondary mt-2">キャンセル</a>
-        </form>
-      </div>
+      <h2> {{ my_cosmetic.cosmetic.cosmetic_name }}</h2>  <!-- コスメ名を表示 -->
+
+      <form method="POST" class="mt-4" action="{% url 'my_cosmetic_edit' pk=my_cosmetic.pk %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.as_p }}
+        </div>
+
+        <button type="submit" class="btn w-100 btn-primary">保存</button>
+        <a href="{% url 'my_cosmetics' %}" class="btn w-100 btn-secondary mt-2">キャンセル</a>
+      </form>
     </div>
   </div>
 </div>
@@ -38,12 +27,12 @@
 <style>
   /* マイコスメ編集画面用スタイル */
   .container-2 {
-      max-width: 600px; 
+      max-width: 700px; 
       border: 1px solid #ccc;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       background-color: #f9f9f9;
       margin-top: 20px;
-      padding: 20px;
+      padding: 50px;
   }
 
   .btn {
@@ -69,34 +58,9 @@
       background-color: #5a636a;
   }
 
-  .d-flex {
-      display: flex;
-      justify-content: space-between;
-  }
-
-  .w-100 {
-      width: 100%;
-  }
-
-  .form-group {
-      margin-bottom: 15px;
-  }
-  
   .page-title {
       text-align: center;
-      margin-bottom: 20px;
-  }
-
-  .form-check-inline .form-check {
-      display: inline-block;
-      margin-right: 15px;
-  }
-
-  /* ラジオボタンを横一列に表示 */
-  .form-group .radio {
-      display: inline-block;
-      margin-right: 15px;
+      margin-bottom: 10px;
   }
 </style>
 {% endblock %}
-

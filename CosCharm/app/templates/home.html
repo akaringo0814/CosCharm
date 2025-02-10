@@ -1,22 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}ホーム画面{% endblock %}
 
 {% block content %}
 <div class="container">
-    <!-- 左側: 未使用のマイコスメ -->
+    <!-- 未使用のマイコスメ -->
     <section class="unused-cosmetics">
         <h2>未使用のマイコスメ</h2>
-        <ul>
+        <div class="cosmetics-grid">
             {% for cosmetic in unused_cosmetics %}
-                <li>{{ cosmetic.cosmetic.cosmetic_name }}</li>
+            <div class="cosmetic-item" onclick="location.href='{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}';">
+                {% if cosmetic.cosmetic.photo %}
+                <img src="{% static cosmetic.cosmetic.photo %}" alt="{{ cosmetic.cosmetic.cosmetic_name }}" class="cosmetic-image">
+                {% else %}
+                <img src="{% static 'images/cosmetics/default_image.jpg' %}" alt="デフォルト画像" class="cosmetic-image">
+                {% endif %}
+                <div class="cosmetic-info">
+                    <a href="{% url 'my_cosmetic_detail' cosmetic.cosmetic.pk %}" class="cosmetic-name">{{ cosmetic.cosmetic.cosmetic_name }}</a>
+                </div>
+            </div>
             {% empty %}
-                <p>未使用のコスメはありません。</p>
+            <p>未使用のコスメはありません。</p>
             {% endfor %}
-        </ul>
+        </div>
     </section>
 
-    <!-- 右側: フォローユーザーの投稿 -->
+    <!-- フォローユーザーの投稿 -->
     <section class="follow-user-posts">
         <h2>タイムライン</h2>
         <form method="GET" action="" class="filter-form">
@@ -41,15 +51,13 @@
 
         <ul class="posts-list">
             {% for post in follow_user_posts %}
-                <li class="post-item" onclick="location.href='{% url 'my_make_detail' post.id %}'">
-                    <img src="{{ post.image.url }}" alt="{{ post.make_name }}" class="post-image">
-                    <p>{{ post.make_name }}</p>
-                </li>
+            <li class="post-item" onclick="location.href='{% url 'my_make_detail' post.id %}'">
+                <img src="{{ post.image.url }}" alt="{{ post.make_name }}" class="post-image">
+                <p>{{ post.make_name }}</p>
+            </li>
             {% empty %}
-                <li class="no-post">該当する投稿はありません</li>
+            <li class="no-post">該当する投稿はありません</li>
             {% endfor %}
-        </ul>
-        
         </ul>
     </section>
 </div>
@@ -60,37 +68,71 @@
 </div>
 
 <style>
-/* 全体のレイアウト */
+/* レイアウト */
 .container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 20px;
     gap: 20px;
-    background-color: #f2e8e800;
 }
 
+/* 未使用のマイコスメ、タイムライン 共通 */
 .unused-cosmetics, .follow-user-posts {
     flex: 1;
     min-width: 300px;
-    background-color: #f2e8e800;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.unused-cosmetics ul, .follow-user-posts ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+/* 未使用のマイコスメ */
+.cosmetics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
 }
 
-.unused-cosmetics li, .follow-user-posts li {
-    margin-bottom: 10px;
+.cosmetic-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
     cursor: pointer;
 }
 
-/* フィルターフォームのデザイン */
+.cosmetic-item:hover {
+    background-color: #e9e9e9;
+}
+
+.cosmetic-image {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.cosmetic-info {
+    text-align: center;
+}
+
+.cosmetic-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+.cosmetic-name:hover {
+    text-decoration: underline;
+}
+
+/* フィルターフォーム */
 .filter-form {
     display: flex;
     flex-wrap: wrap;
@@ -104,7 +146,7 @@
     border: 1px solid #ccc;
 }
 
-/* 投稿リストのデザイン */
+/* 投稿リスト */
 .posts-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -136,7 +178,7 @@
     margin-bottom: 10px;
 }
 
-/* 投稿ボタンのデザイン */
+/* 投稿ボタン */
 .post-button {
     text-align: center;
     margin-top: 20px;
@@ -145,19 +187,16 @@
 .post-button a {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
+    background-color:#007BFF;
+    color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    font-size: 16px;
 }
 
 .post-button a:hover {
     background-color: #0056b3;
 }
-
 </style>
+
 {% endblock %}
-
-
-
