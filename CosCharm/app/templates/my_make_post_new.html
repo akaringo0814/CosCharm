@@ -48,6 +48,12 @@ body {
     width: 90%; /* 横幅を100%に設定 */
 }
 
+.form-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
 .checkbox-group {
     display: flex;
     flex-direction: column; /* 一列に表示 */
@@ -87,8 +93,6 @@ body {
     background-color: #0056b3;
     color: white;
 }
-
-
 </style>
 <h1>マイメイク投稿画面</h1>
 <form method="post" enctype="multipart/form-data" class="makeup-form">
@@ -105,10 +109,10 @@ body {
 
     <div class="form-group">
         <label>メインコスメ:</label>
-        <select name="main_cosmetic" class="form-control">
+        <select name="main_cosmetic" class="form-select">
+            <option value="">コスメを選択してください</option>
             {% for cosmetic in all_cosmetics %}
-            <option value="{{ cosmetic.pk }}" 
-                {% if cosmetic.pk == main_cosmetic_id %}selected{% endif %}>
+            <option value="{{ cosmetic.pk }}" {% if cosmetic.pk == main_cosmetic_id %}selected{% endif %}>
                 {{ cosmetic.cosmetic_name }}
             </option>
             {% endfor %}
@@ -117,15 +121,13 @@ body {
 
     <div class="form-group">
         <label>他使用コスメ:</label>
-        <div class="checkbox-group">
+        <select name="other_cosmetics" class="form-select" multiple>
             {% for cosmetic in all_cosmetics %}
-            <label class="checkbox-inline">
-                <input type="checkbox" name="other_cosmetics" value="{{ cosmetic.pk }}" 
-                    {% if cosmetic.pk in other_cosmetic_ids %}checked{% endif %}>
+            <option value="{{ cosmetic.pk }}" {% if cosmetic.pk in other_cosmetic_ids %}selected{% endif %}>
                 {{ cosmetic.cosmetic_name }}
-            </label>
+            </option>
             {% endfor %}
-        </div>
+        </select>
     </div>
 
     <div class="form-group-2">
@@ -137,5 +139,20 @@ body {
         <button type="submit" class="btn">投稿</button>
     </div>
 </form>
-{% endblock %}
 
+<!-- Select2のCDN (jQuery必須) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<!-- Select2の初期化 -->
+<script>
+  $(document).ready(function() {
+    $('select[name="main_cosmetic"], select[name="other_cosmetics"]').select2({
+      placeholder: "コスメを検索",
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
+{% endblock %}
